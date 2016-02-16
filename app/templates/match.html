@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+{% block content %}
+<h1>Round stats:</h1>
+  <p>Antag objectives:</p>
+    {% for objective in match.antagobjs %}
+      <div>{{objective.mindname}} the {{objective.special_role}} - {{objective.objective_desc}} {{objective.objective_succeeded}}</div>
+    {% endfor %}
+  <p>Deaths</p>
+  {% for death in match.deaths %}
+    <div>
+      {% if death.mindkey %}
+        {{death.mindkey}} as
+      {% endif %}
+      {{death.mindname}}
+      {% if death.last_assailant %}
+        - Last assailant is {{death.last_assailant}}
+      {% endif %}
+  {% endfor %}
+
+{% endblock %}
