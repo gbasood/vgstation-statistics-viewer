@@ -1,4 +1,4 @@
-from app import app, parse, models, db
+from app import app, parse, models, db, global_stats
 from flask import render_template
 
 @app.route('/')
@@ -8,11 +8,15 @@ def index():
 
 @app.route('/test')
 def test():
-    return parse.parse_url('http://ss13.undo.it/stats/statistics_2015.28.12.9.txt')
+    return parse.parse_url('http://game.ss13.moe/stats/statistics_2016.31.01.7.txt')
 
 @app.route('/matchlist')
 def matchlist():
     return render_template('matchlist.html', matches=models.Match.query.all())
+
+@app.route('/globalstats')
+def globalstats():
+    return render_template('globalstats.html', modes=global_stats.get_global_stats())
 
 @app.route('/match/<id>')
 def match(id):

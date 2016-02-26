@@ -67,6 +67,8 @@ class AntagObjective(db.Model):
     objective_type = db.Column(db.String(45))
     objective_desc = db.Column(db.String)
     objective_succeeded = db.Column(db.Boolean)
+    target_name = db.Column(db.String(100))
+    target_role = db.Column(db.String(100))
 
 class UplinkBuy(db.Model):
     id = db.Column(db.Integer, primary_key=True)

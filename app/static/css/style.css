@@ -1,4 +1,12 @@
 body {
   background: #444;
-  color: #fff;
+  color: #DDD;
+}
+
+a, a:hover, a:active {
+    color: #FFF
+}
+
+a:hover {
+    text-decoration: underline;
 }

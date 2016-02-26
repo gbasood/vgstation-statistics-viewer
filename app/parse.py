@@ -34,103 +34,109 @@ def parse_line(line, match):
     x = nullparse(x)
 
     if x[0] == 'STATLOG_START':
-        match.data_version = x[1]
-        match.mapname = x[2]
-        match.starttime = x[3]
-        match.endtime = x[4]
+        match.data_version = x[1].encode('ascii').encode('ascii')
+        match.mapname = x[2].encode('ascii').encode('ascii')
+        match.starttime = x[3].encode('ascii').encode('ascii')
+        match.endtime = x[4].encode('ascii').encode('ascii')
     elif x[0] == 'MASTERMODE':
-        match.mastermode = x[1]
+        match.mastermode = x[1].encode('ascii').encode('ascii')
     elif x[0] == "GAMEMODE":
         prefix = len("GAMEMODE|")
         match.modes_string = w[prefix:]
+        match.modes_string= match.modes_string.encode('ascii')
     elif x[0] == "TECH_TOTAL":
-        match.tech_total = x[1]
+        match.tech_total = x[1].encode('ascii')
     elif x[0] == "BLOOD_SPILLED":
-        match.blood_spilled = x[1]
+        match.blood_spilled = x[1].encode('ascii')
     elif x[0] == "CRATES_ORDERED":
-        match.crates_ordered = x[1]
+        match.crates_ordered = x[1].encode('ascii')
     elif x[0] == "ARTIFACTS_DISCOVERED":
-        match.artifacts_discovered = x[1]
+        match.artifacts_discovered = x[1].encode('ascii')
     elif x[0] == "CREWSCORE":
-        match.crewscore = x[1]
+        match.crewscore = x[1].encode('ascii')
     elif x[0] == "NUKED":
         match.nuked = truefalse(x[1])
     elif x[0] == "ESCAPEES":
-        match.escapees = x[1]
+        match.escapees = x[1].encode('ascii')
     elif x[0] == "MOB_DEATH":
         d = models.Death(match_id = match.id)
-        d.mindname=nullparse(x[9])
-        d.mindkey=nullparse(x[8])
-        d.timeofdeath=x[3]
-        d.typepath=x[1]
-        d.special_role=x[2]
-        d.last_assailant=x[4]
-        d.death_x=x[5]
-        d.death_y=x[6]
-        d.death_z=x[7]
-        d.realname=x[10]
+        d.mindname=nullparse(x[9]).encode('ascii')
+        d.mindkey=nullparse(x[8]).encode('ascii')
+        d.timeofdeath=x[3].encode('ascii')
+        d.typepath=x[1].encode('ascii')
+        d.special_role=x[2].encode('ascii')
+        d.last_assailant=x[4].encode('ascii')
+        d.death_x=x[5].encode('ascii')
+        d.death_y=x[6].encode('ascii')
+        d.death_z=x[7].encode('ascii')
+        # d.realname=x[10]
 
         db.session.add(d)
     elif x[0] == "ANTAG_OBJ":
         a = models.AntagObjective(match_id = match.id)
         a.mindname = nullparse(x[1])
         a.mindkey = nullparse(x[2])
-        a.special_role = x[3]
-        a.objective_type = x[4]
-        a.objective_desc = x[6]
-        a.objective_succeeded = x[5]
-
+        a.special_role = x[3].encode('ascii')
+        a.objective_type = x[4].encode('ascii')
+        a.objective_desc = x[6].encode('ascii')
+        # Check if this is a targeted objective or not.
+        if x[5].isdigit():
+            a.objective_succeeded = x[5].encode('ascii')
+        else:
+            a.objective_succeeded = x[8].encode('ascii')
+            a.target_name = x[7].encode('ascii')
+            a.target_role = x[6].encode('ascii')
         db.session.add(a)
     elif x[0] == "EXPLOSION":
         e = models.Explosion(match_id = match.id)
-        e.epicenter_x = x[1]
-        e.epicenter_y = x[2]
-        e.epicenter_z = x[3]
-        e.devestation_range  = x[4]
-        e.heavy_impact_range = x[5]
-        e.light_impact_range = x[6]
-        e.max_range = x[7]
+        e.epicenter_x = x[1].encode('ascii')
+        e.epicenter_y = x[2].encode('ascii')
+        e.epicenter_z = x[3].encode('ascii')
+        e.devestation_range  = x[4].encode('ascii')
+        e.heavy_impact_range = x[5].encode('ascii')
+        e.light_impact_range = x[6].encode('ascii')
+        e.max_range = x[7].encode('ascii')
 
         db.session.add(e)
     elif x[0] == "UPLINK_ITEM":
         u = models.UplinkBuy(match_id = match.id)
-        u.mindname = x[2]
-        u.mindkey = x[1]
+        u.mindname = x[2].encode('ascii')
+        u.mindkey = x[1].encode('ascii')
         u.traitor_buyer = truefalse(x[3])
-        u.bundle_path = x[4]
-        u.item_path = x[5]
+        u.bundle_path = x[4].encode('ascii')
+        u.item_path = x[5].encode('ascii')
 
         db.session.add(u)
     elif x[0] == "BADASS_BUNDLE":
         bb = models.BadassBundleBuy(match_id = match.id)
-        bb.mindname = x[2]
-        bb.mindkey = x[1]
+        bb.mindname = x[2].encode('ascii')
+        bb.mindkey = x[1].encode('ascii')
         bb.traitor_buyer = truefalse(x[3])
 
         db.session.add(bb)
-        items = x[4:]
+        items = x[4].encode('ascii')
         for item in items:
             i = models.BadassBundleItem(badass_bundle_id = bb.id)
             i.item_path = item
             db.session.add(i)
     elif x[0] == "CULTSTATS":
         c = models.CultStats(match_id = match.id)
-        c.runes_written = x[1]
-        c.runes_fumbled = x[2]
-        c.runes_nulled = x[3]
-        c.converted = x[4]
-        c.tomes_created = x[5]
+        c.runes_written = x[1].encode('ascii')
+        c.runes_fumbled = x[2].encode('ascii')
+        c.runes_nulled = x[3].encode('ascii')
+        c.converted = x[4].encode('ascii')
+        c.tomes_created = x[5].encode('ascii')
         c.narsie_summoned = truefalse(x[6])
-        c.narsie_corpses_fed = x[7]
-        c.surviving_cultists = x[8]
-        c.deconverted = x[9]
+        c.narsie_corpses_fed = x[7].encode('ascii')
+        c.surviving_cultists = x[8].encode('ascii')
+        c.deconverted = x[9].encode('ascii')
 
         db.session.add(c)
     elif x[0] == "XENOSTATS":
         xn = models.XenoStats(match_id = match.id)
-        xn.eggs_laid = x[1]
-        xn.faces_hugged = x[2]
-        xn.faces_protected = x[3]
+        xn.eggs_laid = x[1].encode('ascii')
+        xn.faces_hugged = x[2].encode('ascii')
+        xn.faces_protected = x[3].encode('ascii')
 
         db.session.add(xn)
 
