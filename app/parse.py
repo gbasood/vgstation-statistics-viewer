@@ -1,6 +1,13 @@
 import string, requests, flask, os
 from app import models, db
 
+def parse_file(path):
+    f = open(path, 'r+')
+    contents = f.read()
+    f.close()
+    filename = os.path.basename(path)
+    parse(contents, filename)
+
 def parse_url(url):
     r = requests.get(url)
     print(r.status_code)
@@ -10,23 +17,28 @@ def parse_url(url):
         # Generate a Match model and store it in the session. This gives us
         # access to a valid match ID so the other models can be stored properly
         filename = os.path.basename(url)
-        q = db.session.query(models.Match.id).filter(models.Match.parsed_file == filename)
-        if(q.first()):
-            print(' ~ ~ Duplicate parse entry detected.')
-            print(' Request filename:' + filename)
-            print(' Stored filename:' + q.first().parsed_file)
+        parseResult = parse(r.text, filename)
+        if parseResult:
+            print("PARSED")
+            return flask.make_response("OK", 200)
+        else:
             return flask.make_response("DUPLICATE ENTRY", 500)
 
-        match = models.Match()
-        match.parsed_file = filename
-        db.session.add(match)
+def parse(text, filename):
+    q = db.session.query(models.Match.id).filter(models.Match.parsed_file == filename)
+    if(q.first()):
+        print(' ~ ~ Duplicate parse entry detected.')
+        print(' Request filename:' + filename)
+        print(' Stored filename:' + q.first().parsed_file)
+        return False
 
-        lines = r.iter_lines()
-        for line in lines:
-            parse_line(line, match)
+    match = models.Match()
+    match.parsed_file = filename
+    db.session.add(match)
 
-        print("PARSED")
-        return flask.make_response("OK", 200)
+    lines = text.iter_lines()
+    for line in lines:
+        parse_line(line, match)
 
 def parse_line(line, match):
     w = line.decode("utf-8")
