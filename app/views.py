@@ -1,18 +1,29 @@
 from app import app, parse, models, db, global_stats
-from flask import render_template
+from config import MATCHES_PER_PAGE
+from flask import render_template, request
 
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
 
-@app.route('/test')
+@crossdoamin(origin='ss13.moe')
+@app.route('/import')
 def test():
-    return parse.parse_url('http://game.ss13.moe/stats/statistics_2016.31.01.7.txt')
+    url='http://game.ss13.moe/stats/statistics_2016.31.01.7.txt'
+    if request.args.get('url'):
+        url = request.args.get('url')
+        print(url)
+    return parse.parse_url(url)
 
 @app.route('/matchlist')
-def matchlist():
-    return render_template('matchlist.html', matches=models.Match.query.all())
+@app.route('/matchlist/<int:page>')
+def matchlist(page=1):
+    paginatedMatches=models.Match.query.paginate(page, MATCHES_PER_PAGE, False)
+    return render_template('matchlist.html', matches=paginatedMatches.items, pagination=paginatedMatches)
+
+def matchlistpage(page):
+    return
 
 @app.route('/globalstats')
 def globalstats():

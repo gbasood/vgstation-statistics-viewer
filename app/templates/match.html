@@ -1,11 +1,12 @@
 {% extends "_base.html" %}
 {% block content %}
 <h1>Round stats:</h1>
-  <p>Antag objectives:</p>
+  <h2>Match type: {{match.modes_string}}</h2>
+  <h3>Antag objectives:</h3>
     {% for objective in match.antagobjs %}
       <div>{{objective.mindname}} the {{objective.special_role}} - {{objective.objective_desc}} {{objective.objective_succeeded}}</div>
     {% endfor %}
-  <p>Deaths</p>
+  <h3>Deaths</h3>
   {% for death in match.deaths %}
     <div>
       {% if death.mindkey %}

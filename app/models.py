@@ -2,7 +2,7 @@ from app import db
 
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    parsed_file = db.Column(db.String(255), index=False, unique=True)
+    parsed_file = db.Column(db.String(255), index=False, unique=True, nullable=False)
     data_version = db.Column(db.String(45), unique=False)
     mastermode = db.Column(db.String(255), index=True, unique=False)
     modes_string = db.Column(db.String(65535), unique=False)
@@ -26,8 +26,8 @@ class Match(db.Model):
     xenostat = db.relationship('XenoStats', backref='match', lazy='joined', uselist=False)
 
 
-    # def __repr__(self):
-    #     return '<Match #%r>' % (self.id)
+    def __repr__(self):
+        return '<Match #%r | Mode %r Parsed file %r>' % (self.id, self.modes_string, self.parsed_file)
 
 class Explosion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -39,7 +39,6 @@ class Explosion(db.Model):
     heavy_impact_range = db.Column(db.Integer)
     light_impact_range = db.Column(db.Integer)
     max_range = db.Column(db.Integer)
-
 
 class Death(db.Model):
     id = db.Column(db.Integer, primary_key=True)

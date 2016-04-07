@@ -10,35 +10,40 @@ def parse_file(path):
 
 def parse_url(url):
     r = requests.get(url)
-    print(r.status_code)
     if r.status_code != 200:
-        return flask.make_response("ERROR", 500)
+        return flask.make_response("ERROR - We were denied access to the URL supplied.", 500)
     else:
         # Generate a Match model and store it in the session. This gives us
         # access to a valid match ID so the other models can be stored properly
         filename = os.path.basename(url)
         parseResult = parse(r.text, filename)
         if parseResult:
-            print("PARSED")
+            print("PARSED %r" % filename)
             return flask.make_response("OK", 200)
         else:
             return flask.make_response("DUPLICATE ENTRY", 500)
 
 def parse(text, filename):
-    q = db.session.query(models.Match.id).filter(models.Match.parsed_file == filename)
+    print(filename)
+    q = db.session.query(models.Match.parsed_file).filter(models.Match.parsed_file == filename)
     if(q.first()):
         print(' ~ ~ Duplicate parse entry detected.')
-        print(' Request filename:' + filename)
-        print(' Stored filename:' + q.first().parsed_file)
+        print(' ~ ~ Request filename: ' + filename)
+        print(' ~ ~ Stored filename: ' + q.first().parsed_file)
         return False
+    else:
+        print('Starting parse of %r' % filename)
 
     match = models.Match()
     match.parsed_file = filename
     db.session.add(match)
 
-    lines = text.iter_lines()
+    lines = text.splitlines()
     for line in lines:
         parse_line(line, match)
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    db.session.commit()
+    return True
 
 def parse_line(line, match):
     w = line.decode("utf-8")
@@ -151,9 +156,7 @@ def parse_line(line, match):
         xn.faces_protected = x[3].encode('ascii')
 
         db.session.add(xn)
-
-    db.session.commit()
-    return None
+    return True
 
 def nullparse(s):
     for string in s:
