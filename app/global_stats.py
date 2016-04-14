@@ -47,11 +47,18 @@ def match_stats():
 
 
 def checkModeVictory(match):
-    if match.modes_string.lower() == "nuclear emergency" or match.modes_string.lower() in "malfunction":
+    if match.modes_string.lower() == "nuclear emergency" or "malfunction" in match.modes_string.lower():
         if match.nuked:
             return True
         else:
             return False
+    elif "cultist" in match.modes_string.lower()
+        if match.CultStats.narsie_summoned:
+            return True
+        else:
+            return False
+    elif "meteor" in match.modes_string.lower():
+        return False # No one wins in meteor let's be honest
     elif any(match.modes_string.lower() in s for s in antag_objective_victory_modes):
         succeeded = 0
         failed = 0

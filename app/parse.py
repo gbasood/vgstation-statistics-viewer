@@ -41,7 +41,6 @@ def parse(text, filename):
     lines = text.splitlines()
     for line in lines:
         parse_line(line, match)
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
     db.session.commit()
     return True
 
