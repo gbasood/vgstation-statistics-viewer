@@ -7,7 +7,6 @@ from flask import render_template, request
 def index():
     return render_template('index.html')
 
-@crossdoamin(origin='ss13.moe')
 @app.route('/import')
 def test():
     url='http://game.ss13.moe/stats/statistics_2016.31.01.7.txt'
