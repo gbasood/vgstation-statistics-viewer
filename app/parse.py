@@ -1,7 +1,32 @@
-import string, requests, flask, os
+import string, requests, flask, os, fnmatch, shutil, sys
 from app import models, db
+from config import STATS_DIR, PROCESSED_DIR
+
+def batch_parse():
+    parsed = 0
+    errored = 0
+
+    if not os.path.exists(STATS_DIR):
+        print('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
+        return 1
+    for file in os.listdir(STATS_DIR):
+        if fnmatch.fnmatch(file, 'statistics_*.txt'):
+            try:
+                parse_file(os.path.join(STATS_DIR, file))
+                parsed+=1
+                shutil.move(os.path.join(STATS_DIR, file), os.path.join(PROCESSED_DIR, file))
+            except:
+                print('!! ERROR: File could not be parsed. Details:\n', sys.exc_info()[0])
+                errored+=1
+                raise
+
+
+    print('# DEBUG: Batch parsed ' + str(parsed) + ' files with ' + str(errored) + ' exceptions.')
 
 def parse_file(path):
+    if not os.path.exists(path):
+        print('!! ERROR: Tried to parse non-existant path ' + str(path) )
+        return
     f = open(path, 'r+')
     contents = f.read()
     f.close()
@@ -45,7 +70,7 @@ def parse(text, filename):
     return True
 
 def parse_line(line, match):
-    w = line.decode("utf-8")
+    w = line.decode("utf-8").strip()
     x = w.split('|')
     x = nullparse(x)
 

@@ -18,7 +18,7 @@ def get_global_stats():
     victories = dict()
 
     for match in m:
-        print(match.mode)
+        print('# DEBUG: Processing global stats for ' + match.mode);
         if not match.mode in victories:
             victories[match.mode] = {'wins': 0,'losses': 0}
             victories[match.mode]['wins'] = 0
@@ -52,7 +52,7 @@ def checkModeVictory(match):
             return True
         else:
             return False
-    elif "cultist" in match.modes_string.lower()
+    elif "cultist" in match.modes_string.lower():
         if match.CultStats.narsie_summoned:
             return True
         else:

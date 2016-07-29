@@ -13,6 +13,12 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db/app.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db/db_repository')
 
+# Path to stat files. Default value MUST be changed.
+STATS_DIR = os.path.join(basedir, 'test-statfiles')
+# This is where files get moved to once they're batch processed. They will never be used again and are kept around only for debugging the server code.
+PROCESSED_DIR = os.path.join(STATS_DIR, 'processed')
+
+
 # Load from arguments
 if len(sys.argv) > 1:
     if sys.argv[1] == 'debug':

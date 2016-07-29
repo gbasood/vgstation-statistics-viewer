@@ -7,13 +7,13 @@ from flask import render_template, request
 def index():
     return render_template('index.html')
 
-@app.route('/import')
-def test():
-    url='http://game.ss13.moe/stats/statistics_2016.31.01.7.txt'
-    if request.args.get('url'):
-        url = request.args.get('url')
-        print(url)
-    return parse.parse_url(url)
+# @app.route('/import')
+# def test():
+#     url='http://game.ss13.moe/stats/statistics_2016.31.01.7.txt'
+#     if request.args.get('url'):
+#         url = request.args.get('url')
+#         print(url)
+#     return parse.parse_url(url)
 
 @app.route('/matchlist')
 @app.route('/matchlist/<int:page>')
@@ -31,3 +31,11 @@ def globalstats():
 @app.route('/match/<id>')
 def match(id):
     return render_template('match.html', match = models.Match.query.get(id))
+
+# This is the route that the bot will use to notify the app to process files.
+@app.route('/alert_new_file')
+def alert_new_file():
+    returnval = parse.batch_parse()
+    if returnval is not None:
+        return 'ERROR', 500
+    return 'OK'
