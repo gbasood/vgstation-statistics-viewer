@@ -2,20 +2,24 @@
 {% block content %}
 <h1>Round stats:</h1>
   <h2>Match type: {{match.modes_string}}</h2>
+  {% if match.date %}
+    <h3>Match date: {{match.date.strftime('%B %d %Y')}}</h3>
+  {% endif %}
   <h3>Antag objectives:</h3>
     {% for objective in match.antagobjs %}
       <div>{{objective.mindname}} the {{objective.special_role}} - {{objective.objective_desc}} {{objective.objective_succeeded}}</div>
     {% endfor %}
   <h3>Deaths</h3>
-  {% for death in match.deaths %}
-    <div>
-      {% if death.mindkey %}
+  {%- for death in match.deaths if not death.mindkey == 'null' or not death.mindname == 'unknown' -%}
+    <div class = 'matchdeath'>
+      {% if death.mindkey -%}
         {{death.mindkey}} as
-      {% endif %}
+      {% endif -%}
       {{death.mindname}}
-      {% if death.last_assailant %}
+      {% if death.last_assailant -%}
         - Last assailant is {{death.last_assailant}}
-      {% endif %}
+      {% endif -%}
+    </div>
   {% endfor %}
 
 {% endblock %}

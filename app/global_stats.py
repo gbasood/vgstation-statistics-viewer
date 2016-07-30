@@ -1,7 +1,7 @@
 from app import models, db
 
-antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire"]
-do_not_show = ["heist", "meteor"]
+antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire", 'wizard', 'ragin\' mages', 'revolution']
+do_not_show = ['extended','heist', 'meteor']
 objective_success_threshold = 0.49
 
 class MatchTypeVictory:
@@ -38,7 +38,7 @@ def match_stats():
     matches = []
 
     for match in q:
-        if match.modes_string in do_not_show:
+        if match.modes_string.lower() in do_not_show:
             continue
         if 'mixed' in match.mastermode or '|' in match.modes_string:
             continue

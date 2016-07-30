@@ -1,4 +1,4 @@
-import string, requests, flask, os, fnmatch, shutil, sys
+import string, requests, flask, os, fnmatch, shutil, sys, datetime, re
 from app import models, db
 from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
@@ -61,6 +61,9 @@ def parse(text, filename):
 
     match = models.Match()
     match.parsed_file = filename
+    # Regex is in format yyyy-dd-mm
+    file_date = re.search('^statistics_((?:19|20)\d{2})[\. .](0[1-9]|[12][0-9]|3[01])[\. .](0[1-9]|1[012])(?:.*)\.txt$', filename)
+    match.date = datetime.date(int(file_date.group(1)), int(file_date.group(3)), int(file_date.group(2)))
     db.session.add(match)
     db.session.flush()
 

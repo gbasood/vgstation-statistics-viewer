@@ -15,7 +15,7 @@ class Match(db.Model):
     tech_total = db.Column(db.Integer)
     mapname = db.Column(db.String)
     starttime = db.Column(db.Integer)
-    endttime = db.Column(db.Integer)
+    endtime = db.Column(db.Integer)
 
     explosions = db.relationship('Explosion', backref='match', lazy='dynamic')
     deaths = db.relationship('Death', backref='match', lazy='dynamic')
@@ -25,6 +25,7 @@ class Match(db.Model):
     cultstat = db.relationship('CultStats', backref='match', lazy='joined', uselist=False)
     xenostat = db.relationship('XenoStats', backref='match', lazy='joined', uselist=False)
 
+    date = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Match #%r | Mode %r Parsed file %r>' % (self.id, self.modes_string, self.parsed_file)

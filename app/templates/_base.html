@@ -1,11 +1,12 @@
 <html>
   <head>
-    {% if title %}
+    {%- if title -%}
     <title>{{ title }} - /vg/station stats</title>
-    {% else %}
+    {%- else -%}
     <title>nerdstats</title>
-    {% endif %}
-    <link href='{{url_for('static', filename='css/style.css')}}' rel='stylesheet'>
+    {%- endif -%}
+    <link href='{{ url_for('static', filename='css/style.css') }}' rel='stylesheet'>
+    <link rel='shortcut icon' href='{{ url_for('static', filename='favicon.png') }}'>
   </head>
   <body>
     <div>

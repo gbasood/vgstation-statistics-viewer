@@ -10,3 +10,19 @@ a, a:hover, a:active {
 a:hover {
     text-decoration: underline;
 }
+
+h1, h2 {
+    text-align: center;
+}
+
+#centerpadded {
+    margin: auto 20% auto 20%;
+    background: #333;
+    padding: 1em;
+}
+
+.indented {
+    text-indent: 0.75em;
+    -webkit-margin-before: 0.25em;
+    -webkit-margin-after: 0.25em;
+}
