@@ -18,7 +18,8 @@ def index():
 @app.route('/matchlist')
 @app.route('/matchlist/<int:page>')
 def matchlist(page=1):
-    paginatedMatches=models.Match.query.paginate(page, MATCHES_PER_PAGE, False)
+    query = models.Match.query.order_by(models.Match.id.desc())
+    paginatedMatches=query.paginate(page, MATCHES_PER_PAGE, False)
     return render_template('matchlist.html', matches=paginatedMatches.items, pagination=paginatedMatches)
 
 def matchlistpage(page):

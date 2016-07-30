@@ -1,6 +1,6 @@
 import string, requests, flask, os, fnmatch, shutil, sys
 from app import models, db
-from config import STATS_DIR, PROCESSED_DIR
+from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
 def batch_parse():
     parsed = 0
@@ -18,6 +18,7 @@ def batch_parse():
             except:
                 print('!! ERROR: File could not be parsed. Details:\n', sys.exc_info()[0])
                 errored+=1
+                shutil.move(os.path.join(STATS_DIR, file), os.path.join(UNPARSABLE_DIR, file))
                 raise
 
 
@@ -49,7 +50,6 @@ def parse_url(url):
             return flask.make_response("DUPLICATE ENTRY", 500)
 
 def parse(text, filename):
-    print(filename)
     q = db.session.query(models.Match.parsed_file).filter(models.Match.parsed_file == filename)
     if(q.first()):
         print(' ~ ~ Duplicate parse entry detected.')
@@ -62,25 +62,27 @@ def parse(text, filename):
     match = models.Match()
     match.parsed_file = filename
     db.session.add(match)
+    db.session.flush()
 
     lines = text.splitlines()
     for line in lines:
         parse_line(line, match)
+        db.session.flush()
     db.session.commit()
     return True
 
 def parse_line(line, match):
-    w = line.decode("utf-8").strip()
+    w = line.decode("utf-8",errors='ignore')
     x = w.split('|')
     x = nullparse(x)
 
     if x[0] == 'STATLOG_START':
-        match.data_version = x[1].encode('ascii').encode('ascii')
-        match.mapname = x[2].encode('ascii').encode('ascii')
-        match.starttime = x[3].encode('ascii').encode('ascii')
-        match.endtime = x[4].encode('ascii').encode('ascii')
+        match.data_version = x[1].encode('ascii')
+        match.mapname = x[2].encode('ascii')
+        match.starttime = x[3].encode('ascii')
+        match.endtime = x[4].encode('ascii')
     elif x[0] == 'MASTERMODE':
-        match.mastermode = x[1].encode('ascii').encode('ascii')
+        match.mastermode = x[1].encode('ascii')
     elif x[0] == "GAMEMODE":
         prefix = len("GAMEMODE|")
         match.modes_string = w[prefix:]
@@ -110,23 +112,24 @@ def parse_line(line, match):
         d.death_x=x[5].encode('ascii')
         d.death_y=x[6].encode('ascii')
         d.death_z=x[7].encode('ascii')
-        # d.realname=x[10]
 
         db.session.add(d)
     elif x[0] == "ANTAG_OBJ":
         a = models.AntagObjective(match_id = match.id)
-        a.mindname = nullparse(x[1])
-        a.mindkey = nullparse(x[2])
+        a.mindname = nullparse(x[1]).encode('ascii')
+        a.mindkey = nullparse(x[2]).encode('ascii')
         a.special_role = x[3].encode('ascii')
         a.objective_type = x[4].encode('ascii')
         a.objective_desc = x[6].encode('ascii')
         # Check if this is a targeted objective or not.
         if x[5].isdigit():
-            a.objective_succeeded = x[5].encode('ascii')
+            a.objective_succeeded = int(x[5].encode('ascii'))
         else:
-            a.objective_succeeded = x[8].encode('ascii')
+            a.objective_succeeded = int(x[8].encode('ascii'))
             a.target_name = x[7].encode('ascii')
             a.target_role = x[6].encode('ascii')
+        if a.objective_succeeded >= 2: # Mutiny gives 2 as an additional success value.
+            a.objective_succeeded = 1
         db.session.add(a)
     elif x[0] == "EXPLOSION":
         e = models.Explosion(match_id = match.id)

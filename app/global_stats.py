@@ -11,22 +11,24 @@ class MatchTypeVictory:
         if(v): self.victory = v
         if(s): self.secret = s
         if(m): self.mode = m
+    def __str__(self):
+        return 'Mode: %s Victory: %s Secret: %s' % (self.mode, self.victory, self.secret)
 
 def get_global_stats():
     m = match_stats()
 
     victories = dict()
+    total = dict()
 
     for match in m:
-        print('# DEBUG: Processing global stats for ' + match.mode);
         if not match.mode in victories:
             victories[match.mode] = {'wins': 0,'losses': 0}
             victories[match.mode]['wins'] = 0
             victories[match.mode]['losses'] = 0
-        if match.victory:
+        if match.victory == True:
             victories[match.mode]['wins'] = victories[match.mode]['wins'] + 1
         else:
-            victories[match.mode]['wins'] = victories[match.mode]['losses'] + 1
+            victories[match.mode]['losses'] = victories[match.mode]['losses'] + 1
     return victories
 
 def match_stats():
@@ -35,43 +37,44 @@ def match_stats():
     matches = []
 
     for match in q:
-        victory = checkModeVictory(match)
-        if match.mastermode == "mixed":
+        if 'mixed' in match.mastermode or '|' in match.modes_string:
             continue
-        if victory:
-            s = True if match.mastermode == "secret" else False
-            t = match.modes_string
-            m = MatchTypeVictory(victory, s, t)
-            matches.append(m)
+        victory = checkModeVictory(match)
+        s = True if match.mastermode == "secret" else False
+        t = match.modes_string
+        m = MatchTypeVictory(victory, s, t)
+        matches.append(m)
     return matches
 
 
 def checkModeVictory(match):
-    if match.modes_string.lower() == "nuclear emergency" or "malfunction" in match.modes_string.lower():
-        if match.nuked:
+    modestring = match.modes_string.decode('utf-8').lower()
+    if modestring == "nuclear emergency" or "malfunction" in modestring:
+        if match.nuked == True:
             return True
         else:
             return False
-    elif "cultist" in match.modes_string.lower():
+    elif "cultist" in modestring:
         if match.CultStats.narsie_summoned:
             return True
         else:
             return False
-    elif "meteor" in match.modes_string.lower():
+    elif "meteor" in modestring:
         return False # No one wins in meteor let's be honest
-    elif any(match.modes_string.lower() in s for s in antag_objective_victory_modes):
+    elif any(modestring in s for s in antag_objective_victory_modes):
         succeeded = 0
-        failed = 0
+        total = 0
         for objective in match.antagobjs:
+            total+=1
             if objective.objective_succeeded:
                 succeeded+=1
-            else:
-                failed+=1
         if succeeded == 0:
             return False
-        elif failed == 0:
-            return True
-        elif succeeded/succeeded+failed >= objective_success_threshold:
+        elif total == 0:
+            return False
+        ratio = succeeded/total
+        print ratio, succeeded, total
+        if ratio >= objective_success_threshold:
             return True
         else:
             return False

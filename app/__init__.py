@@ -11,5 +11,7 @@ if not os.path.exists(config.STATS_DIR):
     os.makedirs(config.STATS_DIR)
 if not os.path.exists(config.PROCESSED_DIR):
     os.makedirs(config.PROCESSED_DIR)
+if not os.path.exists(config.UNPARSABLE_DIR):
+    os.makedirs(config.UNPARSABLE_DIR)
 
 from app import views, models

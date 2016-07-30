@@ -69,6 +69,9 @@ class AntagObjective(db.Model):
     target_name = db.Column(db.String(100))
     target_role = db.Column(db.String(100))
 
+    def __repr__(self):
+        return '<AntagObjective #%r | Type #%r | Succeeded %r>' % (self.id, self.objective_type, self.succeeded)
+
 class UplinkBuy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
