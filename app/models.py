@@ -24,6 +24,8 @@ class Match(db.Model):
     badassbuy = db.relationship('BadassBundleBuy', backref='match', lazy='dynamic')
     cultstat = db.relationship('CultStats', backref='match', lazy='joined', uselist=False)
     xenostat = db.relationship('XenoStats', backref='match', lazy='joined', uselist=False)
+    blobstat = db.relationship('BlobStats', backref='match', lazy='joined', uselist=False)
+    malfstat = db.relationship('MalfStats', backref='match', lazy='joined', uselist=False)
 
     date = db.Column(db.DateTime)
 
@@ -115,3 +117,19 @@ class XenoStats(db.Model):
     eggs_laid = db.Column(db.Integer)
     faces_hugged = db.Column(db.Integer)
     faces_protected = db.Column(db.Integer)
+
+class BlobStats(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
+    blob_wins = db.Column(db.Boolean)
+    spawned_blob_players = db.Column(db.Integer)
+    spores_spawned = db.Column(db.Integer)
+    res_generated = db.Column(db.Integer)
+
+class MalfStats(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
+    malf_won = db.Column(db.Boolean)
+    malf_shunted = db.Column(db.Boolean)
+    borgs_at_roundend = db.Column(db.Integer)
+    malf_modules = db.Column(db.String)

@@ -1,6 +1,7 @@
 {% extends "_base.html" %}
 {% block content %}
 {% for match in matches %}
+    <img src='{{modethumb(match.modes_string)}}'/>
     {% if match.mastermode == "secret" or "mixed" %}
         <a href ="/match/{{match.id}}">{{match.id}} - {{match.mastermode}}|{{match.modes_string}} - Score: {{match.crewscore}} - Deaths: {{match.deaths.count()}}</a> <br />
     {% else %}

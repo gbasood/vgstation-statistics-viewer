@@ -8,3 +8,9 @@ Anyone who wants to help out or call my code shit is more than welcome. I'd like
 # Prereqs
 
 Python, Flask, Flask-SQLAlchemy, Requests
+
+# Setup
+Modify config.py as needed.
+
+While in the venv, run:
+python db_create.py

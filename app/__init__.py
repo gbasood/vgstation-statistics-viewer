@@ -15,3 +15,6 @@ if not os.path.exists(config.UNPARSABLE_DIR):
     os.makedirs(config.UNPARSABLE_DIR)
 
 from app import views, models
+
+
+from app import helpers

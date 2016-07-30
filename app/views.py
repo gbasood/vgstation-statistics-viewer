@@ -5,7 +5,10 @@ from flask import render_template, request
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    matchesTotal = len(models.Match.query.all())
+    nuked = models.Match.query.filter(models.Match.nuked).count()
+
+    return render_template('index.html', matchcount = matchesTotal, nukedcount = nuked)
 
 # @app.route('/import')
 # def test():

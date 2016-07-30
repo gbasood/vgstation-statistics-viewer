@@ -186,6 +186,26 @@ def parse_line(line, match):
         xn.faces_protected = x[3].encode('ascii')
 
         db.session.add(xn)
+    elif x[0] == 'BLOBSTATS':
+        bs = models.BlobStats(match_id = match.id)
+        bs.blob_wins = x[1].encode('ascii')
+        bs.spawned_blob_players = x[2].encode('ascii')
+        bs.spores_spawned = x[3].encode('ascii')
+        bs.res_generated = x[3].encode('ascii')
+
+        db.session.add(bs)
+    elif x[0] == 'MALFSTATS':
+        ms = models.MalfStats(match_id = match.id)
+        ms.malf_won = x[1].encode('ascii')
+        ms.malf_shunted = x[2].encode('ascii')
+        ms.borgs_at_roundend = x[3].encode('ascii')
+
+        db.session.add(ms)
+    elif x[0] == 'MALFMODULES':
+        try:
+            match.malfstat.malf_modules = '|'.join(x.pop(0))
+        except:
+            raise
     return True
 
 def nullparse(s):
