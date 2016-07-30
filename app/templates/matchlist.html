@@ -7,10 +7,10 @@
         <a href ="/match/{{match.id}}">{{match.id}} - {{match.mastermode}} - Score: {{match.crewscore}} - Deaths: {{match.deaths.count()}}</a> <br />
     {% endif %}
 {% endfor %}
-{% if pagination.has_next %}
-<a href = "/matchlist/{{pagination.next_num}}">Next page</a>
-{% endif %}
 {% if pagination.has_prev %}
 <a href = "/matchlist/{{pagination.prev_num}}">Previous page</a>
+{% endif %}
+{% if pagination.has_next %}
+<a href = "/matchlist/{{pagination.next_num}}">Next page</a>
 {% endif %}
 {% endblock %}

@@ -1,7 +1,8 @@
 from app import models, db
 
 antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire"]
-objective_success_threshold = 0.8
+do_not_show = ["heist", "meteor"]
+objective_success_threshold = 0.49
 
 class MatchTypeVictory:
     victory = False
@@ -37,6 +38,8 @@ def match_stats():
     matches = []
 
     for match in q:
+        if match.modes_string in do_not_show:
+            continue
         if 'mixed' in match.mastermode or '|' in match.modes_string:
             continue
         victory = checkModeVictory(match)
@@ -54,8 +57,8 @@ def checkModeVictory(match):
             return True
         else:
             return False
-    elif "cultist" in modestring:
-        if match.CultStats.narsie_summoned:
+    elif "cult" in modestring:
+        if match.cultstat.narsie_summoned:
             return True
         else:
             return False
@@ -72,8 +75,7 @@ def checkModeVictory(match):
             return False
         elif total == 0:
             return False
-        ratio = succeeded/total
-        print ratio, succeeded, total
+        ratio = float(succeeded)/float(total)
         if ratio >= objective_success_threshold:
             return True
         else:
