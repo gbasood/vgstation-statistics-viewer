@@ -1,0 +1,5 @@
+flask-test:
+    script: "python run.py ci"
+
+after-script::
+  - bash <(curl -s https://codecov.io/bash)
