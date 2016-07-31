@@ -1,5 +1,5 @@
 flask-test:
-    script: "python run.py ci"
-
-after-script::
-  - bash <(curl -s https://codecov.io/bash)
+  script:
+    - "python run.py ci"
+  after_script:
+    - bash <(curl -s https://codecov.io/bash)
