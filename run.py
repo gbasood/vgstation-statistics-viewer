@@ -13,7 +13,7 @@ manager = Manager(app)
 
 manager.add_command('ci', CICommand(ci_config))
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     manager.run()
 
 # app.run(config.host, config.port)
