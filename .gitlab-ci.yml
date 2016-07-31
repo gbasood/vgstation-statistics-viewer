@@ -2,7 +2,7 @@ image: python:2.7.12
 
 flask-test:
   before_script:
-    - "pip install flask, Flask-CI, Flask-Script"
+    - "pip install requirements.txt"
   script:
     - "python run.py ci"
   after_script:
