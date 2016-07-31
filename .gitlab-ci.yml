@@ -2,7 +2,8 @@ image: python:2.7.12
 
 flask-test:
   before_script:
-    - "cd /builds/Sood/vgstation-statistics"
+    - "cd $CI_PROJECT_DIR"
+    - "ls"
     - "pip install -r requirements.txt"
   script:
     - "python run.py ci"
