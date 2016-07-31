@@ -1,9 +1,19 @@
 #!flask/bin/python
+
+from flask.ext.script import Manager
+from flask.ext.ci import CICommand
 from app import app
-import os, config
+import os, config, ci_config
+
+manager = Manager(app)
 
 # def cls():
 #     os.system('cls' if os.name=='nt' else 'clear')
 # cls()
 
-app.run(config.host, config.port)
+manager.add_command('ci', CICommand(ci_config))
+
+if __name__ == '__main__':
+    manager.run()
+
+# app.run(config.host, config.port)

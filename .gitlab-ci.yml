@@ -1,0 +1,10 @@
+image: python:2.7.12
+
+flask-test:
+  before_script:
+    - "cd $CI_PROJECT_DIR"
+    - "pip install -r requirements.txt"
+  script:
+    - "python run.py ci"
+  after_script:
+    - bash <(curl -s https://codecov.io/bash)
