@@ -1,6 +1,8 @@
 image: python:2.7.12
 
 flask-test:
+  before_script:
+    - "pip install flask, Flask-CI, Flask-Script"
   script:
     - "python run.py ci"
   after_script:
