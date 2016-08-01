@@ -3,7 +3,7 @@
     {%- if title -%}
     <title>{{ title }} - /vg/station stats</title>
     {%- else -%}
-    <title>nerdstats</title>
+    <title>/vg/station stats</title>
     {%- endif -%}
     <link href='{{ url_for('static', filename='css/style.css') }}' rel='stylesheet'>
     <link rel='shortcut icon' href='{{ url_for('static', filename='favicon.png') }}'>
@@ -17,4 +17,5 @@
     <hr>
     {% block content %}{% endblock %}
   </body>
+  <script type='text/javascript' src = '{{url_for('static', filename='js/main.js')}}'></script>
 </html>

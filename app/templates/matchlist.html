@@ -1,13 +1,19 @@
 {% extends "_base.html" %}
 {% block content %}
-{% for match in matches %}
-    <img src='{{modethumb(match.modes_string)}}'/>
-    {% if match.mastermode == "secret" or "mixed" %}
-        <a href ="/match/{{match.id}}">{{match.id}} - {{match.mastermode}}|{{match.modes_string}} - Score: {{match.crewscore}} - Deaths: {{match.deaths.count()}}</a> <br />
-    {% else %}
-        <a href ="/match/{{match.id}}">{{match.id}} - {{match.mastermode}} - Score: {{match.crewscore}} - Deaths: {{match.deaths.count()}}</a> <br />
-    {% endif %}
-{% endfor %}
+<div id = 'match-container'>
+{%- for match in matches %}
+    <div name = 'match-{{match.id}} 'class = 'match' data-matchid = '{{match.id}}'>
+        <img src='{{modethumb(match.modes_string)}}'/>
+    {%- if match.mastermode == "mixed" or '|' in match.modes_string -%}
+        <p id ='match-title'>Mixed</p>
+    {%- else -%}
+        <p id = 'match-title'>{{match.modes_string}}</p>
+    {%- endif %}
+        <p><strong>Crew Score</strong> {{match.crewscore}}</p>
+        <p><strong>Deaths</strong> {{match.deaths.count()}}
+    </div>
+{%- endfor %}
+</div>
 {% if pagination.has_prev %}
 <a href = "/matchlist/{{pagination.prev_num}}">Previous page</a>
 {% endif %}

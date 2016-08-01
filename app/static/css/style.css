@@ -1,6 +1,7 @@
 body {
   background: #444;
   color: #DDD;
+  font-family: Arial;
 }
 
 a, a:hover, a:active {
@@ -25,4 +26,67 @@ h1, h2 {
     text-indent: 0.75em;
     -webkit-margin-before: 0.25em;
     -webkit-margin-after: 0.25em;
+}
+
+#match-container {
+    display: block;
+    overflow: auto;
+    padding-left: 15%;
+    padding-right: 15%;
+    margin: 0 auto 0 auto;
+}
+
+@media (max-width: 900px) {
+    #match-container {
+        padding: inherit;
+    }
+}
+@media (max-width: 1200px) and (min-width: 900px) {
+    #match-container {
+        padding-left: 7.5% ;
+        padding-right: 7.5% ;
+    }
+}
+
+.match {
+    width: 25%;
+    height: 18%;
+    float:left;
+    margin: 1% 1.2% 1% 1.2%;
+    background: #333;
+    text-align: center;
+    cursor: pointer;
+}
+
+.match::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 5px;
+    background: #333;
+    transition: background-color 0.25s ease;
+    margin-bottom: 5px;
+}
+
+.match p {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+}
+
+.match #match-title {
+    width: 100%;
+    font-size: 1.5em;
+    margin-bottom: 0.3em;
+    text-transform: capitalize;
+}
+
+.match img {
+    margin: 0 auto;
+    width: 32px;
+    height: 32px;
+    display: block;
+}
+
+.match:hover::before {
+    background: #FF0000;
 }
