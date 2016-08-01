@@ -3,7 +3,6 @@ from config import basedir
 from app import app
 def modethumb(name):
     name=name.lower()
-    print(name, os.path.join(basedir, 'app','static','img','modethumbs', name + '.png'))
     if os.path.isfile(os.path.join(basedir, 'app','static','img','modethumbs', name + '.png')):
         return flask.url_for('static', filename='img/modethumbs/' + name + '.png')
     else:
