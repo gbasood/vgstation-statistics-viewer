@@ -4,20 +4,15 @@
 {%- for match in matches %}
     <div name = 'match-{{match.id}} 'class = 'match' data-matchid = '{{match.id}}'>
         <img src='{{modethumb(match.modes_string)}}'/>
-    {%- if match.mastermode == "mixed" or '|' in match.modes_string -%}
+    {%- if match.is_mixed() -%}
         <p id ='match-title'>Mixed</p>
     {%- else -%}
         <p id = 'match-title'>{{match.modes_string}}</p>
     {%- endif %}
+		<p class = 'bigger-font'>{{match.mapname}}</p>
         <p><strong>Crew Score</strong> {{match.crewscore}}</p>
         <p><strong>Deaths</strong> {{match.deaths.count()}}
     </div>
 {%- endfor %}
 </div>
-{% if pagination.has_prev %}
-<a href = "/matchlist/{{pagination.prev_num}}">Previous page</a>
-{% endif %}
-{% if pagination.has_next %}
-<a href = "/matchlist/{{pagination.next_num}}">Next page</a>
-{% endif %}
 {% endblock %}

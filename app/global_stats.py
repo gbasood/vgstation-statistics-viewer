@@ -40,7 +40,7 @@ def match_stats():
     for match in q:
         if match.modes_string.lower() in do_not_show:
             continue
-        if 'mixed' in match.mastermode or '|' in match.modes_string:
+        if match.is_mixed():
             continue
         victory = checkModeVictory(match)
         s = True if match.mastermode == "secret" else False

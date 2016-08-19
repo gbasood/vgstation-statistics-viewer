@@ -1,7 +1,12 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
 body {
   background: #444;
   color: #DDD;
   font-family: Arial;
+  margin: 0;
 }
 
 a, a:hover, a:active {
@@ -9,11 +14,22 @@ a, a:hover, a:active {
 }
 
 a:hover {
-    text-decoration: underline;
+    color: #CCC;
 }
 
 h1, h2 {
     text-align: center;
+}
+
+#header {
+    width: 100%;
+    border-bottom: 1px solid;
+    text-align: center;
+}
+
+#title {
+    font-family: Courier;
+    font-size: 200%;
 }
 
 #centerpadded {
@@ -29,8 +45,8 @@ h1, h2 {
 }
 
 #match-container {
-    display: block;
-    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
     padding-left: 15%;
     padding-right: 15%;
     margin: 0 auto 0 auto;
@@ -49,13 +65,21 @@ h1, h2 {
 }
 
 .match {
-    width: 25%;
+    width: 32.5%;
     height: 18%;
     float:left;
-    margin: 1% 1.2% 1% 1.2%;
+    margin: 0.5%;
     background: #333;
     text-align: center;
     cursor: pointer;
+}
+
+#match-container .match:nth-of-type(3n) {
+    margin-right: 0;
+}
+
+#match-container .match:nth-of-type(3n+1) {
+    margin-left: 0;
 }
 
 .match::before {
@@ -89,4 +113,12 @@ h1, h2 {
 
 .match:hover::before {
     background: #FF0000;
+}
+
+.match:hover #match-title {
+    color: #f00;
+}
+
+.bigger-font {
+    font-size: 125%;
 }

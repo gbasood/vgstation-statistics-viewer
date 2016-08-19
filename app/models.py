@@ -14,8 +14,11 @@ class Match(db.Model):
     artifacts_discovered = db.Column(db.Integer)
     tech_total = db.Column(db.Integer)
     mapname = db.Column(db.String)
+
     starttime = db.Column(db.Integer)
     endtime = db.Column(db.Integer)
+    #Calculated value in seconds
+    round_length = db.Column(db.Integer)
 
     explosions = db.relationship('Explosion', backref='match', lazy='dynamic')
     deaths = db.relationship('Death', backref='match', lazy='dynamic')
@@ -31,6 +34,8 @@ class Match(db.Model):
 
     def __repr__(self):
         return '<Match #%r | Mode %r Parsed file %r>' % (self.id, self.modes_string, self.parsed_file)
+    def is_mixed(self):
+        return self.mastermode == "mixed" or '|' in self.modes_string
 
 class Explosion(db.Model):
     id = db.Column(db.Integer, primary_key=True)

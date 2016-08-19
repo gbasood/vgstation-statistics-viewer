@@ -9,13 +9,14 @@
     <link rel='shortcut icon' href='{{ url_for('static', filename='favicon.png') }}'>
   </head>
   <body>
-    <div>
+    <div id = 'header'>
+      <div id = 'title'>/vg/stats</div>
       <a href="/">Home</a>
       <a href="/matchlist">Match History</a>
       <a href="/globalstats">Global Stats</a>
     </div>
-    <hr>
     {% block content %}{% endblock %}
   </body>
   <script type='text/javascript' src = '{{url_for('static', filename='js/main.js')}}'></script>
+  <script type='text/javascript' src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.min.js'></script>
 </html>

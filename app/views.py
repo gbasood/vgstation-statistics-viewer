@@ -27,7 +27,7 @@ def matchlist(page=1):
 
 def matchlistpage(page):
     return
-
+#TODO: Use caching to store global stats results and only recalculate when needed, reducing load on server
 @app.route('/globalstats')
 def globalstats():
     return render_template('globalstats.html', modes=global_stats.get_global_stats())
