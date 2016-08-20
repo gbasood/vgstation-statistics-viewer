@@ -1,4 +1,5 @@
 from app import models, db
+import json
 
 antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire", 'wizard', 'ragin\' mages', 'revolution']
 do_not_show = ['extended','heist', 'meteor']
@@ -14,6 +15,21 @@ class MatchTypeVictory:
         if(m): self.mode = m
     def __str__(self):
         return 'Mode: %s Victory: %s Secret: %s' % (self.mode, self.victory, self.secret)
+
+def get_formatted_global_stats():
+    stats = get_global_stats()
+
+    matchData = {}
+    matchData['types'] = json.dumps(stats.keys(), ensure_ascii=True)
+    matchData['matches'] = json.dumps(stats, ensure_ascii=True)
+    wins = []
+    losses = []
+    for mode in stats:
+        wins.append(stats[mode]['wins'])
+        losses.append(stats[mode]['losses'])
+    matchData['wins'] = json.dumps(wins, ensure_ascii=True)
+    matchData['losses'] = json.dumps(losses, ensure_ascii=True)
+    return matchData
 
 def get_global_stats():
     m = match_stats()

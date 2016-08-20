@@ -1,6 +1,10 @@
 {% extends "_base.html" %}
+{% from '_helpers.html' import render_pagination %}
 {% block content %}
-<div id = 'match-container'>
+
+<div id = 'container'>
+  {{ render_pagination(pagination, "matchlist") }}
+  <div id = 'match-container'>
 {%- for match in matches %}
     <div name = 'match-{{match.id}} 'class = 'match' data-matchid = '{{match.id}}'>
         <img src='{{modethumb(match.modes_string)}}'/>
@@ -14,5 +18,7 @@
         <p><strong>Deaths</strong> {{match.deaths.count()}}
     </div>
 {%- endfor %}
+  </div>
+  {{ render_pagination(pagination, "matchlist") }}
 </div>
 {% endblock %}

@@ -1,7 +1,46 @@
 {%- extends "_base.html" -%}
 {%- block title -%}Global Stats{% endblock -%}
 {%- block content -%}
-    {%- for mode in modes-%}
-        {{mode}}: {{(modes[mode]['wins'] / (modes[mode]['wins'] + modes[mode]['losses']) * 100)|round(2)}}% Antag winrate ({{modes[mode]['wins']}} wins, {{modes[mode]['losses']}} losses) <br/>
-    {%- endfor %}
+<div id = 'chart-container'>
+<canvas id="matchChart"></canvas>
+</div>
+{% endblock %}
+
+{% block after_body %}
+<script>
+var bardata = {
+  labels: {{matchData['types'] | safe}},
+  datasets: [{
+    type: 'bar',
+      label: 'Wins',
+      data: {{matchData['wins'] | safe}},
+      backgroundColor: '#779ECB'
+    }, {
+      type: 'bar',
+        label: 'Losses',
+        data: {{matchData['losses'] | safe}},
+        backgroundColor: '#C23B22'
+  }]
+};
+
+var graphOpts = {
+  type: 'bar',
+  data: bardata,
+  options: {
+    responsive: true,
+    fontColor: '#FFFFFF',
+    tooltips: {
+      mode: 'label',
+    }
+  }
+}
+
+Chart.defaults.global.defaultFontColor = '#fff';
+
+window.onload = function() {
+  var ctx = document.getElementById("matchChart").getContext("2d");
+
+  new Chart(ctx, graphOpts);
+}
+</script>
 {% endblock %}

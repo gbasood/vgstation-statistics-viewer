@@ -29,4 +29,4 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db/db_repository')
 
 
 # App settings
-MATCHES_PER_PAGE = 12
+MATCHES_PER_PAGE = 24 # Works best as a multiple of 3

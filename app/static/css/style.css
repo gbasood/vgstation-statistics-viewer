@@ -112,13 +112,32 @@ h1, h2 {
 }
 
 .match:hover::before {
-    background: #FF0000;
+    background: #C23B22;
 }
 
 .match:hover #match-title {
-    color: #f00;
+    color: #C23B22;
 }
 
 .bigger-font {
     font-size: 125%;
+}
+
+#chart-container {
+  margin: 0 auto;
+  padding: 1em;
+  width: 80%;
+}
+
+#container {
+  width: 100%;
+}
+
+.pagination {
+  text-align: center;
+  color: #aaa;
+}
+
+.pagination strong {
+  color: #fff;
 }
