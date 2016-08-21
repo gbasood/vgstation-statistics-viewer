@@ -1,4 +1,5 @@
 from app import db
+from collections import defaultdict
 
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,6 +37,19 @@ class Match(db.Model):
         return '<Match #%r | Mode %r Parsed file %r>' % (self.id, self.modes_string, self.parsed_file)
     def is_mixed(self):
         return self.mastermode == "mixed" or '|' in self.modes_string
+    def get_antags(self):
+        antags = []
+        for obj in self.antagobjs.group_by(AntagObjective.mindkey):
+            antag = {'key': obj.mindkey, 'name': obj.mindname, 'role': obj.special_role}
+            antags.append(antag)
+        return antags
+    def objs_for_antag(self, antagkey):
+        '''Retrieves the objectives for an antag from this match.'''
+        return self.antagobjs.filter(AntagObjective.mindkey == antagkey)
+    def player_deaths(self):
+        return self.deaths.filter(Death.mindkey != 'null')
+    def nonplayer_deaths(self):
+        return self.deaths.filter(Death.mindkey == 'null')
 
 class Explosion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,7 +92,7 @@ class AntagObjective(db.Model):
     target_role = db.Column(db.String(100))
 
     def __repr__(self):
-        return '<AntagObjective #%r | Type #%r | Succeeded %r>' % (self.id, self.objective_type, self.objective_succeeded)
+        return '<AntagObjective #%r | Name %r | Key %r| Type #%r | Succeeded %r>' % (self.id, self.mindname, self.mindkey, self.objective_type, self.objective_succeeded)
 
 class UplinkBuy(db.Model):
     id = db.Column(db.Integer, primary_key=True)

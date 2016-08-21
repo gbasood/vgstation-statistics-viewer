@@ -228,7 +228,3 @@ def truefalse(s):
     if s == '1':
         return True
     return False
-
-# Because BYOND's epoch isn't the same as linux epoch woo
-def timeparse():
-    epoch = datetime.datetime(2000, 1, 1)

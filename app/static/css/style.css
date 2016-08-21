@@ -32,10 +32,17 @@ h1, h2 {
     font-size: 200%;
 }
 
-#centerpadded {
+.centerpadded-small {
     margin: auto 20% auto 20%;
     background: #333;
     padding: 1em;
+}
+
+.centerpadded {
+    margin: auto 5% auto 5%;
+    padding: 1em;
+    width: 85%;
+    display: table;
 }
 
 .indented {
@@ -140,4 +147,46 @@ h1, h2 {
 
 .pagination strong {
   color: #fff;
+}
+
+.antag {
+  background: #333;
+  padding: 1em;
+  margin-bottom: 1%;
+}
+
+.antag #player {
+  display: inline-block;
+}
+
+.antag #actor {
+  float: right;
+  display: inline-block;
+
+}
+
+.antag .objective .success {
+  color: #779ECB;
+}
+
+.antag .objective .failure {
+  color: #C23B22;
+}
+
+.gridhalf {
+  width: 49.5%;
+  float: left;
+  margin-left: 1%;
+}
+
+.gridcontainer .gridhalf:first-of-type {
+  margin-left: 0;
+}
+
+.gridcontainer {
+  margin-bottom: 1%;
+}
+
+.bottom-margin {
+  margin-bottom: 1%;
 }
