@@ -25,6 +25,8 @@ h1, h2 {
     width: 100%;
     border-bottom: 1px solid;
     text-align: center;
+    padding-bottom: 0.25%;
+    margin-bottom: 0.25%;
 }
 
 #title {
@@ -189,4 +191,24 @@ h1, h2 {
 
 .bottom-margin {
   margin-bottom: 1%;
+}
+
+.matchdeath {
+  background: #333;
+  padding: 0.25em;
+  margin-bottom: 1%;
+}
+
+.matchdeath .lassailant {
+  float: right;
+}
+
+#roundinfo #mode {
+  text-transform: capitalize;
+}
+
+#header a .nav-button{
+  background: #333;
+  display: table-cell;
+  padding: 0.5em;
 }

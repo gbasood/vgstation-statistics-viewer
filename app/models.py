@@ -1,5 +1,8 @@
 from app import db
 from collections import defaultdict
+from os import listdir, path
+from config import basedir
+import datetime
 
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -50,6 +53,26 @@ class Match(db.Model):
         return self.deaths.filter(Death.mindkey != 'null')
     def nonplayer_deaths(self):
         return self.deaths.filter(Death.mindkey == 'null')
+    def has_template(self):
+        if self.is_mixed():
+            return False
+        else:
+            for file in listdir(path.join(basedir, 'app', 'templates', 'gamemodes')):
+                if '_' + self.modes_string.lower() + '.html' in file:
+                    return True
+            return False
+    def duration(self):
+        if(float(self.data_version) < 1.1):
+            return None
+        s = self.starttime.split('.')
+        e = self.endtime.split('.')
+        # yyyy mm dd hh mm ss
+        start = datetime.datetime(year=int(s[0]), month=int(s[1]), day=int(s[2]), hour=int(s[3]), minute=int(s[4]), second=int(s[5]))
+        end = datetime.datetime(year=int(e[0]), month=int(e[1]), day=int(e[2]), hour=int(e[3]), minute=int(e[4]), second=int(e[5]))
+
+        delta = start - end
+        return int(abs((delta.total_seconds() - delta.total_seconds() % 60) / 60))
+
 
 class Explosion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
