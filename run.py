@@ -1,6 +1,6 @@
 #!flask/bin/python
 
-from flask.ext.script import Manager
+from flask.ext.script import Manager, Command
 from flask.ext.ci import CICommand
 from app import app
 import os, config, ci_config

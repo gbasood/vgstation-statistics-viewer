@@ -25,15 +25,13 @@ def matchlist(page=1):
     paginatedMatches=query.paginate(page, MATCHES_PER_PAGE, False)
     return render_template('matchlist.html', matches=paginatedMatches.items, pagination=paginatedMatches)
 
-def matchlistpage(page):
-    return
-
+#TODO: Use caching to store global stats results and only recalculate when needed, reducing load on server
 @app.route('/globalstats')
 def globalstats():
-    return render_template('globalstats.html', modes=global_stats.get_global_stats())
+    return render_template('globalstats.html', matchData=global_stats.get_formatted_global_stats())
 
 @app.route('/match/<id>')
-def match(id):
+def match(id=1):
     return render_template('match.html', match = models.Match.query.get(id))
 
 # This is the route that the bot will use to notify the app to process files.

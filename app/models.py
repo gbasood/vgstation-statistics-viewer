@@ -1,4 +1,8 @@
 from app import db
+from collections import defaultdict
+from os import listdir, path
+from config import basedir
+import datetime
 
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -14,8 +18,11 @@ class Match(db.Model):
     artifacts_discovered = db.Column(db.Integer)
     tech_total = db.Column(db.Integer)
     mapname = db.Column(db.String)
+
     starttime = db.Column(db.Integer)
     endtime = db.Column(db.Integer)
+    #Calculated value in seconds
+    round_length = db.Column(db.Integer)
 
     explosions = db.relationship('Explosion', backref='match', lazy='dynamic')
     deaths = db.relationship('Death', backref='match', lazy='dynamic')
@@ -31,6 +38,41 @@ class Match(db.Model):
 
     def __repr__(self):
         return '<Match #%r | Mode %r Parsed file %r>' % (self.id, self.modes_string, self.parsed_file)
+    def is_mixed(self):
+        return self.mastermode == "mixed" or '|' in self.modes_string
+    def get_antags(self):
+        antags = []
+        for obj in self.antagobjs.group_by(AntagObjective.mindkey):
+            antag = {'key': obj.mindkey, 'name': obj.mindname, 'role': obj.special_role}
+            antags.append(antag)
+        return antags
+    def objs_for_antag(self, antagkey):
+        '''Retrieves the objectives for an antag from this match.'''
+        return self.antagobjs.filter(AntagObjective.mindkey == antagkey)
+    def player_deaths(self):
+        return self.deaths.filter(Death.mindkey != 'null')
+    def nonplayer_deaths(self):
+        return self.deaths.filter(Death.mindkey == 'null')
+    def has_template(self):
+        if self.is_mixed():
+            return False
+        else:
+            for file in listdir(path.join(basedir, 'app', 'templates', 'gamemodes')):
+                if '_' + self.modes_string.lower() + '.html' in file:
+                    return True
+            return False
+    def duration(self):
+        if(float(self.data_version) < 1.1):
+            return None
+        s = self.starttime.split('.')
+        e = self.endtime.split('.')
+        # yyyy mm dd hh mm ss
+        start = datetime.datetime(year=int(s[0]), month=int(s[1]), day=int(s[2]), hour=int(s[3]), minute=int(s[4]), second=int(s[5]))
+        end = datetime.datetime(year=int(e[0]), month=int(e[1]), day=int(e[2]), hour=int(e[3]), minute=int(e[4]), second=int(e[5]))
+
+        delta = start - end
+        return int(abs((delta.total_seconds() - delta.total_seconds() % 60) / 60))
+
 
 class Explosion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -73,7 +115,7 @@ class AntagObjective(db.Model):
     target_role = db.Column(db.String(100))
 
     def __repr__(self):
-        return '<AntagObjective #%r | Type #%r | Succeeded %r>' % (self.id, self.objective_type, self.objective_succeeded)
+        return '<AntagObjective #%r | Name %r | Key %r| Type #%r | Succeeded %r>' % (self.id, self.mindname, self.mindkey, self.objective_type, self.objective_succeeded)
 
 class UplinkBuy(db.Model):
     id = db.Column(db.Integer, primary_key=True)

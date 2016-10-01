@@ -20,12 +20,13 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db/app.db')
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db/db_repository')
 
+# No longer used due to Manager implementation
 # Load from arguments
-if len(sys.argv) > 1:
-    if sys.argv[1] == 'debug':
-        debug = True
-        SQLALCHEMY_TRACK_MODIFICATIONS = True
+# if len(sys.argv) > 1:
+#     if sys.argv[1] == 'debug':
+#         debug = True
+#         SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 
 # App settings
-MATCHES_PER_PAGE = 12
+MATCHES_PER_PAGE = 24 # Works best as a multiple of 3

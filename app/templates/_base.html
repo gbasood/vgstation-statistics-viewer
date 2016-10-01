@@ -1,20 +1,26 @@
+<!DOCTYPE html>
 <html>
   <head>
     {%- if title -%}
     <title>{{ title }} - /vg/station stats</title>
     {%- else -%}
-    <title>nerdstats</title>
+    <title>/vg/station stats</title>
     {%- endif -%}
     <link href='{{ url_for('static', filename='css/style.css') }}' rel='stylesheet'>
     <link rel='shortcut icon' href='{{ url_for('static', filename='favicon.png') }}'>
+    <meta charset="UTF-8">
+    {% block before_body %}{% endblock -%}
   </head>
   <body>
-    <div>
-      <a href="/">Home</a>
-      <a href="/matchlist">Match History</a>
-      <a href="/globalstats">Global Stats</a>
+    <div id = 'header'>
+      <div id = 'title'>/vg/stats</div>
+      <a href="/"><div class = 'nav-button'>Home</div></a>
+      <a href="/matchlist"><div class = 'nav-button'>Match History</div></a>
+      <a href="/globalstats"><div class = 'nav-button'>Global Stats</div></a>
     </div>
-    <hr>
     {% block content %}{% endblock %}
   </body>
+  <script type='text/javascript' src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.min.js'></script>
+  <script type='text/javascript' src = '{{url_for('static', filename='js/main.js')}}'></script>
+  {% block after_body %}{% endblock -%}
 </html>
