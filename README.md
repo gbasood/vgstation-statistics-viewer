@@ -10,6 +10,7 @@ Anyone who wants to help out or call my code shit is more than welcome. I'd like
 Python, Flask, Flask-SQLAlchemy, Requests
 
 # Setup
+`pip install -r requirements.txt`
 Modify config.py as needed.
 
 While in the venv, run:
