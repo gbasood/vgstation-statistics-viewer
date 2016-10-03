@@ -4,7 +4,7 @@ import sys, os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # General settings
-debug = False
+debug = True
 host = '0.0.0.0'
 port = 5000
 

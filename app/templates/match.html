@@ -42,8 +42,10 @@
         </div>
       {% endfor -%}
       </div>
-      {% if not match.has_template() %}
+      {% if match.has_template() %}
         {% include "gamemodes/_" + match.modes_string.lower() + ".html"%}
+      {% else %}
+        {% include "_gamemode.html" %}
       {% endif %}
     </div>
   </div>
