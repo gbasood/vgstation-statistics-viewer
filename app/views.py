@@ -38,6 +38,8 @@ def match(id=1):
 @app.route('/alert_new_file')
 def alert_new_file():
     returnval = parse.batch_parse()
-    if returnval is not None:
+    if returnval is 530:
+        return 'Database busy, try later.', 530
+    elif returnval is not None:
         return 'ERROR', 500
     return 'OK'

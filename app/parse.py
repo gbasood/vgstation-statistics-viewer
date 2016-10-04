@@ -2,9 +2,13 @@ import string, requests, flask, os, fnmatch, shutil, sys, datetime, re
 from app import app, models, db
 from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
+database_busy = False
+
 def batch_parse():
     parsed = 0
     errored = 0
+
+    database_busy = False # Just in case
 
     if not os.path.exists(STATS_DIR):
         app.logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
@@ -16,7 +20,10 @@ def batch_parse():
                 parsed+=1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(PROCESSED_DIR, file))
             except:
-                app.logger.debug('!! ERROR: File could not be parsed. Details:\n', str(sys.exc_info()[0]))
+                if database_busy:
+                    app.logger.warning('Could not write file changes: database busy. Try again later.')
+                    return 530
+                app.logger.error('!! ERROR: File could not be parsed. Details: \n${0}'.format(str(sys.exc_info()[0])))
                 errored+=1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(UNPARSABLE_DIR, file))
                 raise
@@ -69,7 +76,10 @@ def parse(text, filename):
         return False
     match.date = datetime.date(int(file_date.group(1)), int(file_date.group(3)), int(file_date.group(2)))
     db.session.add(match)
-    db.session.flush()
+    try:
+        db.session.flush()
+    except:
+
 
     lines = text.splitlines()
     for line in lines:
@@ -77,7 +87,7 @@ def parse(text, filename):
             parse_line(line, match)
         except:
             app.logger.error('Error parsing line: %r' % line)
-            raise 
+            raise
         db.session.flush()
     db.session.commit()
     return True
