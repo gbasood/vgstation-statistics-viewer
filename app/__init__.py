@@ -16,9 +16,7 @@ if not os.path.exists(config.UNPARSABLE_DIR):
 
 import logging
 from logging.handlers import RotatingFileHandler
-handler = RotatingFileHandler('statsserv_log.txt', maxBytes = 100000, backupCount = 1)
-handler.setLevel(logging.INFO)
-app.logger.addHandler(handler)
+logging.basicConfig(format="%(asctime)s %(msg)s", filename="statsserv_log.txt")
 
 errorHandler = RotatingFileHandler('statsserv_error.txt', maxBytes = 100000, backupCount = 1)
 errorHandler.setLevel(logging.WARNING)
