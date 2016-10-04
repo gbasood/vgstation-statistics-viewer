@@ -74,3 +74,7 @@ _mailinglist
 .cache/
 .idea/
 db/*
+
+# Logfiles
+statsserv_error.txt
+statsserv_log.txt
