@@ -7,7 +7,7 @@ def batch_parse():
     errored = 0
 
     if not os.path.exists(STATS_DIR):
-        logging.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
+        app.logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
         return 1
     for file in os.listdir(STATS_DIR):
         if fnmatch.fnmatch(file, 'statistics_*.txt'):
@@ -16,17 +16,17 @@ def batch_parse():
                 parsed+=1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(PROCESSED_DIR, file))
             except:
-                logging.debug('!! ERROR: File could not be parsed. Details:\n', sys.exc_info()[0])
+                app.logger.debug('!! ERROR: File could not be parsed. Details:\n', sys.exc_info()[0])
                 errored+=1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(UNPARSABLE_DIR, file))
                 raise
 
 
-    logging.debug('# DEBUG: Batch parsed ' + str(parsed) + ' files with ' + str(errored) + ' exceptions.')
+    app.logger.debug('# DEBUG: Batch parsed ' + str(parsed) + ' files with ' + str(errored) + ' exceptions.')
 
 def parse_file(path):
     if not os.path.exists(path):
-        logging.error('!! ERROR: Tried to parse non-existant path ' + str(path) )
+        app.logger.error('!! ERROR: Tried to parse non-existant path ' + str(path) )
         return
     f = open(path, 'r+')
     contents = f.read()
@@ -44,7 +44,7 @@ def parse_url(url):
         filename = os.path.basename(url)
         parseResult = parse(r.text, filename)
         if parseResult:
-            logging.debug("PARSED %r" % filename)
+            app.logger.debug("PARSED %r" % filename)
             return flask.make_response("OK", 200)
         else:
             return flask.make_response("DUPLICATE ENTRY", 500)
@@ -52,12 +52,12 @@ def parse_url(url):
 def parse(text, filename):
     q = db.session.query(models.Match.parsed_file).filter(models.Match.parsed_file == filename)
     if(q.first()):
-        logging.warning(""" ~ ~ Duplicate parse entry detected.)
+        app.logger.warning(""" ~ ~ Duplicate parse entry detected.)
                             ~ ~ Request filename: """ + filename +
                         '\n ~ ~ Stored filename: ' + q.first().parsed_file)
         return False
     else:
-        logging.debug('Starting parse of %r' % filename)
+        app.logger.debug('Starting parse of %r' % filename)
 
     match = models.Match()
     match.parsed_file = filename
