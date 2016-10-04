@@ -16,7 +16,7 @@ def batch_parse():
                 parsed+=1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(PROCESSED_DIR, file))
             except:
-                app.logger.debug('!! ERROR: File could not be parsed. Details:\n', sys.exc_info()[0])
+                app.logger.debug('!! ERROR: File could not be parsed. Details:\n', str(sys.exc_info()[0]))
                 errored+=1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(UNPARSABLE_DIR, file))
                 raise
@@ -73,7 +73,11 @@ def parse(text, filename):
 
     lines = text.splitlines()
     for line in lines:
-        parse_line(line, match)
+        try:
+            parse_line(line, match)
+        except:
+            app.logger.error('Error parsing line: %r' % line)
+            raise 
         db.session.flush()
     db.session.commit()
     return True
