@@ -19,6 +19,8 @@ More information on configuring Gunicorn can be found [in the documentation for 
 We'll need to specify the directory for the `static` resources so that images and such work correctly, and are served by Apache instead of Gunicorn.
 ```apache
 <VirtualHost oursite.com>
+  LoadModule proxy_module modules/mod_proxy.so
+  LoadModule proxy_http_module modules/mod_proxy_http.so
 
   # Tells apache where /static/ should go
   Alias /static/ /full/path/to/flask/app/static/
@@ -41,6 +43,7 @@ pip install gevent
 ```
 
 ## Running Gevent
+Note: There is an example script in the repo titled `example-gevent-deploy.py` which is identical to what I have below here. Use that if you'd like.
 Make a new python script at the root of the project folder.
 ```python
 from gevent.wsgi import WSGIServer
