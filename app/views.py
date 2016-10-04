@@ -1,6 +1,9 @@
 from app import app, parse, models, db, global_stats
 from config import MATCHES_PER_PAGE
 from flask import render_template, request
+import threading
+
+parse_lock = threading.RLock()
 
 @app.route('/')
 @app.route('/index')
@@ -37,9 +40,11 @@ def match(id=1):
 # This is the route that the bot will use to notify the app to process files.
 @app.route('/alert_new_file')
 def alert_new_file():
-    returnval = parse.batch_parse()
-    if returnval is 530:
-        return 'Database busy, try later.', 530
-    elif returnval is not None:
-        return 'ERROR', 500
-    return 'OK'
+    with parse_lock:
+        returnval = parse.batch_parse()
+        if returnval is 530:
+            return 'Database busy, try later.', 530
+        elif returnval is not None:
+            return 'ERROR', 500
+        return 'OK'
+    return 'Already parsing.', 531
