@@ -53,4 +53,3 @@ http_server = WSGIServer(('', 8080), app)
 http_server.serve_forever()
 ```
 For instructions on configuring the Apache reverse proxy, [see above](#Configuring Apache).
-Note: For some reason, gevent didn't work properly and I couldn't load `gevent.pywsgi`. If you know why this is, let me know.
