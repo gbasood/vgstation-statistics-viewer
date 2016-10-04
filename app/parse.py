@@ -62,7 +62,11 @@ def parse(text, filename):
     match = models.Match()
     match.parsed_file = filename
     # Regex is in format yyyy-dd-mm
-    file_date = re.search('^statistics_((?:19|20)\d{2})[\. .](0[1-9]|[12][0-9]|3[01])[\. .](0[1-9]|1[012])(?:.*)\.txt$', filename)
+    search_str = '^statistics_((?:19|20)\d{2})[\. .](0[1-9]|[12][0-9]|3[01])[\. .](0[1-9]|1[012])(?:.*)\.txt$'
+    file_date = re.search(search_str, filename)
+    if not file_date:
+        app.logger.warning('Invalid filename for timestamp: %r' % filename)
+        return False
     match.date = datetime.date(int(file_date.group(1)), int(file_date.group(3)), int(file_date.group(2)))
     db.session.add(match)
     db.session.flush()

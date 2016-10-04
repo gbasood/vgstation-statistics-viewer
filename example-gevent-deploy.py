@@ -3,6 +3,9 @@ from app import app
 import logging
 from logging.handlers import RotatingFileHandler
 
+from gevent import monkey
+monkey.patch_all()
+
 ourLog = logging.getLogger('gevent.log')
 ourLog.setLevel(logging.DEBUG)
 logHandler = RotatingFileHandler('statsserv_gevent_log.txt', maxBytes = 100000, backupCount = 1)
