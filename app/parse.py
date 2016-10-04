@@ -79,8 +79,8 @@ def parse(text, filename):
     try:
         db.session.flush()
     except:
-
-
+        database_busy = True
+        return False
     lines = text.splitlines()
     for line in lines:
         try:
