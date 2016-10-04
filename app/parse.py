@@ -1,6 +1,5 @@
 import string, requests, flask, os, fnmatch, shutil, sys, datetime, re
-import app
-from app import models, db
+from app import app, models, db
 from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
 def batch_parse():

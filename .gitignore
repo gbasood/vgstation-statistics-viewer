@@ -78,3 +78,5 @@ db/*
 # Logfiles
 statsserv_error.txt
 statsserv_log.txt
+statsserv_gevent_error.txt
+statsserv_gevent_log.txt
