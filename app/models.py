@@ -83,7 +83,7 @@ class Match(db.Model):
     def badass_buys_by_key(self, key):
         badbuys = []
         for badbuy in self.badassbuy:
-            if badbuy.minkey == key:
+            if badbuy.mindkey == key:
                 badbuys.append(badbuy)
         return badbuys
 
