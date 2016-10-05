@@ -6,8 +6,8 @@
     {%- else -%}
     <title>/vg/station stats</title>
     {%- endif -%}
-    <link href='{{ url_for('static', filename='css/style.css', external=True) }}' rel='stylesheet'>
-    <link rel='shortcut icon' href='{{ url_for('static', filename='favicon.png', external=True) }}'>
+    <link href='{{ url_for('static', filename='css/style.css') }}' rel='stylesheet'>
+    <link rel='shortcut icon' href='{{ url_for('static', filename='favicon.png') }}'>
     <meta charset="UTF-8">
     {% block before_body %}{% endblock -%}
   </head>
@@ -21,6 +21,6 @@
     {% block content %}{% endblock %}
   </body>
   <script type='text/javascript' src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.min.js'></script>
-  <script type='text/javascript' src = '{{url_for('static', filename='js/main.js', external=True)}}'></script>
+  <script type='text/javascript' src = '{{url_for('static', filename='js/main.js')}}'></script>
   {% block after_body %}{% endblock -%}
 </html>

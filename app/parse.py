@@ -107,8 +107,8 @@ def parse_line(line, match):
             expected_timestamp_format = '^(\d{4})\.(0?[1-9]|1[012])\.(0?[1-9]|[12][0-9]|3[01])\.(?:(?:([01]?\d|2[0-3])\.)?([0-5]?\d)\.)?([0-5]?\d)$'
             start_reg = re.search(expected_timestamp_format, match.starttime)
             end_reg = re.search(expected_timestamp_format, match.endtime)
-            start_datetime = datetime.datetime(int(start_reg.group(1)),int(start_reg.group(2)),int(start_reg.group(3)),int(start_reg.group(4)),int(start_reg.group(5)),int(start_reg.group(6)))
-            end_datetime = datetime.datetime(int(end_reg.group(1)),int(end_reg.group(2)),int(end_reg.group(3)),int(end_reg.group(4)),int(end_reg.group(5)),int(end_reg.group(6)))
+            match.start_datetime = datetime.datetime(int(start_reg.group(1)),int(start_reg.group(2)),int(start_reg.group(3)),int(start_reg.group(4)),int(start_reg.group(5)),int(start_reg.group(6)))
+            match.end_datetime = datetime.datetime(int(end_reg.group(1)),int(end_reg.group(2)),int(end_reg.group(3)),int(end_reg.group(4)),int(end_reg.group(5)),int(end_reg.group(6)))
             match.round_length = (end_datetime - start_datetime).total_seconds()
             # TODO: Test this once PR merges
     elif x[0] == 'MASTERMODE':
