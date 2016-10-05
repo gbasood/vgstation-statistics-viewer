@@ -7,11 +7,25 @@
         <p class = 'indented'>Number of matches logged: {{matchcount}}</p>
         <p class = 'indented'>Number of nukes set off: {{nukedcount}}</p>
     </div>
+    <p class = 'centertext'>Everything here is very much a work in progress. As such, match history may be wiped at any time.</p>
+    <div id = 'promote-gitlab'>
+      <p>Found a bug? Have a feature request?</p>
+      <a href = 'https://gitlab.com/Sood/vgstation-statistics/issues'>Visit the Gitlab repo!</a></p>
+    </div>
+    <div class = 'centertext' style = 'font-size: 80%'>By the way if you have any ideas for grafix to throw around this plain frontpage or the bar up top, let me know over on Gitlab as well</div>
+    <p class = 'centertext' style = 'margin-bottom: 0'>Last match:</p>
     <div id = 'matches-shortlist'>
-{%- for match in matches%}}
-
-{% endfor -%}
-
+      <div name = 'match-{{lastmatch.id}}' class = 'match singular' data-matchid = '{{lastmatch.id}}'>
+          <img src='{{modethumb(lastmatch.modes_string)}}'/>
+      {%- if lastmatch.is_mixed() -%}
+          <p id ='match-title'>Mixed</p>
+      {%- else -%}
+          <p id = 'match-title'>{{lastmatch.modes_string}}</p>
+      {%- endif -%}
+      <p class = 'bigger-font'>{{lastmatch.mapname}}</p>
+          <p><strong>Crew Score</strong> {{lastmatch.crewscore}}</p>
+          <p><strong>Deaths</strong> {{lastmatch.deaths.count()}}
+      </div>
     </div>
 </div>
-{% endblock %}
+{%- endblock -%}

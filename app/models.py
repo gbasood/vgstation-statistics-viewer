@@ -35,6 +35,8 @@ class Match(db.Model):
     malfstat = db.relationship('MalfStats', backref='match', lazy='joined', uselist=False)
 
     date = db.Column(db.DateTime)
+    start_datetime = db.Column(db.DateTime)
+    end_datetime = db.Column(db.DateTime)
 
     def __repr__(self):
         return '<Match #%r | Mode %r Parsed file %r>' % (self.id, self.modes_string, self.parsed_file)
@@ -72,7 +74,18 @@ class Match(db.Model):
 
         delta = start - end
         return int(abs((delta.total_seconds() - delta.total_seconds() % 60) / 60))
-
+    def uplink_buys_by_key(self, key):
+        buys = []
+        for buy in self.uplinkbuys:
+            if buy.mindkey == key:
+                buys.append(buy)
+        return buys
+    def badass_buys_by_key(self, key):
+        badbuys = []
+        for badbuy in self.badassbuy:
+            if badbuy.minkey == key:
+                badbuys.append(badbuy)
+        return badbuys
 
 class Explosion(db.Model):
     id = db.Column(db.Integer, primary_key=True)

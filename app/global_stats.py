@@ -68,7 +68,7 @@ def match_stats():
 
 def checkModeVictory(match):
     modestring = match.modes_string.decode('utf-8').lower()
-    if modestring == "nuclear emergency" or "malfunction" in modestring:
+    if modestring == "nuclear emergency" in modestring:
         if match.nuked == True:
             return True
         else:
@@ -80,6 +80,10 @@ def checkModeVictory(match):
             return False
     elif "meteor" in modestring:
         return False # No one wins in meteor let's be honest
+    elif "blob" in modestring:
+        return match.blobstat.blob_wins
+    elif "ai malfunction" in modestring:
+        return match.malfstat.malf_won
     elif any(modestring in s for s in antag_objective_victory_modes):
         succeeded = 0
         total = 0

@@ -2,7 +2,7 @@
 {% block content %}
   <div id = 'roundinfo' class = 'centerpadded-small bottom-margin'>
   <h1>Round #{{match.id}}</h1>
-    <h2 id = 'mode'>{{match.modes_string}}</h2>
+    <h2 id = 'mode'>{{match.modes_string}} on {{match.mapname}}</h2>
     {% if match.data_version | float >= 1.1 %}
       <p>Lasted {{match.duration()}} minutes (from {{match.starttime|format_timestamp('shortmatchtime')}} to {{match.endtime|format_timestamp('shortmatchtime')}})</p>
     {% elif match.date %}
@@ -39,6 +39,18 @@
             </li>
           {% endfor -%}
           </ol>
+          <ol>
+          {%- for uppurchase in match.uplink_buys_by_key(antag.key) %}
+            <li class = 'uplinkbuy'> {{uppurchase.bundle_path}}</li>
+          {%- endfor -%}
+          {%- for badass in match.badass_buys_by_key(antag.key) %}
+            <li class = 'uplinkbuy'>Badass bundle:</li>
+            <ol>
+              {%- for item in badass.items -%}
+                {{item_path}}
+              {%- endfor -%}
+          {%- endfor -%}
+        </ol>
         </div>
       {% endfor -%}
       </div>

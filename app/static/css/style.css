@@ -212,3 +212,18 @@ h1, h2 {
   display: table-cell;
   padding: 0.5em;
 }
+
+#promote-gitlab {
+  text-align:center;
+  font-size: 150%;
+}
+
+.match.singular {
+  float: none;
+  margin: 0 auto 0;
+  background: #2a2a2a;
+}
+
+.centertext {
+  text-align: center;
+}

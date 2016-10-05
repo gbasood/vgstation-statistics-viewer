@@ -8,10 +8,12 @@ parse_lock = threading.RLock()
 @app.route('/')
 @app.route('/index')
 def index():
-    matchesTotal = len(models.Match.query.all())
+    matches = models.Match.query
+    matchesTotal = len(matches.all())
     nuked = models.Match.query.filter(models.Match.nuked).count()
+    lastmatch = matches.order_by(models.Match.id.desc()).first()
 
-    return render_template('index.html', matchcount = matchesTotal, nukedcount = nuked)
+    return render_template('index.html', matchcount = matchesTotal, nukedcount = nuked, lastmatch = lastmatch)
 
 # @app.route('/import')
 # def test():
