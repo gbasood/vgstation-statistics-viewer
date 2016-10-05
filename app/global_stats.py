@@ -59,6 +59,8 @@ def match_stats():
         if match.is_mixed():
             continue
         victory = checkModeVictory(match)
+        if victory is None:
+            continue
         s = True if match.mastermode == "secret" else False
         t = match.modes_string
         m = MatchTypeVictory(victory, s, t)
@@ -74,16 +76,22 @@ def checkModeVictory(match):
         else:
             return False
     elif "cult" in modestring:
-        if match.cultstat.narsie_summoned:
+        if match.cultstat.narsie_summoned is True:
             return True
         else:
             return False
     elif "meteor" in modestring:
         return False # No one wins in meteor let's be honest
     elif "blob" in modestring:
-        return match.blobstat.blob_wins
+        if match.blobstat:
+            return match.blobstat.blob_wins
+        else:
+            return None
     elif "ai malfunction" in modestring:
-        return match.malfstat.malf_won
+        if match.malfstat:
+            return match.malfstat.malf_won
+        else:
+            return None
     elif any(modestring in s for s in antag_objective_victory_modes):
         succeeded = 0
         total = 0
