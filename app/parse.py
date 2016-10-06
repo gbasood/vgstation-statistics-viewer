@@ -233,6 +233,12 @@ def parse_line(line, match):
             match.malfstat.malf_modules = '|'.join(x.pop(0))
         except:
             raise
+    elif x[0] == 'REVSQUADSTATS':
+        rss = models.RevsquadStats(match_id = match.id)
+        rss.revsquad_won = x[1].encode('ascii')
+        rss.remaining_heads = x[2].encode('ascii')
+
+        db.session.add(rss)
     return True
 
 def nullparse(s):

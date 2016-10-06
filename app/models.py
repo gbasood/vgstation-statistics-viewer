@@ -33,6 +33,7 @@ class Match(db.Model):
     xenostat = db.relationship('XenoStats', backref='match', lazy='joined', uselist=False)
     blobstat = db.relationship('BlobStats', backref='match', lazy='joined', uselist=False)
     malfstat = db.relationship('MalfStats', backref='match', lazy='joined', uselist=False)
+    revsquadstat = db.Relationship('RevsquadStats', backref='match', lazy='joined', uselist=False)
 
     date = db.Column(db.DateTime)
     start_datetime = db.Column(db.DateTime)
@@ -188,3 +189,9 @@ class MalfStats(db.Model):
     malf_shunted = db.Column(db.Boolean)
     borgs_at_roundend = db.Column(db.Integer)
     malf_modules = db.Column(db.String)
+
+class RevsquadStats(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
+    revsquad_won = db.Column(db.Boolean)
+    remaining_heads = db.Column(db.Integer)

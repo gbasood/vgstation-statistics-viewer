@@ -92,6 +92,11 @@ def checkModeVictory(match):
             return match.malfstat.malf_won
         else:
             return None
+    elif "revolutionary squad" in modestring:
+        if match.revsquadstat:
+            return match.revsquadstat.revsquad_won
+        else:
+            return None
     elif any(modestring in s for s in antag_objective_victory_modes):
         succeeded = 0
         total = 0
