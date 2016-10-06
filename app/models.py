@@ -2,6 +2,7 @@ from app import db
 from collections import defaultdict
 from os import listdir, path
 from config import basedir
+from sqlalchemy import and_
 import datetime
 
 class Match(db.Model):
@@ -53,7 +54,7 @@ class Match(db.Model):
         '''Retrieves the objectives for an antag from this match.'''
         return self.antagobjs.filter(AntagObjective.mindkey == antagkey)
     def player_deaths(self):
-        return self.deaths.filter(Death.mindkey != 'null' and Death.mindname != 'Manifested Ghost')
+        return self.deaths.filter(and_(Death.mindkey != 'null', Death.mindname != 'Manifested Ghost'))
     def nonplayer_deaths(self):
         return self.deaths.filter(Death.mindkey == 'null')
     def has_template(self):
