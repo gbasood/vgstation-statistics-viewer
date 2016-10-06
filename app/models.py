@@ -53,7 +53,7 @@ class Match(db.Model):
         '''Retrieves the objectives for an antag from this match.'''
         return self.antagobjs.filter(AntagObjective.mindkey == antagkey)
     def player_deaths(self):
-        return self.deaths.filter(Death.mindkey != 'null')
+        return self.deaths.filter(Death.mindkey != 'null' and Death.mindname != 'Manifested Ghost')
     def nonplayer_deaths(self):
         return self.deaths.filter(Death.mindkey == 'null')
     def has_template(self):
