@@ -109,7 +109,7 @@ def parse_line(line, match):
             end_reg = re.search(expected_timestamp_format, match.endtime)
             match.start_datetime = datetime.datetime(int(start_reg.group(1)),int(start_reg.group(2)),int(start_reg.group(3)),int(start_reg.group(4)),int(start_reg.group(5)),int(start_reg.group(6)))
             match.end_datetime = datetime.datetime(int(end_reg.group(1)),int(end_reg.group(2)),int(end_reg.group(3)),int(end_reg.group(4)),int(end_reg.group(5)),int(end_reg.group(6)))
-            match.round_length = (end_datetime - start_datetime).total_seconds()
+            match.round_length = (match.end_datetime - match.start_datetime).total_seconds()
             # TODO: Test this once PR merges
     elif x[0] == 'MASTERMODE':
         match.mastermode = x[1].encode('ascii')
