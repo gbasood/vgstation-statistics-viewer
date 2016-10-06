@@ -33,7 +33,7 @@ class Match(db.Model):
     xenostat = db.relationship('XenoStats', backref='match', lazy='joined', uselist=False)
     blobstat = db.relationship('BlobStats', backref='match', lazy='joined', uselist=False)
     malfstat = db.relationship('MalfStats', backref='match', lazy='joined', uselist=False)
-    revsquadstat = db.Relationship('RevsquadStats', backref='match', lazy='joined', uselist=False)
+    revsquadstat = db.relationship('RevsquadStats', backref='match', lazy='joined', uselist=False)
 
     date = db.Column(db.DateTime)
     start_datetime = db.Column(db.DateTime)
