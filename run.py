@@ -2,7 +2,7 @@
 
 from flask.ext.script import Manager, Command
 from app import app
-import os, config, ci_config
+import os, config
 
 manager = Manager(app)
 

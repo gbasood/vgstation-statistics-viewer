@@ -1,6 +1,8 @@
 image: python:2.7.12
 
 flask-test:
+  variables:
+    CODECOV_TOKEN: 7633c96e-4f42-4c65-8aa2-6ddee7021660
   before_script:
     - "cd $CI_PROJECT_DIR"
     - "pip install -r requirements.txt"
