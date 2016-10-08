@@ -1,5 +1,4 @@
 Flask==0.10.1
-Flask-CI==0.4.22
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.1
 Jinja2==2.8
@@ -7,3 +6,4 @@ requests>=2.9.1
 SQLAlchemy==1.0.12
 sqlalchemy-migrate==0.10.0
 coverage==4.2
+nose>=1.3.7

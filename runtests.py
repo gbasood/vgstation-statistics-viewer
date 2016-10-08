@@ -51,7 +51,7 @@ class ParseToDBTestCase(unittest.TestCase):
 
         assert testresult and match1 and match1.mapname and match1.crewscore and "HH10SS" in match1.parsed_file
 
-class ViewsTestCase(unittest.TestCase)
+class ViewsTestCase(unittest.TestCase):
 
     def setUp(self):
         self.app = sviewer.test_client()
