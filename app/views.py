@@ -46,7 +46,7 @@ def alert_new_file():
         returnval = parse.batch_parse()
         if returnval is 530:
             return 'Database busy, try later.', 530
-        elif returnval is not None:
+        elif returnval is not None or returnval is -1: 
             return 'ERROR', 500
         return 'OK'
     return 'Already parsing.', 531

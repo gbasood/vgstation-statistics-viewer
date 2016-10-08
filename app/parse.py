@@ -12,7 +12,7 @@ def batch_parse():
 
     if not os.path.exists(STATS_DIR):
         app.logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
-        return 1
+        return -1
     for file in os.listdir(STATS_DIR):
         if fnmatch.fnmatch(file, 'statistics_*.txt'):
             try:
@@ -34,12 +34,12 @@ def batch_parse():
 def parse_file(path):
     if not os.path.exists(path):
         app.logger.error('!! ERROR: Tried to parse non-existant path ' + str(path) )
-        return
+        return False
     f = open(path, 'r+')
     contents = f.read()
     f.close()
     filename = os.path.basename(path)
-    parse(contents, filename)
+    return parse(contents, filename)
 
 def parse_url(url):
     r = requests.get(url)
@@ -71,7 +71,7 @@ def parse(text, filename):
     # Regex is in format yyyy-dd-mm
     search_str = '^statistics_((?:19|20)\d{2})[\. .](0[1-9]|[12][0-9]|3[01])[\. .](0[1-9]|1[012])(?:.*)\.txt$'
     file_date = re.search(search_str, filename)
-    if not file_date:
+    if file_date is None or len(file_date.groups()) != 3:
         app.logger.warning('Invalid filename for timestamp: %r' % filename)
         return False
     match.date = datetime.date(int(file_date.group(1)), int(file_date.group(3)), int(file_date.group(2)))
@@ -87,10 +87,26 @@ def parse(text, filename):
             parse_line(line, match)
         except:
             app.logger.error('Error parsing line: %r' % line)
+            db.session.rollback()
             raise
+            return
         db.session.flush()
     db.session.commit()
     return True
+
+# Format is YYYY.MM.DD.HH.MM.SS
+def format_timestamp(timestamp):
+    expected_timestamp_format = '^(\d{4})\.(0?[1-9]|1[012])\.(0?[1-9]|[12][0-9]|3[01])\.(?:(?:([01]?\d|2[0-3])\.)?([0-5]?\d)\.)?([0-5]?\d)$'
+    searched = re.search(expected_timestamp_format, timestamp)
+    year = int(searched.group(1))
+    month = int(searched.group(2))
+    day = int(searched.group(3))
+    hour = int(searched.group(4))
+    minute = int(searched.group(5))
+    second = int(searched.group(6))
+
+    dated = datetime.datetime(year, month, day, hour, minute, second)
+    return dated
 
 def parse_line(line, match):
     w = line.decode("utf-8",errors='ignore')
@@ -103,12 +119,8 @@ def parse_line(line, match):
         match.starttime = x[3].encode('ascii')
         match.endtime = x[4].encode('ascii')
         if float(match.data_version) >= 1.1:
-            # Format is YYYY.MM.DD.HH.MM.SS
-            expected_timestamp_format = '^(\d{4})\.(0?[1-9]|1[012])\.(0?[1-9]|[12][0-9]|3[01])\.(?:(?:([01]?\d|2[0-3])\.)?([0-5]?\d)\.)?([0-5]?\d)$'
-            start_reg = re.search(expected_timestamp_format, match.starttime)
-            end_reg = re.search(expected_timestamp_format, match.endtime)
-            match.start_datetime = datetime.datetime(int(start_reg.group(1)),int(start_reg.group(2)),int(start_reg.group(3)),int(start_reg.group(4)),int(start_reg.group(5)),int(start_reg.group(6)))
-            match.end_datetime = datetime.datetime(int(end_reg.group(1)),int(end_reg.group(2)),int(end_reg.group(3)),int(end_reg.group(4)),int(end_reg.group(5)),int(end_reg.group(6)))
+            match.start_datetime = format_timestamp(match.starttime)
+            match.end_datetime = format_timestamp(match.endtime)
             match.round_length = (match.end_datetime - match.start_datetime).total_seconds()
             # TODO: Test this once PR merges
     elif x[0] == 'MASTERMODE':

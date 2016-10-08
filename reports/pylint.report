@@ -1,0 +1,4 @@
+************* Module flask_ci_test
+flask_ci_test:1: [F0001(fatal), ] No module named flask_ci_test
+************* Module flask_ci_test_users
+flask_ci_test_users:1: [F0001(fatal), ] No module named flask_ci_test_users

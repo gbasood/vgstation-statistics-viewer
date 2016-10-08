@@ -15,7 +15,7 @@
     {%- endif %}
 		<p class = 'bigger-font'>{{match.mapname}}</p>
         <p><strong>Crew Score</strong> {{match.crewscore}}</p>
-        <p><strong>Deaths</strong> {{match.deaths.count()}}
+        <p><strong>Deaths</strong> {{match.player_deaths()}}
     </div>
 {%- endfor %}
   </div>

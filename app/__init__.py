@@ -22,6 +22,10 @@ errorHandler = RotatingFileHandler('statsserv_error.txt', maxBytes = 100000, bac
 errorHandler.setLevel(logging.WARNING)
 app.logger.addHandler(errorHandler)
 
+logFormat = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'
+ '[in %(pathname)s:%(lineno)d]')
+errorHandler.setFormatter(logFormat)
+
 app.logger.info('Logging enabled.')
 
 from app import views, models

@@ -14,6 +14,7 @@
     </div>
     <div class = 'centertext' style = 'font-size: 80%'>By the way if you have any ideas for grafix to throw around this plain frontpage or the bar up top, let me know over on Gitlab as well</div>
     <p class = 'centertext' style = 'margin-bottom: 0'>Last match:</p>
+    {%- if lastmatch -%}
     <div id = 'matches-shortlist'>
       <div name = 'match-{{lastmatch.id}}' class = 'match singular' data-matchid = '{{lastmatch.id}}'>
           <img src='{{modethumb(lastmatch.modes_string)}}'/>
@@ -24,8 +25,9 @@
       {%- endif -%}
       <p class = 'bigger-font'>{{lastmatch.mapname}}</p>
           <p><strong>Crew Score</strong> {{lastmatch.crewscore}}</p>
-          <p><strong>Deaths</strong> {{lastmatch.deaths.count()}}
+          <p><strong>Deaths</strong> {{lastmatch.player_deaths()}}
       </div>
     </div>
+    {%- endif -%}
 </div>
 {%- endblock -%}

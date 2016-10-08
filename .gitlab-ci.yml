@@ -6,5 +6,6 @@ flask-test:
     - "pip install -r requirements.txt"
   script:
     - "python run.py ci"
+    - "python runtests.py"
   after_script:
     - bash <(curl -s https://codecov.io/bash)
