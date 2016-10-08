@@ -4,10 +4,10 @@ import app as ourapp
 from config import basedir
 from sqlalchemy import MetaData
 
-dbpath = os.path.join(basedir, 'testcontent', 'db', 'test.db')
-if not os.path.exists(os.path.dirname(dbpath)):
-    os.makedirs(os.path.dirname(dbpath))
-sviewer.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(dbpath)
+dbpath = os.path.join(basedir, 'testcontent', 'db', 'test.db') #pragma: no cover
+if not os.path.exists(os.path.dirname(dbpath)): # pragma: no cover
+    os.makedirs(os.path.dirname(dbpath)) # pragma: no cover
+sviewer.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(dbpath) # pragma: no cover
 
 
 class ParseToDBTestCase(unittest.TestCase):
