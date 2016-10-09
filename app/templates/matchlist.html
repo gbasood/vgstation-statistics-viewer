@@ -14,8 +14,12 @@
         <p id = 'match-title'>{{match.modes_string}}</p>
     {%- endif %}
 		<p class = 'bigger-font'>{{match.mapname}}</p>
-        <p><strong>Crew Score</strong> {{match.crewscore}}</p>
-        <p><strong>Deaths</strong> {{match.player_deaths().count()}}
+    <p>{{match.date.strftime('%m/%d/%y')}}
+      {%if match.start_datetime%}
+      {{match.start_datetime.strftime('%H:%M')}}
+    {%endif %}</p>
+    <p><strong>Crew Score</strong> {{match.crewscore}}</p>
+    <p><strong>Deaths</strong> {{match.player_deaths().count()}}
     </div>
 {%- endfor %}
   </div>

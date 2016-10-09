@@ -8,9 +8,12 @@ def format_timestamp(value, format='matchtime'):
         # yyyy mm dd hh mm ss
         value = value.encode('ascii').split('.')
         return "{} {} {}:{}".format(calendar.month_name[int(value[1])], int(value[2]), int(value[3]), value[4] )
-    if format == 'shortmatchtime':
+    elif format == 'shortmatchtime':
         value = value.encode('ascii').split('.')
         return "{}/{} {}:{}".format(int(value[1]), int(value[2]), int(value[3]), value[4] )
+    elif format == 'hhmm': # datetime hour/min
+        value = value.encode('ascii').split('.')
+        return "{}:{}".format(value[4], value[5])
 
 @app.template_filter('obj_successfail')
 def obj_successfail(succeeded):

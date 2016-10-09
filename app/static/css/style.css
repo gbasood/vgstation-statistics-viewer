@@ -1,289 +1,296 @@
-html, body {
-    width: 100%;
-    height: 100%;
-}
-body {
-  background: #444;
-  color: #DDD;
-  font-family: Arial;
-  margin: 0;
+html,body {
+	width: 100%;
+	height: 100%;
 }
 
-a, a:hover, a:active {
-    color: #FFF
+body {
+	background: #444;
+	color: #DDD;
+	font-family: Arial;
+	margin: 0;
+}
+
+a,a:hover,a:active {
+	color: #FFF;
 }
 
 a:hover {
-    color: #CCC;
+	color: #CCC;
 }
 
-h1, h2 {
-    text-align: center;
+h1,h2 {
+	text-align: center;
 }
 
 #header {
-    width: 100%;
-    border-bottom: 1px solid;
-    text-align: center;
-    padding-bottom: 0.25%;
-    margin-bottom: 0.25%;
+	width: 100%;
+	border-bottom: 1px solid;
+	text-align: center;
+	padding-bottom: .25%;
+	margin-bottom: .25%;
 }
 
 #title {
-    font-family: 'Space Mono', Courier, monospace;
-    font-size: 200%;
+	font-family: 'Space Mono',Courier,monospace;
+	font-size: 200%;
 }
 
 .centerpadded-small {
-    margin: auto 20% auto 20%;
-    background: #333;
-    padding: 1em;
+	margin: auto 20%;
+	background: #333;
+	padding: 1em;
 }
 
 .centerpadded {
-    margin: auto 5% auto 5%;
-    padding: 1em;
-    width: 85%;
-    display: table;
+	margin: auto 5%;
+	padding: 1em;
+	width: 85%;
+	display: table;
 }
 
 .indented {
-    text-indent: 0.75em;
-    -webkit-margin-before: 0.25em;
-    -webkit-margin-after: 0.25em;
+	text-indent: .75em;
+	-webkit-margin-before: .25em;
+	-webkit-margin-after: .25em;
 }
 
 #match-container {
-    display: flex;
-    flex-wrap: wrap;
-    padding-left: 15%;
-    padding-right: 15%;
-    margin: 0 auto 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	padding-left: 15%;
+	padding-right: 15%;
+	margin: 0 auto;
 }
 
 @media (max-width: 900px) {
-    #match-container {
-        padding: inherit;
-    }
+	#match-container {
+		padding: inherit;
+	}
 }
+
 @media (max-width: 1200px) and (min-width: 900px) {
-    #match-container {
-        padding-left: 7.5% ;
-        padding-right: 7.5% ;
-    }
+	#match-container {
+		padding-left: 7.5%;
+		padding-right: 7.5%;
+	}
 }
 
 .match {
-    width: 32.5%;
-    height: 18%;
-    float:left;
-    margin: 0.5%;
-    background: #333;
-    text-align: center;
-    cursor: pointer;
+	width: 32.5%;
+	height: 18%;
+	float: left;
+	margin: .5%;
+	background: #333;
+	text-align: center;
+	cursor: pointer;
 }
 
 #match-container .match:nth-of-type(3n) {
-    margin-right: 0;
+	margin-right: 0;
 }
 
 #match-container .match:nth-of-type(3n+1) {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 .match::before {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 5px;
-    background: #333;
-    transition: background-color 0.25s ease;
-    margin-bottom: 5px;
+	content: '';
+	display: block;
+	width: 100%;
+	height: 5px;
+	background: #333;
+	transition: background-color .25s ease;
+	margin-bottom: 5px;
 }
 
 .match p {
-    margin-top: 0.1em;
-    margin-bottom: 0.1em;
+	margin-top: .1em;
+	margin-bottom: .1em;
 }
 
 .match #match-title {
-    width: 100%;
-    font-size: 1.5em;
-    margin-bottom: 0.3em;
-    text-transform: capitalize;
+	width: 100%;
+	font-size: 1.5em;
+	margin-bottom: .3em;
+	text-transform: capitalize;
 }
 
 .match img {
-    margin: 0 auto;
-    width: 32px;
-    height: 32px;
-    display: block;
+	margin: 0 auto;
+	width: 32px;
+	height: 32px;
+	display: block;
 }
 
 .match:hover::before {
-    background: #C23B22;
+	background: #C23B22;
 }
 
 .match:hover #match-title {
-    color: #C23B22;
+	color: #C23B22;
 }
 
 .bigger-font {
-    font-size: 125%;
+	font-size: 125%;
 }
 
 #chart-container {
-  margin: 0 auto;
-  padding: 1em;
-  width: 80%;
+	margin: 0 auto;
+	padding: 1em;
+	width: 80%;
 }
 
 #container {
-  width: 100%;
+	width: 100%;
 }
 
 .pagination {
-  text-align: center;
-  color: #aaa;
+	text-align: center;
+	color: #aaa;
 }
 
 .pagination strong {
-  color: #fff;
+	color: #fff;
 }
 
 .antag {
-  background: #333;
-  padding: 1em;
-  margin-bottom: 1%;
+	background: #333;
+	padding: 1em;
+	margin-bottom: 1%;
 }
 
 .antag #player {
-  display: inline-block;
+	display: inline-block;
 }
 
 .antag #actor {
-  float: right;
-  display: inline-block;
-
+	float: right;
+	display: inline-block;
 }
 
 .antag .objective .success {
-  color: #779ECB;
+	color: #779ECB;
 }
 
 .antag .objective .failure {
-  color: #C23B22;
+	color: #C23B22;
 }
 
 .gridhalf {
-  width: 49.5%;
-  float: left;
-  margin-left: 1%;
+	width: 49.5%;
+	float: left;
+	margin-left: 1%;
 }
 
 .gridcontainer .gridhalf:first-of-type {
-  margin-left: 0;
+	margin-left: 0;
 }
 
 .gridcontainer {
-  margin-bottom: 1%;
+	margin-bottom: 1%;
 }
 
 .bottom-margin {
-  margin-bottom: 1%;
+	margin-bottom: 1%;
 }
 
 .matchdeath {
-  background: #333;
-  padding: 0.25em;
-  margin-bottom: 1%;
+	background: #333;
+	padding: .25em;
+	margin-bottom: 1%;
 }
 
 .matchdeath .lassailant {
-  float: right;
+	float: right;
 }
 
 #roundinfo #mode {
-  text-transform: capitalize;
+	text-transform: capitalize;
 }
 
-#header a .nav-button{
-  background: #333;
-  display: table-cell;
-  padding: 0.5em;
+#roundinfo h3 {
+  text-align: center
+}
+
+#header a .nav-button {
+	background: #333;
+	display: table-cell;
+	padding: .5em;
 }
 
 #promote-gitlab {
-  text-align:center;
-  font-size: 150%;
+	text-align: center;
+	font-size: 150%;
 }
 
 .match.singular {
-  float: none;
-  margin: 0 auto 0;
-  background: #2a2a2a;
+	float: none;
+	margin: 0 auto;
+	background: #2a2a2a;
 }
 
 .centertext {
-  text-align: center;
+	text-align: center;
 }
 
-
-
 .errorpage > div {
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: 'Space Mono', monospace;
+	margin: 0 auto;
+	text-align: center;
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	font-family: 'Space Mono',monospace;
 }
 
 .errorpage > div > p {
-  font-size: 2000%;
-  margin: 0;
+	font-size: 2000%;
+	margin: 0;
 }
 
 .errorpage > div > a {
-  font-size: 200%;
+	font-size: 200%;
 }
 
 .errorpage {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-position: 0px 0px;
-  background-repeat: repeat;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-position: 0 0;
+	background-repeat: repeat;
 }
 
 #notfound {
-  background: url('../img/mapbase1024.png');
-
-  animation: animatedBackground 40s linear infinite;
+	background: url(../img/mapbase1024.png);
+	animation: animatedBackground 40s linear infinite;
 }
 
 @keyframes animatedBackground {
-  from { background-position: 0 0; }
-  to { background-position: 100% 0; }
+	from {
+		background-position: 0 0;
+	}
+
+	to {
+		background-position: 100% 0;
+	}
 }
 
 #error {
-  background: url('../img/malf.gif');
-  background-size: 64px;
+	background: url(../img/malf.gif);
+	background-size: 64px;
 }
 
 #error > div {
-  background: rgba(50, 50, 50, 0.5);
-  padding-top: 50px;
-  padding-bottom: 50px;
+	background: rgba(50,50,50,0.5);
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
 
 #error > div > p {
-  padding: 10px;
-  font-size: 400%;
+	padding: 10px;
+	font-size: 400%;
 }
 
-#error > div > a, #error > div > a:hover {
-  border: 5px solid #fff;
-  text-decoration: none;
+#error > div > a,#error > div > a:hover {
+	border: 5px solid #fff;
+	text-decoration: none;
 }

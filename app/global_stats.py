@@ -1,5 +1,8 @@
-from app import models, db
+from app import models, db, logging
+from werkzeug.contrib.cache import SimpleCache
 import json
+
+cache = SimpleCache()
 
 antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire", 'wizard', 'ragin\' mages', 'revolution']
 do_not_show = ['extended','heist', 'meteor']
@@ -32,24 +35,32 @@ def get_formatted_global_stats():
     return matchData
 
 def get_global_stats():
-    m = match_stats()
 
     victories = dict()
     total = dict()
+    q = cache.get('globalstats')
+    if q is None:
+        logging.debug('Cache miss on globalstats')
 
-    for match in m:
-        if not match.mode in victories:
-            victories[match.mode] = {'wins': 0,'losses': 0}
-            victories[match.mode]['wins'] = 0
-            victories[match.mode]['losses'] = 0
-        if match.victory == True:
-            victories[match.mode]['wins'] = victories[match.mode]['wins'] + 1
-        else:
-            victories[match.mode]['losses'] = victories[match.mode]['losses'] + 1
+        m = match_stats()
+        for match in m:
+            if not match.mode in victories:
+                victories[match.mode] = {'wins': 0,'losses': 0}
+                victories[match.mode]['wins'] = 0
+                victories[match.mode]['losses'] = 0
+            if match.victory == True:
+                victories[match.mode]['wins'] = victories[match.mode]['wins'] + 1
+            else:
+                victories[match.mode]['losses'] = victories[match.mode]['losses'] + 1
+
+        cache.set('globalstats', victories, timeout = 15 * 60) # 15 minutes
+    else:
+        victories = q
+        logging.debug('Cache hit on globalstats')
     return victories
 
 def match_stats():
-    q = db.session.query(models.Match).all()
+    q = models.Match.query.filter(not models.Match.mastermode == "mixed" or not '|' in self.modes_string or not 'meteor' in models.Match.modes_string).all()
 
     matches = []
 
