@@ -10,8 +10,6 @@ manager = Manager(app)
 #     os.system('cls' if os.name=='nt' else 'clear')
 # cls()
 
-manager.add_command('ci', CICommand(ci_config))
-
 if __name__ == '__main__':
     manager.run()
 

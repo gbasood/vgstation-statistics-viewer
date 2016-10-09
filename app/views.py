@@ -46,7 +46,11 @@ def alert_new_file():
         returnval = parse.batch_parse()
         if returnval is 530:
             return 'Database busy, try later.', 530
-        elif returnval is not None or returnval is -1: 
+        elif returnval is not None or returnval is -1:
             return 'ERROR', 500
         return 'OK'
     return 'Already parsing.', 531
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
