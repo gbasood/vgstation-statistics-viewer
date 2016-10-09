@@ -283,7 +283,7 @@ h1, h2 {
   font-size: 400%;
 }
 
-#error > div > a, a:hover {
+#error > div > a, #error > div > a:hover {
   border: 5px solid #fff;
   text-decoration: none;
 }
