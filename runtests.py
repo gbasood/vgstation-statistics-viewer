@@ -36,11 +36,12 @@ class ParseToDBTestCase(unittest.TestCase):
         assert testresult and match1 and match1.mapname and match1.crewscore
 
     def test_parse_invalid_match(self):
+        print('Next test should not pass!')
         try:
-            testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
-            assert testresult == False
+            testresult = ourapp.parse.parse_file('testcontent/invalid/statistics_2015.14.testfile.txt')
             assert ourapp.models.Match.query.first() is None
             assert len(ourapp.models.Match.query.all()) is None
+            self.fail("Test did not fail as expected")
             return False
         except:
             return True
@@ -50,6 +51,12 @@ class ParseToDBTestCase(unittest.TestCase):
         match1 = ourapp.models.Match.query.first()
 
         assert testresult and match1 and match1.mapname and match1.crewscore and "HH10SS" in match1.parsed_file
+
+    def test_parse_sqlinjection_test(self):
+        testresult = ourapp.parse.parse_file('testcontent/invalid/statistics_2015.14.12.sqlinjectiontestfile.txt')
+        match1 = ourapp.models.Match.query.first()
+
+        assert match1 is not None
 
 class ViewsTestCase(unittest.TestCase):
 

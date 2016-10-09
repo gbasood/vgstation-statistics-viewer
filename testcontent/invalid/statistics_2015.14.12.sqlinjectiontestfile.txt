@@ -1,0 +1,111 @@
+STATLOG_START|1.0|Meta Club|5033880064|5033955328
+MASTERMODE|secret
+GAMEMODE|double agents
+TECH_TOTAL|43
+BLOOD_SPILLED|4155.89
+CRATES_ORDERED|7
+ARTIFACTS_DISCOVERED|0
+CREWSCORE|3141
+ESCAPEES|10
+NUKED|0
+MOB_DEATH|/mob/living/carbon/human|null|2378.669921875||197|39|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2378.669921875||194|40|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2378.669921875||195|42|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2378.669921875||186|46|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|3229.409912109375||189|88|1|null|Artificial Test Subject Alpha
+MOB_DEATH|/mob/living/carbon/human|null|3251.18994140625||189|82|1|null|Artifical Test Subject Beta
+MOB_DEATH|/mob/living/carbon/human|null|9456.1796875|Ragno Zoucks|135|127|1|Cowboybuttsdrivemenuts|Kichitawa
+MOB_DEATH|/mob/living/carbon/monkey|null|12993.7802734375|Blank|127|73|1|null|monkey (796)
+MOB_DEATH|/mob/living/carbon/human|traitor|19486.19921875|Unknown|161|194|1|Cpt_Wad|Apple Gray
+MOB_DEATH|/mob/living/carbon/human|traitor|19834.6796875|Blank|80|117|1|Kiniamaro|Gerard Kisler
+MOB_DEATH|/mob/living/carbon/human|null|26090.490234375|Patrick Anderson (as Juan Conrad)|63|46|6|Skumdreg|Joe Bennett
+MOB_DEATH|/mob/living/carbon/human|null|30015.1796875|Hunson Heilstorm|107|120|1|Corgee|Nyla Sky
+MOB_DEATH|/mob/living/carbon/slime|null|30399.9609375||125|60|1|null|grey baby slime (250)
+MOB_DEATH|/mob/living/carbon/slime|null|31857.240234375||116|56|1|null|grey baby slime (955)
+MOB_DEATH|/mob/living/carbon/human|null|40297.98046875|Unknown (as Piper Kuster)|0|0|0|ClickCrisis|Blank
+MOB_DEATH|/mob/living/carbon/monkey|null|49186.19921875|Patrick Anderson (as Juan Conrad)|93|91|1|null|monkey (402)
+MOB_DEATH|/mob/living/carbon/slime|null|49683.1796875||110|108|1|Golfer45|Terrel Lord
+MOB_DEATH|/mob/living/carbon/human|null|51222.62890625|Patrick Anderson (as Juan Conrad)|104|92|1|null|Wynter Mortland
+MOB_DEATH|/mob/living/carbon/monkey|null|55314.30078125|Unknown|115|116|1|null|Rimshot
+MOB_DEATH|/mob/living/carbon/monkey|null|55370.73046875|Unknown|131|128|1|null|Pun Pun
+MOB_DEATH|/mob/living/carbon/monkey|null|56127.08984375||127|115|1|null|monkey (274)
+MOB_DEATH|/mob/living/carbon/monkey|null|56858.69921875|Wynter Mortland|127|117|1|null|monkey (73)
+MOB_DEATH|/mob/living/carbon/human|null|60639.51171875|Reynard Reynolds|103|163|1|CadaverousCoyote'); DROP TABLE *; --|Jeffrey Hirleman'); DROP TABLE *; --
+MOB_DEATH|/mob/living/carbon/human|null|61425.5703125|Unknown|113|37|1|Corgee|Nyla Sky
+MOB_DEATH|/mob/living/carbon/human|traitor|64432.19921875|the grey adult slime (162)|112|113|1|TonyGunk|Reynard Reynolds
+MOB_DEATH|/mob/living/carbon/human|null|64527.23828125|Reynard Reynolds|93|89|1|SangriaMonkey|Nicklas Aue
+MOB_DEATH|/mob/living/carbon/human|null|65859.78125|Reynard Reynolds|209|134|1|Gorgonmaia|Caiden Roberts
+MOB_DEATH|/mob/living/carbon/human|null|67549.7109375|Roberto Anderson|131|110|1|Ekkosangen|Roberto Anderson
+MOB_DEATH|/mob/living/carbon/human|null|68063.5234375||138|71|1|FudgePucker|Griffin Dennis
+MOB_DEATH|/mob/living/carbon/human|null|68082.328125||103|70|1|Lancemaker|Baking Soda
+MOB_DEATH|/mob/living/carbon/human|null|68118.9609375||100|79|1|Clugehead|Hunson Heilstorm
+MOB_DEATH|/mob/living/carbon/monkey|null|68562.4765625|Opie Armstrong|97|75|1|null|monkey (507)
+MOB_DEATH|/mob/living/carbon/monkey|null|68600.1015625||98|71|1|null|monkey (834)
+MOB_DEATH|/mob/living/carbon/monkey|null|68636.7265625|the monkey (854)|98|73|1|null|monkey (318)
+MOB_DEATH|/mob/living/carbon/slime|null|68672.3671875||112|74|1|null|grey baby slime (321)
+MOB_DEATH|/mob/living/carbon/human|null|68746.953125||108|88|1|Exxion|Kayahi
+MOB_DEATH|/mob/living/carbon/monkey|null|68763.453125|the monkey (380)|97|73|1|null|monkey (307)
+MOB_DEATH|/mob/living/carbon/monkey|null|68783.25||98|71|1|null|monkey (346)
+MOB_DEATH|/mob/living/carbon/monkey|null|68802.0625||98|71|1|null|monkey (854)
+MOB_DEATH|/mob/living/carbon/monkey|null|68820.8671875|the nanotrasen minebot|97|74|1|null|monkey (194)
+MOB_DEATH|/mob/living/carbon/monkey|null|68874.328125|the monkey (318)|95|93|1|null|monkey (849)
+MOB_DEATH|/mob/living/carbon/monkey|null|68874.328125|the monkey (854)|99|68|1|null|monkey (272)
+MOB_DEATH|/mob/living/carbon/monkey|null|68874.328125|the monkey (346)|97|75|1|null|monkey (569)
+MOB_DEATH|/mob/living/carbon/monkey|null|68874.328125||99|70|1|null|monkey (565)
+MOB_DEATH|/mob/living/carbon/monkey|null|68874.328125|the monkey (380)|99|71|1|null|monkey (421)
+MOB_DEATH|/mob/living/carbon/monkey|null|68874.328125||98|71|1|null|monkey (380)
+MOB_DEATH|/mob/living/carbon/monkey|null|68874.328125||98|71|1|null|monkey (925)
+MOB_DEATH|/mob/living/carbon/human|null|68965.40625|Reynard Reynolds|98|103|1|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|69332.703125|Opie Armstrong|89|102|1|Napalmpanda|Opie Armstrong
+MOB_DEATH|/mob/living/carbon/human|null|69473.9375|Reynard Reynolds|89|104|1|null|Piper Kuster
+MOB_DEATH|/mob/living/carbon/human|null|69571.2890625|Reynard Reynolds|94|104|1|Buttswana|Darren Powers
+MOB_DEATH|/mob/living/carbon/slime|null|69571.2890625|the nanotrasen minebot|99|64|1|Strawberrytan|Peacock One-Seven
+MOB_DEATH|/mob/living/carbon/human|null|69607.921875||107|89|1|DrJelly|Janel Ringer
+MOB_DEATH|/mob/living/carbon/human|null|70561.2890625|Patrick Anderson (as Juan Conrad)|100|90|1|null|Logan Heckendora
+MOB_DEATH|/mob/living/carbon/human|traitor|71303.7890625|Nicklas Aue|95|106|1|Jackrip|William Addison
+MOB_DEATH|/mob/living/carbon/human|traitor|71500.796875|Hunson Heilstorm|97|74|1|IrishManiac|Hans Nelson
+MOB_DEATH|/mob/living/carbon/human|null|72280.921875||0|0|0|null|Ciara Cox
+MOB_DEATH|/mob/living/carbon/human|null|72772.953125|Hunson Heilstorm|98|98|1|Dusty49|Sloan Poley
+MOB_DEATH|/mob/living/silicon/ai|null|72882.1796875||215|145|1|Tnepr|V.A.L.I.D.
+MOB_DEATH|/mob/living/carbon/human|null|73666.921875|Nicklas Aue|101|102|1|Miniature Bigfoot|Camron Margaret
+EXPLOSION|135|127|1|-1|-1|1|1
+EXPLOSION|118|193|5|1|3|5|5
+EXPLOSION|97|189|5|1|3|5|5
+EXPLOSION|95|161|5|1|3|5|5
+EXPLOSION|84|120|1|-1|-1|2|2
+EXPLOSION|106|155|5|1|3|5|5
+EXPLOSION|109|149|5|1|3|5|5
+EXPLOSION|134|162|5|1|3|5|5
+EXPLOSION|120|83|5|1|3|5|5
+EXPLOSION|123|84|5|1|3|5|5
+EXPLOSION|122|98|5|1|3|5|5
+EXPLOSION|122|112|5|1|3|5|5
+EXPLOSION|133|117|5|1|3|5|5
+EXPLOSION|125|205|5|1|3|5|5
+EXPLOSION|111|97|1|1|2|4|4
+UPLINK_ITEM|Kiniamaro|Gerard Kisler|1|/datum/uplink_item/stealthy_weapons/para_pen|/obj/item/weapon/pen/paralysis
+UPLINK_ITEM|Jackrip|William Addison|1|/datum/uplink_item/jobspecific/radgun|/obj/item/weapon/gun/energy/radgun
+UPLINK_ITEM|TonyGunk|Reynard Reynolds|1|/datum/uplink_item/stealthy_weapons/detomatix|/obj/item/weapon/cartridge/syndicate
+UPLINK_ITEM|TonyGunk|Reynard Reynolds|1|/datum/uplink_item/jobspecific/briefcase_smg|/obj/item/weapon/storage/briefcase/false_bottomed/smg
+UPLINK_ITEM|Kiniamaro|Gerard Kisler|1|/datum/uplink_item/device_tools/pdapinpointer|/obj/item/weapon/pinpointer/pdapinpointer
+UPLINK_ITEM|TonyGunk|Reynard Reynolds|1|/datum/uplink_item/stealthy_weapons/para_pen|/obj/item/weapon/pen/paralysis
+UPLINK_ITEM|TonyGunk|Reynard Reynolds|1|/datum/uplink_item/stealthy_tools/syndigolashes|/obj/item/clothing/shoes/syndigaloshes
+UPLINK_ITEM|Kiniamaro|Gerard Kisler|1|/datum/uplink_item/dangerous/viscerator|/obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
+UPLINK_ITEM|Ricklaus|Esteban Thomas|0|/datum/uplink_item/device_tools/plastic_explosives|/obj/item/weapon/plastique
+UPLINK_ITEM|IrishManiac|Hans Nelson|1|/datum/uplink_item/jobspecific/mastertrainer|/obj/item/weapon/storage/belt/lazarus/antag
+UPLINK_ITEM|IrishManiac|Hans Nelson|1|/datum/uplink_item/jobspecific/mastertrainer|/obj/item/weapon/storage/belt/lazarus/antag
+UPLINK_ITEM|IrishManiac|Hans Nelson|1|/datum/uplink_item/implants/explosive|/obj/item/weapon/storage/box/syndie_kit/imp_explosive
+BADASS_BUNDLE|Cpt_Wad|Apple Gray|1|/obj/item/beacon/syndicate|/obj/item/clothing/suit/space/syndicate|/obj/item/clothing/head/helmet/space/syndicate|/obj/item/weapon/card/emag
+CULTSTATS|0|0|0|0|0|0|0|0|0
+XENOSTATS|0|0|0
+ANTAG_OBJ|Gerard Kisler|Kiniamaro|traitor|/datum/objective/assassinate|Reynard Reynolds|Internal Affairs Agent|Reynard Reynolds|1|Assassinate Reynard Reynolds, the traitor.
+ANTAG_OBJ|Gerard Kisler|Kiniamaro|traitor|/datum/objective/escape|0|Escape on the shuttle or an escape pod alive and free.
+ANTAG_OBJ|Reynard Reynolds|TonyGunk|traitor|/datum/objective/assassinate|Hans Nelson|Shaft Miner|Hans Nelson|1|Assassinate Hans Nelson, the traitor.
+ANTAG_OBJ|Reynard Reynolds|TonyGunk|traitor|/datum/objective/die|1|Die a glorious death.
+ANTAG_OBJ|Apple Gray|Cpt_Wad|traitor|/datum/objective/assassinate|William Addison|Geneticist|William Addison|1|Assassinate William Addison, the traitor.
+ANTAG_OBJ|Apple Gray|Cpt_Wad|traitor|/datum/objective/die|1|Die a glorious death.
+ANTAG_OBJ|Hans Nelson|IrishManiac|traitor|/datum/objective/assassinate|Apple Gray|Botanist|Apple Gray|1|Assassinate Apple Gray, the traitor.
+ANTAG_OBJ|Hans Nelson|IrishManiac|traitor|/datum/objective/die|1|Die a glorious death.
+ANTAG_OBJ|William Addison|Jackrip|traitor|/datum/objective/assassinate|Gerard Kisler|Librarian|Gerard Kisler|1|Assassinate Gerard Kisler, the traitor.
+ANTAG_OBJ|William Addison|Jackrip|traitor|/datum/objective/escape|0|Escape on the shuttle or an escape pod alive and free.
+WRITE_COMPLETE
