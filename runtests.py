@@ -10,7 +10,7 @@ if not os.path.exists(os.path.dirname(dbpath)): # pragma: no cover
 sviewer.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(dbpath) # pragma: no cover
 
 
-class ParseToDBTestCase(unittest.TestCase):
+class ParseToDBTestCase(unittest.TestCase): # pragma: no cover
 
     def setUp(self):
         self.app = sviewer.test_client()
@@ -58,7 +58,7 @@ class ParseToDBTestCase(unittest.TestCase):
 
         assert match1 is not None
 
-class ViewsTestCase(unittest.TestCase):
+class ViewsTestCase(unittest.TestCase): # pragma: no cover
 
     def setUp(self):
         self.app = sviewer.test_client()
@@ -70,5 +70,19 @@ class ViewsTestCase(unittest.TestCase):
     def tearDown(self):
         ourapp.db.drop_all()
 
-if __name__ == '__main__':
+    def test_global_stats(self):
+        rv = self.app.get('/globalstats')
+        assert b'matchChart' in rv.data
+
+    def test_matchlist(self):
+        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
+        rv = self.app.get('/matchlist')
+        assert b'match-title' in rv.data
+
+    def test_matchpage(self):
+        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
+        rv = self.app.get('/match/1')
+        assert b'Player deaths' in rv.data
+
+if __name__ == '__main__': # pragma: no cover
     unittest.main()
