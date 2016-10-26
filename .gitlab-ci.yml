@@ -7,6 +7,6 @@ flask-test:
     - "cd $CI_PROJECT_DIR"
     - "pip install -r requirements.txt"
   script:
-    - "coverage run runtests.py"
+    - "nosetests runtests.py --with-coverage --cover-package=app --cover-erase"
   after_script:
     - bash <(curl -s https://codecov.io/bash)
