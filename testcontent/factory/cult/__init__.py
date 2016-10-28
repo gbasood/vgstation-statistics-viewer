@@ -3,6 +3,7 @@ from app import models, db
 from factory.fuzzy import FuzzyInteger, FuzzyChoice
 truefalse = [True, False]
 
+
 class CultStatFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = models.CultStats
