@@ -5,6 +5,7 @@ from config import basedir
 from sqlalchemy import and_
 import datetime
 
+
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     parsed_file = db.Column(db.String(255), index=False, unique=True, nullable=False)
@@ -22,7 +23,7 @@ class Match(db.Model):
 
     starttime = db.Column(db.Integer)
     endtime = db.Column(db.Integer)
-    #Calculated value in seconds
+    # Calculated value in seconds
     round_length = db.Column(db.Integer)
 
     explosions = db.relationship('Explosion', backref='match', lazy='dynamic')
@@ -42,21 +43,27 @@ class Match(db.Model):
 
     def __repr__(self):
         return '<Match #%r | Mode %r Parsed file %r>' % (self.id, self.modes_string, self.parsed_file)
+
     def is_mixed(self):
         return self.mastermode == "mixed" or '|' in self.modes_string
+
     def get_antags(self):
         antags = []
         for obj in self.antagobjs.group_by(AntagObjective.mindkey):
             antag = {'key': obj.mindkey, 'name': obj.mindname, 'role': obj.special_role}
             antags.append(antag)
         return antags
+
     def objs_for_antag(self, antagkey):
         '''Retrieves the objectives for an antag from this match.'''
         return self.antagobjs.filter(AntagObjective.mindkey == antagkey)
+
     def player_deaths(self):
         return self.deaths.filter(and_(Death.mindkey != 'null', Death.mindname != 'Manifested Ghost'))
+
     def nonplayer_deaths(self):
         return self.deaths.filter(Death.mindkey == 'null')
+
     def has_template(self):
         if self.is_mixed():
             return False
@@ -65,6 +72,7 @@ class Match(db.Model):
                 if '_' + self.modes_string.lower() + '.html' in file:
                     return True
             return False
+
     def duration(self):
         if(float(self.data_version) < 1.1):
             return None
@@ -76,18 +84,21 @@ class Match(db.Model):
 
         delta = start - end
         return int(abs((delta.total_seconds() - delta.total_seconds() % 60) / 60))
+
     def uplink_buys_by_key(self, key):
         buys = []
         for buy in self.uplinkbuys:
             if buy.mindkey == key:
                 buys.append(buy)
         return buys
+
     def badass_buys_by_key(self, key):
         badbuys = []
         for badbuy in self.badassbuy:
             if badbuy.mindkey == key:
                 badbuys.append(badbuy)
         return badbuys
+
 
 class Explosion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -99,6 +110,7 @@ class Explosion(db.Model):
     heavy_impact_range = db.Column(db.Integer)
     light_impact_range = db.Column(db.Integer)
     max_range = db.Column(db.Integer)
+
 
 class Death(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -117,6 +129,7 @@ class Death(db.Model):
     # def __repr__(self):
     #     return '<Death #%r>' % (self.id)
 
+
 class AntagObjective(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
@@ -132,6 +145,7 @@ class AntagObjective(db.Model):
     def __repr__(self):
         return '<AntagObjective #%r | Name %r | Key %r| Type #%r | Succeeded %r>' % (self.id, self.mindname, self.mindkey, self.objective_type, self.objective_succeeded)
 
+
 class UplinkBuy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
@@ -140,6 +154,7 @@ class UplinkBuy(db.Model):
     traitor_buyer = db.Column(db.Boolean)
     bundle_path = db.Column(db.String)
     item_path = db.Column(db.String)
+
 
 class BadassBundleBuy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -150,10 +165,12 @@ class BadassBundleBuy(db.Model):
 
     items = db.relationship("BadassBundleItem", backref='badass_bundle_buy', lazy='joined')
 
+
 class BadassBundleItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     badass_bundle_id = db.Column(db.Integer, db.ForeignKey('badass_bundle_buy.id'), index=True)
     item_path = db.Column(db.String)
+
 
 class CultStats(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -168,12 +185,14 @@ class CultStats(db.Model):
     surviving_cultists = db.Column(db.Integer)
     deconverted = db.Column(db.Integer)
 
+
 class XenoStats(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     eggs_laid = db.Column(db.Integer)
     faces_hugged = db.Column(db.Integer)
     faces_protected = db.Column(db.Integer)
+
 
 class BlobStats(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -183,6 +202,7 @@ class BlobStats(db.Model):
     spores_spawned = db.Column(db.Integer)
     res_generated = db.Column(db.Integer)
 
+
 class MalfStats(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
@@ -190,6 +210,7 @@ class MalfStats(db.Model):
     malf_shunted = db.Column(db.Boolean)
     borgs_at_roundend = db.Column(db.Integer)
     malf_modules = db.Column(db.String)
+
 
 class RevsquadStats(db.Model):
     id = db.Column(db.Integer, primary_key=True)

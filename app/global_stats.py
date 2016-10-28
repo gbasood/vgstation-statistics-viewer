@@ -5,19 +5,26 @@ import json
 cache = SimpleCache()
 
 antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire", 'wizard', 'ragin\' mages', 'revolution']
-do_not_show = ['extended','heist', 'meteor']
+do_not_show = ['extended', 'heist', 'meteor']
 objective_success_threshold = 0.49
+
 
 class MatchTypeVictory:
     victory = False
     secret = False
     mode = None
+
     def __init__(self, v, s, m):
-        if(v): self.victory = v
-        if(s): self.secret = s
-        if(m): self.mode = m
+        if v:
+            self.victory = v
+        if s:
+            self.secret = s
+        if m:
+            self.mode = m
+
     def __str__(self):
         return 'Mode: %s Victory: %s Secret: %s' % (self.mode, self.victory, self.secret)
+
 
 def get_formatted_global_stats():
     stats = get_global_stats()
@@ -34,6 +41,7 @@ def get_formatted_global_stats():
     matchData['losses'] = json.dumps(losses, ensure_ascii=True)
     return matchData
 
+
 def get_global_stats():
 
     victories = dict()
@@ -44,23 +52,24 @@ def get_global_stats():
 
         m = match_stats()
         for match in m:
-            if not match.mode in victories:
-                victories[match.mode] = {'wins': 0,'losses': 0}
+            if match.mode not in victories:
+                victories[match.mode] = {'wins': 0, 'losses': 0}
                 victories[match.mode]['wins'] = 0
                 victories[match.mode]['losses'] = 0
-            if match.victory == True:
+            if match.victory is True:
                 victories[match.mode]['wins'] = victories[match.mode]['wins'] + 1
             else:
                 victories[match.mode]['losses'] = victories[match.mode]['losses'] + 1
 
-        cache.set('globalstats', victories, timeout = 15 * 60) # 15 minutes
+        cache.set('globalstats', victories, timeout=15 * 60)  # 15 minutes
     else:
         victories = q
         logging.debug('Cache hit on globalstats')
     return victories
 
+
 def match_stats():
-    q = models.Match.query.filter(not models.Match.mastermode == "mixed" or not '|' in self.modes_string or not 'meteor' in models.Match.modes_string).all()
+    q = models.Match.query.filter(models.Match.mastermode != "mixed" or '|' not in self.modes_string or 'meteor' not in models.Match.modes_string).all()
 
     matches = []
 
@@ -82,7 +91,7 @@ def match_stats():
 def checkModeVictory(match):
     modestring = match.modes_string.decode('utf-8').lower()
     if modestring == "nuclear emergency" in modestring:
-        if match.nuked == True:
+        if match.nuked is True:
             return True
         else:
             return False
@@ -92,7 +101,7 @@ def checkModeVictory(match):
         else:
             return False
     elif "meteor" in modestring:
-        return False # No one wins in meteor let's be honest
+        return False  # No one wins in meteor let's be honest
     elif "blob" in modestring:
         if match.blobstat:
             return match.blobstat.blob_wins
@@ -112,14 +121,14 @@ def checkModeVictory(match):
         succeeded = 0
         total = 0
         for objective in match.antagobjs:
-            total+=1
+            total += 1
             if objective.objective_succeeded:
-                succeeded+=1
+                succeeded += 1
         if succeeded == 0:
             return False
         elif total == 0:
             return False
-        ratio = float(succeeded)/float(total)
+        ratio = float(succeeded) / float(total)
         if ratio >= objective_success_threshold:
             return True
         else:

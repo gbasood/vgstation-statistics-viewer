@@ -2,6 +2,7 @@ import factory
 from app import models, db
 from factory.fuzzy import FuzzyInteger, FuzzyChoice
 
+
 class CultStatFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = models.CultStats
