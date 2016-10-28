@@ -16,17 +16,17 @@
     <p class = 'centertext' style = 'margin-bottom: 0'>Last match:</p>
     {%- if lastmatch -%}
     <div id = 'matches-shortlist'>
-      <div name = 'match-{{lastmatch.id}}' class = 'match singular' data-matchid = '{{lastmatch.id}}'>
+      <a name = 'match-{{lastmatch.id}}' class = 'match singular block' href='/match/{{lastmatch.id}}'>
           <img src='{{modethumb(lastmatch.modes_string)}}'/>
       {%- if lastmatch.is_mixed() -%}
           <p id ='match-title'>Mixed</p>
       {%- else -%}
           <p id = 'match-title'>{{lastmatch.modes_string}}</p>
       {%- endif -%}
-      <p class = 'bigger-font'>{{lastmatch.mapname}}</p>
+          <p class = 'bigger-font'>{{lastmatch.mapname}}</p>
           <p><strong>Crew Score</strong> {{lastmatch.crewscore}}</p>
-          <p><strong>Deaths</strong> {{lastmatch.player_deaths().count()}}
-      </div>
+          <p><strong>Deaths</strong> {{lastmatch.player_deaths().count()}}</p>
+      </a>
     </div>
     {%- endif -%}
 </div>
