@@ -15,9 +15,9 @@
     {%- endif %}
 		<p class = 'bigger-font'>{{match.mapname}}</p>
     <p>{{match.date.strftime('%m/%d/%y')}}
-      {%if match.start_datetime%}
+      {%-if match.start_datetime%}
       {{match.start_datetime.strftime('%H:%M')}}
-    {%endif %}</p>
+    {%-endif %}</p>
     <p><strong>Crew Score</strong> {{match.crewscore}}</p>
     <p><strong>Deaths</strong> {{match.player_deaths().count()}}</p>
     </a>

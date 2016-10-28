@@ -3,6 +3,7 @@ from app import app as sviewer
 import app as ourapp
 from config import basedir
 from sqlalchemy import MetaData
+from testcontent import factories
 
 dbpath = os.path.join(basedir, 'testcontent', 'db', 'test.db') #pragma: no cover
 if not os.path.exists(os.path.dirname(dbpath)): # pragma: no cover
@@ -71,6 +72,8 @@ class ViewsTestCase(unittest.TestCase): # pragma: no cover
         ourapp.db.drop_all()
 
     def test_global_stats(self):
+        factories.match.MatchFactory()
+
         rv = self.app.get('/globalstats')
         assert b'matchChart' in rv.data
 

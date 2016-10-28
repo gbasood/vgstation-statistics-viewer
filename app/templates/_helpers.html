@@ -4,18 +4,18 @@
     <a href="{{ url_for(endpoint, page=pagination.prev_num, external=True) }}">«</a>
   {%- endif -%}
   {%- for page in pagination.iter_pages() %}
-    {% if page %}
+    {%- if page -%}
       {% if page != pagination.page %}
-        <a href="{{ url_for(endpoint, page=page, external=True) }}">{{ page }}</a>
-      {% else %}
-        <strong>{{ page }}</strong>
-      {% endif %}
+    <a href="{{ url_for(endpoint, page=page, external=True) }}">{{ page }}</a>
+      {%- else %}
+    <strong>{{ page }}</strong>
+      {%- endif -%}
     {% else %}
-      <span class=ellipsis>…</span>
-    {% endif %}
-  {%- endfor %}
-  {%- if pagination.has_next -%}
+    <span class=ellipsis>…</span>
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if pagination.has_next %}
     <a href="{{ url_for(endpoint, page=pagination.next_num, external=True) }}">»</a>
-  {%- endif -%}
+  {%- endif %}
   </div>
 {% endmacro %}
