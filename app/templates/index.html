@@ -16,7 +16,7 @@
     <p class = 'centertext' style = 'margin-bottom: 0'>Last match:</p>
     {%- if lastmatch -%}
     <div id = 'matches-shortlist'>
-      <a name = 'match-{{lastmatch.id}}' class = 'match singular block' href='/match/{{lastmatch.id}}'>
+      <a class = 'match singular block' href='/match/{{lastmatch.id}}'>
           <img src='{{modethumb(lastmatch.modes_string)}}'/>
       {%- if lastmatch.is_mixed() -%}
           <p id ='match-title'>Mixed</p>
