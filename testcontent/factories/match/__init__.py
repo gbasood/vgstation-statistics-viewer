@@ -3,7 +3,7 @@ import datetime
 import pytz
 from datetime import tzinfo
 from app import models, db
-from testcontent import factory as ourfactory
+from testcontent import factories as ourfactory
 from factory.fuzzy import FuzzyInteger, FuzzyChoice, FuzzyDateTime
 
 
