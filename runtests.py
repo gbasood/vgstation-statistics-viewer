@@ -3,7 +3,7 @@ from app import app as sviewer
 import app as ourapp
 from config import basedir
 from sqlalchemy import MetaData
-from testcontent import factory as factories
+from testcontent import factories
 
 dbpath = os.path.join(basedir, 'testcontent', 'db', 'test.db') #pragma: no cover
 if not os.path.exists(os.path.dirname(dbpath)): # pragma: no cover

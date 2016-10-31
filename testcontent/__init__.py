@@ -1,1 +1,1 @@
-from factory import cult, match
+from factories import cult, match
