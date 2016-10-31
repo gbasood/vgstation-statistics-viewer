@@ -31,7 +31,7 @@ def get_formatted_global_stats():
     stats = get_global_stats()
 
     matchData = {}
-    matchData['types'] = json.dumps(stats.keys(), ensure_ascii=True)
+    matchData['types'] = json.dumps(list(stats.keys()), ensure_ascii=True)
     matchData['matches'] = json.dumps(stats, ensure_ascii=True)
     wins = []
     losses = []
