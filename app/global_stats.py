@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from app import models, db, logging
 from werkzeug.contrib.cache import SimpleCache
 import json
@@ -89,7 +90,7 @@ def match_stats():
 
 
 def checkModeVictory(match):
-    modestring = match.modes_string.decode('utf-8').lower()
+    modestring = match.modes_string.lower()
     if modestring == "nuclear emergency" in modestring:
         if match.nuked is True:
             return True

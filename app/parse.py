@@ -7,6 +7,7 @@ import shutil
 import sys
 import datetime
 import re
+from __future__ import unicode_literals
 from app import app, models, db
 from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
@@ -121,135 +122,134 @@ def format_timestamp(timestamp):
 
 
 def parse_line(line, match):
-    w = line.decode("utf-8", errors='ignore')
-    x = w.split('|')
+    x = line.split('|')
     x = nullparse(x)
 
     if x[0] == 'STATLOG_START':
-        match.data_version = x[1].encode('ascii')
-        match.mapname = x[2].encode('ascii')
-        match.starttime = x[3].encode('ascii')
-        match.endtime = x[4].encode('ascii')
+        match.data_version = x[1]
+        match.mapname = x[2]
+        match.starttime = x[3]
+        match.endtime = x[4]
         if float(match.data_version) >= 1.1:
             match.start_datetime = format_timestamp(match.starttime)
             match.end_datetime = format_timestamp(match.endtime)
             match.round_length = (match.end_datetime - match.start_datetime).total_seconds()
             # TODO: Test this once PR merges
     elif x[0] == 'MASTERMODE':
-        match.mastermode = x[1].encode('ascii')
+        match.mastermode = x[1]
     elif x[0] == "GAMEMODE":
         prefix = len("GAMEMODE|")
-        match.modes_string = w[prefix:]
-        match.modes_string = match.modes_string.encode('ascii')
+        match.modes_string = line[prefix:]
+        match.modes_string = match.modes_string
     elif x[0] == "TECH_TOTAL":
-        match.tech_total = x[1].encode('ascii')
+        match.tech_total = x[1]
     elif x[0] == "BLOOD_SPILLED":
-        match.blood_spilled = x[1].encode('ascii')
+        match.blood_spilled = x[1]
     elif x[0] == "CRATES_ORDERED":
-        match.crates_ordered = x[1].encode('ascii')
+        match.crates_ordered = x[1]
     elif x[0] == "ARTIFACTS_DISCOVERED":
-        match.artifacts_discovered = x[1].encode('ascii')
+        match.artifacts_discovered = x[1]
     elif x[0] == "CREWSCORE":
-        match.crewscore = x[1].encode('ascii')
+        match.crewscore = x[1]
     elif x[0] == "NUKED":
         match.nuked = truefalse(x[1])
     elif x[0] == "ESCAPEES":
-        match.escapees = x[1].encode('ascii')
+        match.escapees = x[1]
     elif x[0] == "MOB_DEATH":
         d = models.Death(match_id=match.id)
-        d.mindname = nullparse(x[9]).encode('ascii')
-        d.mindkey = nullparse(x[8]).encode('ascii')
-        d.timeofdeath = x[3].encode('ascii')
-        d.typepath = x[1].encode('ascii')
-        d.special_role = x[2].encode('ascii')
-        d.last_assailant = x[4].encode('ascii')
-        d.death_x = x[5].encode('ascii')
-        d.death_y = x[6].encode('ascii')
-        d.death_z = x[7].encode('ascii')
+        d.mindname = nullparse(x[9])
+        d.mindkey = nullparse(x[8])
+        d.timeofdeath = x[3]
+        d.typepath = x[1]
+        d.special_role = x[2]
+        d.last_assailant = x[4]
+        d.death_x = x[5]
+        d.death_y = x[6]
+        d.death_z = x[7]
 
         db.session.add(d)
     elif x[0] == "ANTAG_OBJ":
         a = models.AntagObjective(match_id=match.id)
-        a.mindname = nullparse(x[1]).encode('ascii')
-        a.mindkey = nullparse(x[2]).encode('ascii')
-        a.special_role = x[3].encode('ascii')
-        a.objective_type = x[4].encode('ascii')
-        a.objective_desc = x[6].encode('ascii')
+        a.mindname = nullparse(x[1])
+        a.mindkey = nullparse(x[2])
+        a.special_role = x[3]
+        a.objective_type = x[4]
+        a.objective_desc = x[6]
         # Check if this is a targeted objective or not.
         if x[5].isdigit():
-            a.objective_succeeded = int(x[5].encode('ascii'))
+            a.objective_succeeded = int(x[5])
         else:
-            a.objective_succeeded = int(x[8].encode('ascii'))
-            a.target_name = x[7].encode('ascii')
-            a.target_role = x[6].encode('ascii')
+            a.objective_succeeded = int(x[8])
+            a.target_name = x[7]
+            a.target_role = x[6]
         if a.objective_succeeded >= 2:  # Mutiny gives 2 as an additional success value.
             a.objective_succeeded = 1
         db.session.add(a)
     elif x[0] == "EXPLOSION":
         e = models.Explosion(match_id=match.id)
-        e.epicenter_x = x[1].encode('ascii')
-        e.epicenter_y = x[2].encode('ascii')
-        e.epicenter_z = x[3].encode('ascii')
-        e.devestation_range = x[4].encode('ascii')
-        e.heavy_impact_range = x[5].encode('ascii')
-        e.light_impact_range = x[6].encode('ascii')
-        e.max_range = x[7].encode('ascii')
+        e.epicenter_x = x[1]
+        e.epicenter_y = x[2]
+        e.epicenter_z = x[3]
+        e.devestation_range = x[4]
+        e.heavy_impact_range = x[5]
+        e.light_impact_range = x[6]
+        e.max_range = x[7]
 
         db.session.add(e)
     elif x[0] == "UPLINK_ITEM":
         u = models.UplinkBuy(match_id=match.id)
-        u.mindname = x[2].encode('ascii')
-        u.mindkey = x[1].encode('ascii')
+        u.mindname = x[2]
+        u.mindkey = x[1]
         u.traitor_buyer = truefalse(x[3])
-        u.bundle_path = x[4].encode('ascii')
-        u.item_path = x[5].encode('ascii')
+        u.bundle_path = x[4]
+        u.item_path = x[5]
 
         db.session.add(u)
     elif x[0] == "BADASS_BUNDLE":
         bb = models.BadassBundleBuy(match_id=match.id)
-        bb.mindname = x[2].encode('ascii')
-        bb.mindkey = x[1].encode('ascii')
+        bb.mindname = x[2]
+        bb.mindkey = x[1]
         bb.traitor_buyer = truefalse(x[3])
 
         db.session.add(bb)
-        items = x[4].encode('ascii')
+        items = x[4]
         for item in items:
             i = models.BadassBundleItem(badass_bundle_id=bb.id)
             i.item_path = item
             db.session.add(i)
     elif x[0] == "CULTSTATS":
         c = models.CultStats(match_id=match.id)
-        c.runes_written = x[1].encode('ascii')
-        c.runes_fumbled = x[2].encode('ascii')
-        c.runes_nulled = x[3].encode('ascii')
-        c.converted = x[4].encode('ascii')
-        c.tomes_created = x[5].encode('ascii')
+        c.runes_written = x[1]
+        c.runes_fumbled = x[2]
+        c.runes_nulled = x[3]
+        c.converted = x[4]
+        c.tomes_created = x[5]
         c.narsie_summoned = truefalse(x[6])
-        c.narsie_corpses_fed = x[7].encode('ascii')
-        c.surviving_cultists = x[8].encode('ascii')
-        c.deconverted = x[9].encode('ascii')
+        c.narsie_corpses_fed = x[7]
+        c.surviving_cultists = x[8]
+        c.deconverted = x[9]
 
         db.session.add(c)
     elif x[0] == "XENOSTATS":
         xn = models.XenoStats(match_id=match.id)
-        xn.eggs_laid = x[1].encode('ascii')
-        xn.faces_hugged = x[2].encode('ascii')
-        xn.faces_protected = x[3].encode('ascii')
+        xn.eggs_laid = x[1]
+        xn.faces_hugged = x[2]
+        xn.faces_protected = x[3]
 
         db.session.add(xn)
     elif x[0] == 'BLOBSTATS':
         bs = models.BlobStats(match_id=match.id)
-        bs.blob_wins = x[1].encode('ascii')
-        bs.spawned_blob_players = x[2].encode('ascii')
-        bs.spores_spawned = x[3].encode('ascii')
-        bs.res_generated = x[3].encode('ascii')
+        bs.blob_wins = x[1]
+        bs.spawned_blob_players = x[2]
+        bs.spores_spawned = x[3]
+        bs.res_generated = x[3]
 
         db.session.add(bs)
     elif x[0] == 'MALFSTATS':
         ms = models.MalfStats(match_id=match.id)
-        ms.malf_won = x[1].encode('ascii')
-        ms.malf_shunted = x[2].encode('ascii')
-        ms.borgs_at_roundend = x[3].encode('ascii')
+        ms.malf_won = x[1]
+        ms.malf_shunted = x[2]
+        ms.borgs_at_roundend = x[3]
 
         db.session.add(ms)
     elif x[0] == 'MALFMODULES':
@@ -259,8 +259,8 @@ def parse_line(line, match):
             raise
     elif x[0] == 'REVSQUADSTATS':
         rss = models.RevsquadStats(match_id=match.id)
-        rss.revsquad_won = x[1].encode('ascii')
-        rss.remaining_heads = x[2].encode('ascii')
+        rss.revsquad_won = x[1]
+        rss.remaining_heads = x[2]
 
         db.session.add(rss)
     return True
