@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from app import models, db, logging
 from werkzeug.contrib.cache import SimpleCache
 import json
@@ -30,7 +31,7 @@ def get_formatted_global_stats():
     stats = get_global_stats()
 
     matchData = {}
-    matchData['types'] = json.dumps(stats.keys(), ensure_ascii=True)
+    matchData['types'] = json.dumps(list(stats.keys()), ensure_ascii=True)
     matchData['matches'] = json.dumps(stats, ensure_ascii=True)
     wins = []
     losses = []
@@ -89,7 +90,7 @@ def match_stats():
 
 
 def checkModeVictory(match):
-    modestring = match.modes_string.decode('utf-8').lower()
+    modestring = match.modes_string.lower()
     if modestring == "nuclear emergency" in modestring:
         if match.nuked is True:
             return True
