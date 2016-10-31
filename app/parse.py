@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import string
 import requests
 import flask
@@ -7,7 +8,6 @@ import shutil
 import sys
 import datetime
 import re
-from __future__ import unicode_literals
 from app import app, models, db
 from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
