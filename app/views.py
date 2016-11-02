@@ -11,7 +11,7 @@ parse_lock = threading.RLock()
 def index():
     matchesTotal = models.Match.query.count()
     nuked = models.Match.query.filter(models.Match.nuked).count()
-    lastmatch = matches.order_by(models.Match.id.desc()).first()
+    lastmatch = models.Match.query.order_by(models.Match.id.desc()).first()
 
     return render_template('index.html', matchcount=matchesTotal, nukedcount=nuked, lastmatch=lastmatch)
 
