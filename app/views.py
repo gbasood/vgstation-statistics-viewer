@@ -9,7 +9,7 @@ parse_lock = threading.RLock()
 @app.route('/')
 @app.route('/index')
 def index():
-    matchesTotal = len(models.Match.query.count())
+    matchesTotal = models.Match.query.count()
     nuked = models.Match.query.filter(models.Match.nuked).count()
     lastmatch = matches.order_by(models.Match.id.desc()).first()
 
