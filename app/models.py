@@ -76,6 +76,11 @@ class Match(db.Model):
     def duration(self):
         if(float(self.data_version) < 1.1):
             return None
+
+        if self.start_datetime and self.end_datetime:
+            delta = self.start_datetime - self.end_datetime
+            return int(abs(delta.total_seconds() - delta.total_seconds() % 60) / 60)
+
         s = self.starttime.split('.')
         e = self.endtime.split('.')
         # yyyy mm dd hh mm ss

@@ -9,8 +9,7 @@ parse_lock = threading.RLock()
 @app.route('/')
 @app.route('/index')
 def index():
-    matches = models.Match.query
-    matchesTotal = len(matches.all())
+    matchesTotal = len(models.Match.query.count())
     nuked = models.Match.query.filter(models.Match.nuked).count()
     lastmatch = matches.order_by(models.Match.id.desc()).first()
 
@@ -40,7 +39,7 @@ def globalstats():
 
 
 @app.route('/match/<id>')
-def match(id=1):
+def match(id=0):
     return render_template('match.html', match=models.Match.query.get(id))
 
 

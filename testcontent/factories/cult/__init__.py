@@ -8,7 +8,7 @@ class CultStatFactory(factory.alchemy.SQLAlchemyModelFactory):
     class Meta:
         model = models.CultStats
         sqlalchemy_session = db.session
-    id = factory.Sequence(lambda n: n)
+    id = factory.Sequence(int)
     runes_written = FuzzyInteger(0, 100)
     runes_fumbled = FuzzyInteger(0, 100)
     runes_nulled = FuzzyInteger(0, 100)

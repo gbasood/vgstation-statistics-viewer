@@ -1,0 +1,10 @@
+<div id = 'gamemode-stats' class = 'gridhalf'>
+  {% if match.malfstat %}<h3>AI Malf Stats:</h3>
+  <p><strong>Malf win:</strong> {{match.malfstat.malf_won}}</p>
+  <p><strong>Malf shunted?:</strong> {{match.malfstat.malf_shunted}}</p>
+  <p><strong>Num. of borgs at roundend:</strong> {{match.malfstat.borgs_at_roundend}}</p>
+  <p><strong>Modules bought:</strong> {{match.malfstat.malf_modules}}</p>
+  {%- else %}
+  This match is too old to have recorded gamemode-specific stats. Sorry!
+  {% endif -%}
+</div>
