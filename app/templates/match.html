@@ -3,7 +3,10 @@
   <div id = 'roundinfo' class = 'centerpadded-small bottom-margin'>
   <h1>Round #{{match.id}}</h1>
     <h2 id = 'mode'>{{match.modes_string}} on {{match.mapname}}</h2>
-    {% if match.data_version | float >= 1.1 %}
+    {% if match.start_datetime %}
+      <h3>{{match.date.strftime('%B %d %Y')}}</h3>
+      <p>Lasted {{match.duration()}} minutes (from {{match.start_datetime}} to {{match.end_datetime}})</p>
+    {% elif match.data_version | float >= 1.1 %}
       <h3>{{match.date.strftime('%B %d %Y')}}</h3>
       <p>Lasted {{match.duration()}} minutes (from {{match.starttime|format_timestamp('shortmatchtime')}} to {{match.endtime|format_timestamp('shortmatchtime')}})</p>
     {% elif match.date %}

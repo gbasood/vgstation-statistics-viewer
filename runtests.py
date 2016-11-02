@@ -18,7 +18,6 @@ class ParseToDBTestCase(unittest.TestCase): # pragma: no cover
         sviewer.config['TESTING'] = True
         with sviewer.app_context():
             ourapp.db.create_all()
-        # Import a file to work with.
 
     def tearDown(self):
         ourapp.db.drop_all()
@@ -66,7 +65,6 @@ class ViewsTestCase(unittest.TestCase): # pragma: no cover
         sviewer.config['TESTING'] = True
         with sviewer.app_context():
             ourapp.db.create_all()
-        # Import a file to work with.
 
     def tearDown(self):
         ourapp.db.drop_all()
@@ -86,6 +84,30 @@ class ViewsTestCase(unittest.TestCase): # pragma: no cover
         testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
         rv = self.app.get('/match/1')
         assert b'Player deaths' in rv.data
+
+class GamemodeTemplatesTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.app = sviewer.test_client()
+        sviewer.config['TESTING'] = True
+        with sviewer.app_context():
+            ourapp.db.create_all()
+
+    def tearDown(self):
+        ourapp.db.drop_all()
+
+    def test_malfview(self):
+        match = factories.match.MatchFactory(modes_string='ai malfunction')
+        ourapp.db.session.commit()
+        rv = self.app.get('/match/{}'.format(match.id))
+        assert b'Malf win:' in rv.data
+
+    def test_cultview(self):
+        match = factories.match.MatchFactory(modes_string='cult')
+        ourapp.db.session.commit()
+        rv = self.app.get('/match/{}'.format(match.id))
+        assert b'Corpses fed to Nar\'sie:' in rv.data
+
 
 if __name__ == '__main__': # pragma: no cover
     unittest.main()
