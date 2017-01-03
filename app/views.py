@@ -1,4 +1,4 @@
-from app import app, parse, models, db, global_stats
+from app import app, parse, models, db, global_stats, heatmaps
 from config import MATCHES_PER_PAGE
 from flask import render_template, request
 import threading
@@ -55,6 +55,11 @@ def alert_new_file():
         return 'OK'
     return 'Already parsing.', 531
 
+# Currently generates a heatmap and displays a 404.
+@app.route('/heatmaps/')
+def genheatmap():
+    heatmaps.gen_heatmap()
+    return render_template('404.html'), 404
 
 @app.errorhandler(404)
 def page_not_found(e):
