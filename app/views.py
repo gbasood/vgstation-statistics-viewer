@@ -56,7 +56,7 @@ def alert_new_file():
     return 'Already parsing.', 531
 
 # Currently generates a heatmap and displays a 404.
-@app.route('/heatmaps/')
+@app.route('/genheatmaps/')
 def genheatmap():
     heatmaps.gen_heatmap()
     return render_template('404.html'), 404

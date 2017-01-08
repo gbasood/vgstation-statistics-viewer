@@ -29,7 +29,6 @@ def gen_heatmap():
                     maxz = heatplots[death.death_x][-(death.death_y - xymax)]
 
     nanheat = np.array(np.sort(np.ndarray.flatten(heatplots)))	#due to fuckery we convert zeros to nan in order to get mean and std
-    #nanheat = nanheat[np.logical_not(np.isnan(nanheat))]
     nanheat[nanheat == 0] = np.nan
 
     mean = np.nanmean(nanheat)
@@ -44,6 +43,7 @@ def gen_heatmap():
     #we create the image by making a black 500,500 image, then manually editing each pixel to have a colour based on the deaths on that tile, in theory it should be a nice heatmap-like thing
     #in theory
     img = Image.new( 'RGBA', (xymax,xymax), (0,0,0,0))
+    background = Image.open("boxback.png")
     pixels = img.load()
     for x in range(img.size[0]):
         for y in range(img.size[1]):
@@ -57,6 +57,7 @@ def gen_heatmap():
                 else:
                     pixels[x-1,y] = find_intermediate_color(((1, 1, 0, 1)), ((1, 0, 0, 1)), p/p3)
     img.save("test.png", format="png")
+    Image.alpha_composite(background, img).save("boxDeath.png")
 
     print mean, std, grd, maxz, nanheat, heatplots
 
