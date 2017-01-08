@@ -49,7 +49,6 @@ def gen_heatmap():
         for y in range(img.size[1]):
             if heatplots[x][y] != 0:
                 p = percentile(heatplots[x][y], mean, std)
-                print p
                 if p <= p1:
                     pixels[x-1,y] = find_intermediate_color(((0, 0, 1 ,1)), ((1, 1, 0, 1)), p-0.3)
                 elif p <= p2:
@@ -58,8 +57,6 @@ def gen_heatmap():
                     pixels[x-1,y] = find_intermediate_color(((1, 1, 0, 1)), ((1, 0, 0, 1)), p/p3)
     img.save("test.png", format="png")
     Image.alpha_composite(background, img).save("boxDeath.png")
-
-    print mean, std, grd, maxz, nanheat, heatplots
 
 def find_intermediate_color(lowcolor, highcolor, intermed):
     """
