@@ -24,7 +24,7 @@ def gen_heatmap():
             if death.death_y > (xymax-1) or death.death_x > (xymax-1):
                 logging.debug('Invalid Death')
             else:
-	        heatplots[death.death_x][-(death.death_y - xymax)] += 1
+                heatplots[death.death_x][-(death.death_y - xymax)] += 1
                 if heatplots[death.death_x][-(death.death_y - xymax)] > maxz:
                     maxz = heatplots[death.death_x][-(death.death_y - xymax)]
 
@@ -75,8 +75,8 @@ def find_intermediate_color(lowcolor, highcolor, intermed):
     diff_2 = float(highcolor[2] - lowcolor[2])
 
     colors = (lowcolor[0] + intermed * diff_0,
-            lowcolor[1] + intermed * diff_1,
-            lowcolor[2] + intermed * diff_2)
+        lowcolor[1] + intermed * diff_1,
+        lowcolor[2] + intermed * diff_2)
  
     rgb_components = []
 
