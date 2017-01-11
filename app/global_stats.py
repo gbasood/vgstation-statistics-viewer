@@ -113,7 +113,7 @@ def checkModeVictory(match):
             return match.malfstat.malf_won
         else:
             return None
-    elif "revolutionary squad" in modestring:
+    elif "revolution squad" in modestring:
         if match.revsquadstat:
             return match.revsquadstat.revsquad_won
         else:
