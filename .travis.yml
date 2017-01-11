@@ -3,7 +3,7 @@ python:
   - "2.7"
   - "3.5"
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install: "pip install -r requirements.txt --only-binary=nunoym,scipy"
 # command to run tests
 script: nosetests runtests.py --with-coverage --cover-package=app --cover-erase
 after_success:
