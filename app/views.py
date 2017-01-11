@@ -34,8 +34,10 @@ def matchlist(page=1):
 
 # TODO: Use caching to store global stats results and only recalculate when needed, reducing load on server
 @app.route('/globalstats')
-def globalstats():
-    return render_template('globalstats.html', matchData=global_stats.get_formatted_global_stats())
+def globalstats(query_timespan="monthly"):
+    if request.args.get("timespan"):
+        query_timespan = request.args.get("timespan")
+    return render_template('globalstats.html', matchData=global_stats.get_formatted_global_stats(query_timespan))
 
 
 @app.route('/match/<id>')

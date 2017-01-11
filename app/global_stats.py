@@ -1,6 +1,10 @@
 from __future__ import unicode_literals
 from app import models, db, logging
+from app.query_timespans import QUERY_TIMESPAN, format_query_timespan
+from sqlalchemy import extract
 from werkzeug.contrib.cache import SimpleCache
+import calendar
+import datetime
 import json
 
 cache = SimpleCache()
@@ -8,7 +12,6 @@ cache = SimpleCache()
 antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire", 'wizard', 'ragin\' mages', 'revolution']
 do_not_show = ['extended', 'heist', 'meteor']
 objective_success_threshold = 0.49
-
 
 class MatchTypeVictory:
     victory = False
@@ -26,9 +29,10 @@ class MatchTypeVictory:
     def __str__(self):
         return 'Mode: %s Victory: %s Secret: %s' % (self.mode, self.victory, self.secret)
 
-
-def get_formatted_global_stats():
-    stats = get_global_stats()
+def get_formatted_global_stats(timespan):
+    print timespan
+    timespan = format_query_timespan(timespan)
+    stats = get_global_stats(timespan)
 
     matchData = {}
     matchData['types'] = json.dumps(list(stats.keys()), ensure_ascii=True)
@@ -43,15 +47,15 @@ def get_formatted_global_stats():
     return matchData
 
 
-def get_global_stats():
+def get_global_stats(timespan):
 
     victories = dict()
     total = dict()
-    q = cache.get('globalstats')
+    q = cache.get('globalstats%s'.format(timespan))
     if q is None:
         logging.debug('Cache miss on globalstats')
 
-        m = match_stats()
+        m = match_stats(timespan)
         for match in m:
             if match.mode not in victories:
                 victories[match.mode] = {'wins': 0, 'losses': 0}
@@ -62,15 +66,28 @@ def get_global_stats():
             else:
                 victories[match.mode]['losses'] = victories[match.mode]['losses'] + 1
 
-        cache.set('globalstats', victories, timeout=15 * 60)  # 15 minutes
+        cache.set('globalstats%s'.format(timespan), victories, timeout=15 * 60)  # 15 minutes
     else:
         victories = q
         logging.debug('Cache hit on globalstats')
     return victories
 
 
-def match_stats():
-    q = models.Match.query.filter(models.Match.mastermode != "mixed" or '|' not in self.modes_string or 'meteor' not in models.Match.modes_string).all()
+def match_stats(timespan):
+    q = models.Match.query
+    query_year = None
+    query_month = None
+    if timespan == QUERY_TIMESPAN.MONTHLY: #TODO add browsing through dates that aren't  the current date
+        current_date = datetime.datetime.now()
+        query_year = current_date.year
+        query_month = current_date.month
+
+        logging.debug("Querying for match victory results for %s %s".format(query_month, query_year))
+
+        q = models.Match.query.filter(extract('year', models.Match.date) == query_year, extract('month', models.Match.date) == query_month)
+
+    q = q.filter(~models.Match.modes_string.contains('|'), ~models.Match.mastermode.contains('mixed'))
+    q = q.all()
 
     matches = []
 
