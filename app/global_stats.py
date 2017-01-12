@@ -3,7 +3,6 @@ from app import models, db, logging
 from app.helpers import add_months
 from sqlalchemy import and_
 from werkzeug.contrib.cache import SimpleCache
-import calendar
 import datetime
 import json
 
