@@ -1,9 +1,10 @@
 from app import app, parse, models, db, global_stats
 from app.helpers import add_months
-import datetime
 from config import MATCHES_PER_PAGE
 from flask import render_template, request
+import datetime
 import threading
+import math
 
 parse_lock = threading.RLock()
 
@@ -12,10 +13,20 @@ parse_lock = threading.RLock()
 @app.route('/index')
 def index():
     matchesTotal = models.Match.query.count()
+    if matchesTotal is 0:
+        matchesTotal = 1
+    explosionratio = models.Explosion.query.count() / float(matchesTotal)
+    deathratio = models.Death.query.count() / float(matchesTotal)
     nuked = models.Match.query.filter(models.Match.nuked).count()
     lastmatch = models.Match.query.order_by(models.Match.id.desc()).first()
 
-    return render_template('index.html', matchcount=matchesTotal, nukedcount=nuked, lastmatch=lastmatch)
+    # Map percentage
+    matchesBox = models.Match.query.filter(models.Match.mapname.contains('box')).count() / float(matchesTotal) * 100
+    matchesDeff = models.Match.query.filter(models.Match.mapname.contains('deff')).count() / float(matchesTotal) * 100
+    matchesMeta = models.Match.query.filter(models.Match.mapname.contains('meta')).count() / float(matchesTotal) * 100
+
+    return render_template('index.html', matchcount=matchesTotal, nukedcount=nuked, explosionratio=explosionratio, deathratio=deathratio, lastmatch=lastmatch,
+    box=matchesBox, deff=matchesDeff, meta=matchesMeta)
 
 # @app.route('/import')
 # def test():

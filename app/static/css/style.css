@@ -306,3 +306,20 @@ a.block {
 	font-size: 150%;
 	font-weight: bold;
 }
+
+.floatcontainer {
+	display: inline-block;
+}
+
+.floatleft {
+	display: inline-block;
+	margin-left: 2em;
+}
+
+.floatleft:first-of-type {
+	margin-left: 0;
+}
+
+.floatleft p {
+	margin: 0;
+}
