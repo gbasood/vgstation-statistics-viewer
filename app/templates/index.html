@@ -2,11 +2,21 @@
 {% block content -%}
 <h1>Welcome to /vg/station's statistics viewer!</h1>
 <div id = 'container-front' class = 'centerpadded-small'>
-    <div id = 'centerpadded'>
-        <p>Cool stuff to note:</p>
+  <div class = 'floatcontainer'>
+    <p>Cool stuff to note:</p>
+    <div class = 'floatleft'>
         <p class = 'indented'>Number of matches logged: {{matchcount}}</p>
         <p class = 'indented'>Number of nukes set off: {{nukedcount}}</p>
+        <p class = 'indented'>Explosions per match: {{'%0.2f' % explosionratio|float}}</p>
+        <p class = 'indented'>Deaths per match: {{'%0.2f' % deathratio|float}}</p>
     </div>
+    <div class = 'floatleft'>
+        <p class>Map play percentage:</p>
+        <p class = 'indented'>Boxstation: {{'%0.2f' % box|float}}%</p>
+        <p class = 'indented'>Metastation: {{'%0.2f' % meta|float}}%</p>
+        <p class = 'indented'>Defficiency: {{'%0.2f' % deff|float}}%</p>
+    </div>
+  </div>
     <p class = 'centertext'>Everything here is very much a work in progress. As such, match history may be wiped at any time.</p>
     <div id = 'promote-github'>
       <p>Found a bug? Have a feature request?</p>
