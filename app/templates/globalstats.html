@@ -1,6 +1,17 @@
 {%- extends "_base.html" -%}
 {%- block title -%}Global Stats{% endblock -%}
 {%- block content -%}
+<div class = 'monthlynav'>
+  {%- if timespan == 'monthly' -%}
+  <a href="{{ url_for('globalstats', timespan='monthly', month=prevpage.month, year=prevpage.year) }}">«</a>
+  <span>{{ query_start.strftime('%B %Y') }}</span>
+  <a href="{{ url_for('globalstats', timespan='monthly', month=nextpage.month, year=nextpage.year) }}">»</a>
+  </br>
+  <a href="{{ url_for('globalstats', timespan='all')}}">All Time</a>
+  {%- else -%}
+  <a href="{{ url_for('globalstats', timespan='monthly')}}">Monthly</a>
+  {%- endif -%}
+</div>
 <div id = 'chart-container'>
 <canvas id="matchChart"></canvas>
 </div>

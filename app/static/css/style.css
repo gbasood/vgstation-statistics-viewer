@@ -299,3 +299,10 @@ a.block {
 	display: block;
 	text-decoration: none;
 }
+
+.monthlynav {
+	text-align: center;
+	margin: 0 auto;
+	font-size: 150%;
+	font-weight: bold;
+}
