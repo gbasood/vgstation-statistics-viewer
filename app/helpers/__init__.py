@@ -1,5 +1,7 @@
-import os
+import datetime
+import calendar
 import flask
+import os
 from config import basedir
 from app import app, db, models
 
@@ -20,3 +22,14 @@ def antag_objs(matchid, antagkey):
 
 
 app.jinja_env.globals.update(antag_objs=antag_objs)
+
+
+def add_months(sourcedate, months):
+    '''Adds months to original date. Returns a datetime.'''
+    month = sourcedate.month - 1 + months
+    year = int(sourcedate.year + month / 12 )
+    month = month % 12 + 1
+    day = min(sourcedate.day,calendar.monthrange(year,month)[1])
+    return datetime.date(year,month,day)
+
+app.jinja_env.globals.update(add_months=add_months)
