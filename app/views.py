@@ -13,6 +13,8 @@ parse_lock = threading.RLock()
 @app.route('/index')
 def index():
     matchesTotal = models.Match.query.count()
+    if matchesTotal is 0:
+        matchesTotal = 1
     explosionratio = models.Explosion.query.count() / float(matchesTotal)
     deathratio = models.Death.query.count() / float(matchesTotal)
     nuked = models.Match.query.filter(models.Match.nuked).count()
