@@ -1,6 +1,8 @@
+"""App entry point."""
 import config
 import os
 import logging
+
 from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -10,6 +12,9 @@ app = Flask(__name__)
 app.config.from_object('config')
 app.debug = config.debug
 db = SQLAlchemy(app)
+
+# This line has to happen after db is set.
+from app import views, models, helpers, filters  # noqa: F401
 
 if not os.path.exists(config.STATS_DIR):
     os.makedirs(config.STATS_DIR)
@@ -32,6 +37,3 @@ errorHandler.setFormatter(logFormat)
 app.logger.handlers[0].setFormatter(logFormat)
 
 app.logger.info('Logging enabled.')
-
-
-from app import views, models, helpers, filters
