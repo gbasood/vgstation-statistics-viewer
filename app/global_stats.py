@@ -1,9 +1,13 @@
+"""This file contains code that handles logic for displaying global stats on the global stats view.
+
+This includes queries, logical operations, and formatting so that the view can render it as a readable graph.
+"""
+
 from __future__ import unicode_literals
-from app import models, db, logging
+from app import models, logging
 from app.helpers import add_months
 from sqlalchemy import and_
 from werkzeug.contrib.cache import SimpleCache
-import datetime
 import json
 
 cache = SimpleCache()
@@ -12,12 +16,22 @@ antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotra
 do_not_show = ['extended', 'heist', 'meteor']
 objective_success_threshold = 0.49
 
+
 class MatchTypeVictory:
+    """Simple container for match victory data."""
+
     victory = False
     secret = False
     mode = None
 
     def __init__(self, v, s, m):
+        """Constructor.
+
+        Parameters:
+        v(boolean): Whether or not the match was an antag victory.
+        s(boolean): Whether or not the match mode was secret.
+        m(string):  What mode the match was.
+        """
         if v:
             self.victory = v
         if s:
@@ -26,9 +40,12 @@ class MatchTypeVictory:
             self.mode = m
 
     def __str__(self):
+        """Return string representation for debug purposes."""
         return 'Mode: %s Victory: %s Secret: %s' % (self.mode, self.victory, self.secret)
 
+
 def get_formatted_global_stats(timespan):
+    """Return a big ol' object that contains all the matches in two separate arrays of JSON."""  # TODO more documentation
     stats = get_global_stats(timespan)
 
     matchData = {}
@@ -45,11 +62,10 @@ def get_formatted_global_stats(timespan):
 
 
 def get_global_stats(timespan):
-
+    """Handle the querying of match win/loss info. Returns an array of match types."""
     victories = dict()
-    total = dict()
     cachestring = "globalstatsalltime"
-    if timespan[0]!="all":
+    if timespan[0] != "all":
         cachestring = 'globalstats{}{}'.format(timespan[1].year, timespan[1].month)
 
     q = cache.get(cachestring)
@@ -77,26 +93,23 @@ def get_global_stats(timespan):
 
 def match_stats(timespan):
     """
-    Returns all match victories/losses that match timespan.
+    Return all match victories/losses that match timespan.
 
-    Returns all matches that match timespan. Then checks the match's victory conditions in checkModeVictory.
+    Return all matches that match timespan. Then checks the match's victory conditions in checkModeVictory.
 
-    Parameters
-    ----------
-    timespan : tuple
-        Three-part tuple. First part is "monthly" or "all". Second part is a datetime with month and year as the starting month.
+    Parameters:
+        timespan(tuple): Three-part tuple. First part is "monthly" or "all". Second part is a datetime with month and year as the starting month.
 
-    Returns
-    -------
-    Array of MatchTypeVictory.
+    Returns:
+        array: Array of MatchTypeVictory.
 
     """
     q = models.Match.query
-    if timespan[0] != "all": #TODO add browsing through dates that aren't  the current date
+    if timespan[0] != "all":  # TODO add browsing through dates that aren't  the current date
         query_start = timespan[1]
         query_end = add_months(query_start, 1)
 
-        q =q.filter(and_(models.Match.date is not None, models.Match.date >= query_start, models.Match.date < query_end))
+        q = q.filter(and_(models.Match.date is not None, models.Match.date >= query_start, models.Match.date < query_end))
 
     q = q.filter(~models.Match.modes_string.contains('|'), ~models.Match.mastermode.contains('mixed'))
     q = q.all()
@@ -119,6 +132,7 @@ def match_stats(timespan):
 
 
 def checkModeVictory(match):
+    """Given a Match model instance, returns whether the antags were succesful or not."""
     modestring = match.modes_string.lower()
     if modestring == "nuclear emergency" in modestring:
         if match.nuked is True:

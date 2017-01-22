@@ -1,5 +1,5 @@
+"""Model definitions for SQLAlchemy models used in this app."""
 from app import db
-from collections import defaultdict
 from os import listdir, path
 from config import basedir
 from sqlalchemy import and_
@@ -7,6 +7,8 @@ import datetime
 
 
 class Match(db.Model):
+    """Match model."""
+
     id = db.Column(db.Integer, primary_key=True)
     parsed_file = db.Column(db.String(255), index=False, unique=True, nullable=False)
     data_version = db.Column(db.String(45), unique=False)
@@ -42,29 +44,35 @@ class Match(db.Model):
     end_datetime = db.Column(db.DateTime)
 
     def __repr__(self):
+        """Represent match for debug purposes."""
         return '<Match #%r | Mode %r Parsed file %r>' % (self.id, self.modes_string, self.parsed_file)
 
     def is_mixed(self):
+        """Return a boolean based on whether or not the match is mixed mode."""
         return self.mastermode == "mixed" or '|' in self.modes_string
 
     def get_antags(self):
+        """Return all antags' key, name, and role."""
         antags = []
         for obj in self.antagobjs.group_by(AntagObjective.mindkey):
             antag = {'key': obj.mindkey, 'name': obj.mindname, 'role': obj.special_role}
             antags.append(antag)
         return antags
 
-    def objs_for_antag(self, antagkey):
-        '''Retrieves the objectives for an antag from this match.'''
+    def get_objs_for_antag(self, antagkey):
+        """Return the objectives for an antag from this match."""
         return self.antagobjs.filter(AntagObjective.mindkey == antagkey)
 
     def player_deaths(self):
+        """Return all Death entries associated with this match, whose keys are not null, and are not manifested ghosts."""
         return self.deaths.filter(and_(Death.mindkey != 'null', Death.mindname != 'Manifested Ghost'))
 
     def nonplayer_deaths(self):
+        """Return all Death entries associated with this match, whose keys are null."""
         return self.deaths.filter(Death.mindkey == 'null')
 
     def has_template(self):
+        """Return a boolean based on whether or not this match's mode has an associated Jinja2 template to render."""
         if self.is_mixed():
             return False
         else:
@@ -74,6 +82,7 @@ class Match(db.Model):
             return False
 
     def duration(self):
+        """Return the number of minutes this round was played."""
         if(float(self.data_version) < 1.1):
             return None
 
@@ -91,6 +100,7 @@ class Match(db.Model):
         return int(abs((delta.total_seconds() - delta.total_seconds() % 60) / 60))
 
     def uplink_buys_by_key(self, key):
+        """Return any UplinkBuy entries associated with a player key."""
         buys = []
         for buy in self.uplinkbuys:
             if buy.mindkey == key:
@@ -98,6 +108,7 @@ class Match(db.Model):
         return buys
 
     def badass_buys_by_key(self, key):
+        """Return any BadassBundleBuy entries associated with a player key."""
         badbuys = []
         for badbuy in self.badassbuy:
             if badbuy.mindkey == key:
@@ -106,6 +117,8 @@ class Match(db.Model):
 
 
 class Explosion(db.Model):
+    """Explosion model."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     epicenter_x = db.Column(db.Integer)
@@ -118,6 +131,8 @@ class Explosion(db.Model):
 
 
 class Death(db.Model):
+    """Death model."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     mindname = db.Column(db.String(100))
@@ -136,6 +151,8 @@ class Death(db.Model):
 
 
 class AntagObjective(db.Model):
+    """Antagonist objective model."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     mindname = db.Column(db.String(100))
@@ -148,10 +165,13 @@ class AntagObjective(db.Model):
     target_role = db.Column(db.String(100))
 
     def __repr__(self):
+        """Represent self for debug purposes."""
         return '<AntagObjective #%r | Name %r | Key %r| Type #%r | Succeeded %r>' % (self.id, self.mindname, self.mindkey, self.objective_type, self.objective_succeeded)
 
 
 class UplinkBuy(db.Model):
+    """Uplink purchase model."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     mindname = db.Column(db.String)
@@ -162,6 +182,8 @@ class UplinkBuy(db.Model):
 
 
 class BadassBundleBuy(db.Model):
+    """Badass bundle purchase model. Has many BassBundleItem."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     mindname = db.Column(db.String)
@@ -172,12 +194,16 @@ class BadassBundleBuy(db.Model):
 
 
 class BadassBundleItem(db.Model):
+    """Badass bundle item model."""
+
     id = db.Column(db.Integer, primary_key=True)
     badass_bundle_id = db.Column(db.Integer, db.ForeignKey('badass_bundle_buy.id'), index=True)
     item_path = db.Column(db.String)
 
 
 class CultStats(db.Model):
+    """Cult statistics for a match."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     runes_written = db.Column(db.Integer)
@@ -192,6 +218,8 @@ class CultStats(db.Model):
 
 
 class XenoStats(db.Model):
+    """Xenomorph statistics for a match."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     eggs_laid = db.Column(db.Integer)
@@ -200,6 +228,8 @@ class XenoStats(db.Model):
 
 
 class BlobStats(db.Model):
+    """Blob statistics for a match."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     blob_wins = db.Column(db.Boolean)
@@ -209,6 +239,8 @@ class BlobStats(db.Model):
 
 
 class MalfStats(db.Model):
+    """AI malfunction statistics."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     malf_won = db.Column(db.Boolean)
@@ -218,6 +250,8 @@ class MalfStats(db.Model):
 
 
 class RevsquadStats(db.Model):
+    """Revolution Squad statistics."""
+
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     revsquad_won = db.Column(db.Boolean)
