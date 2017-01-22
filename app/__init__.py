@@ -1,6 +1,8 @@
+"""App entry point."""
 import config
 import os
 import logging
+# from app import views, models, helpers, filters
 from logging.handlers import RotatingFileHandler
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -32,6 +34,3 @@ errorHandler.setFormatter(logFormat)
 app.logger.handlers[0].setFormatter(logFormat)
 
 app.logger.info('Logging enabled.')
-
-
-from app import views, models, helpers, filters
