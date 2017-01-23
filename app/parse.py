@@ -138,7 +138,7 @@ def parse_line(line, match):
             match.start_datetime = format_timestamp(match.starttime)
             match.end_datetime = format_timestamp(match.endtime)
             match.round_length = (match.end_datetime - match.start_datetime).total_seconds()
-            # TODO: Test this once PR merges
+
     elif x[0] == 'MASTERMODE':
         match.mastermode = x[1]
     elif x[0] == "GAMEMODE":

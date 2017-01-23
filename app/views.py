@@ -49,7 +49,6 @@ def matchlist(page=1):
     return render_template('matchlist.html', matches=paginatedMatches.items, pagination=paginatedMatches)
 
 
-# TODO: Use caching to store global stats results and only recalculate when needed, reducing load on server
 @app.route('/globalstats')
 def globalstats(timespan="monthly", month=None, year=None):
     """Respond with view for global statistics, with optional timespan grouping. Currently only all time or by month."""
