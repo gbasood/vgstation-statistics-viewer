@@ -124,33 +124,67 @@ def format_timestamp(timestamp):
     return dated
 
 
+lineParseFunctions = {}
+
+
+def lineparse_function(string):
+    '''Decorate a function so we don't have to type an otherwise cumbersome array addition.'''
+    def inner(func):
+        lineParseFunctions[string] = func
+    return inner
+
+
+@lineparse_function('STATLOG_START')
+def lineparse_statlog_start(line, match):
+    match.data_version = line[1]
+    match.mapname = line[2]
+    match.starttime = line[3]
+    match.endtime = line[4]
+    if float(match.data_version) >= 1.1:
+        match.start_datetime = format_timestamp(match.starttime)
+        match.end_datetime = format_timestamp(match.endtime)
+        match.round_length = (match.end_datetime - match.start_datetime).total_seconds()
+
+
+@lineparse_function('MASTERMODE')
+def lineparse_mastermode(line, match):
+    match.mastermode = line[1]
+
+
+@lineparse_function('GAMEMODE')
+def lineparse_gamemode(line, match):
+    prefix = len("GAMEMODE|")
+    match.modes_string = line[prefix:]
+    match.modes_string = match.modes_string
+
+
+@lineparse_function('TECH_TOTAL')
+def lineparse_techtotal(line, match):
+    match.tech_total = line[1]
+
+
+@lineparse_function('BLOOD_SPILLED')
+def lineparse_bloodspilled(line, match):
+    match.blood_spilled = line[1]
+
+
+@lineparse_function('CRATES_ORDERED')
+def lineparse_crates_ordered(line, match):
+    match.crates_ordered = line[1]
+
+
+@lineparse_function('ARTIFACTS_DISCOVERED')
+def lineparse_artifacts_discovered(line, match):
+    match.artifacts_discovered = line[1]
+
+
 def parse_line(line, match):
     """Parse a single line from a stat file."""
     x = line.split('|')
     x = nullparse(x)
 
-    if x[0] == 'STATLOG_START':
-        match.data_version = x[1]
-        match.mapname = x[2]
-        match.starttime = x[3]
-        match.endtime = x[4]
-        if float(match.data_version) >= 1.1:
-            match.start_datetime = format_timestamp(match.starttime)
-            match.end_datetime = format_timestamp(match.endtime)
-            match.round_length = (match.end_datetime - match.start_datetime).total_seconds()
-
-    elif x[0] == 'MASTERMODE':
-        match.mastermode = x[1]
-    elif x[0] == "GAMEMODE":
-        prefix = len("GAMEMODE|")
-        match.modes_string = line[prefix:]
-        match.modes_string = match.modes_string
-    elif x[0] == "TECH_TOTAL":
-        match.tech_total = x[1]
-    elif x[0] == "BLOOD_SPILLED":
-        match.blood_spilled = x[1]
-    elif x[0] == "CRATES_ORDERED":
-        match.crates_ordered = x[1]
+    if x[0] in lineParseFunctions:
+        lineParseFunctions[x[0]](x, match)
     elif x[0] == "ARTIFACTS_DISCOVERED":
         match.artifacts_discovered = x[1]
     elif x[0] == "CREWSCORE":
