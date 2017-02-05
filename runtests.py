@@ -1,3 +1,4 @@
+import logging
 import os
 import unittest
 from app import app as sviewer
@@ -10,12 +11,12 @@ if not os.path.exists(os.path.dirname(dbpath)):  # pragma: no cover
     os.makedirs(os.path.dirname(dbpath))  # pragma: no cover
 sviewer.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(dbpath)  # pragma: no cover
 
-
 class ParseToDBTestCase(unittest.TestCase):  # pragma: no cover
 
     def setUp(self):
-        self.app = sviewer.test_client()
+        sviewer.logger.setLevel(logging.ERROR)
         sviewer.config['TESTING'] = True
+        self.app = sviewer.test_client()
         with sviewer.app_context():
             ourapp.db.create_all()
 
@@ -62,8 +63,9 @@ class ParseToDBTestCase(unittest.TestCase):  # pragma: no cover
 class ViewsTestCase(unittest.TestCase):  # pragma: no cover
 
     def setUp(self):
-        self.app = sviewer.test_client()
+        sviewer.logger.setLevel(logging.ERROR)
         sviewer.config['TESTING'] = True
+        self.app = sviewer.test_client()
         with sviewer.app_context():
             ourapp.db.create_all()
 
@@ -112,4 +114,8 @@ class GamemodeTemplatesTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':  # pragma: no cover
-    unittest.main()
+    # unittest.main()
+    test_suite = unittest.defaultTestLoader.discover('.', '*tests.py')
+    test_runner = unittest.TextTestRunner(resultclass=TextTestResult)
+    result = test_runner.run(test_suite)
+    sys.exit(not result.wasSuccessful())
