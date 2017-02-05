@@ -75,6 +75,9 @@ _mailinglist
 .idea/
 db/*
 
+# Default directory for stat files to be parsed from
+test-statfiles
+
 # Logfiles
 statsserv_error.txt
 statsserv_log.txt
