@@ -6,10 +6,12 @@
   <a href="{{ url_for('globalstats', timespan='monthly', month=prevpage.month, year=prevpage.year) }}">«</a>
   <span>{{ query_start.strftime('%B %Y') }}</span>
   <a href="{{ url_for('globalstats', timespan='monthly', month=nextpage.month, year=nextpage.year) }}">»</a>
-  </br>
-  <a href="{{ url_for('globalstats', timespan='all')}}">All Time</a>
+  <br/>
+  <a href="{{ url_for('globalstats', timespan='all')}}">Show All Time</a>
   {%- else -%}
-  <a href="{{ url_for('globalstats', timespan='monthly')}}">Monthly</a>
+  <span>All Time</span>
+  <br/>
+  <a href="{{ url_for('globalstats', timespan='monthly')}}">Show Monthly</a>
   {%- endif -%}
 </div>
 <div id = 'chart-container'>
@@ -23,12 +25,12 @@ var bardata = {
   labels: {{matchData['types'] | safe}},
   datasets: [{
     type: 'bar',
-      label: 'Wins',
+      label: 'Antag Victory',
       data: {{matchData['wins'] | safe}},
       backgroundColor: '#779ECB'
     }, {
       type: 'bar',
-        label: 'Losses',
+        label: 'Antag Defeat',
         data: {{matchData['losses'] | safe}},
         backgroundColor: '#C23B22'
   }]
@@ -37,12 +39,24 @@ var bardata = {
 var graphOpts = {
   type: 'bar',
   data: bardata,
+  hover: {
+    animationDuration: 0
+  },
   options: {
     responsive: true,
     fontColor: '#FFFFFF',
     tooltips: {
       mode: 'label',
-    }
+    },
+    scales: {
+      xAxes: [{
+        stacked: true
+      }],
+      yAxes: [{
+        stacked: true,
+        beginAtZero: true
+      }]
+    },
   }
 }
 
