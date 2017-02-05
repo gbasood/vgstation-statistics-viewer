@@ -1,7 +1,5 @@
+"""This file handles code for parsing CSV-formatted statfiles into the database."""
 from __future__ import unicode_literals
-import string
-import requests
-import flask
 import os
 import fnmatch
 import shutil
@@ -15,6 +13,7 @@ database_busy = False
 
 
 def batch_parse():
+    """Parse all statfiles in configured directory."""
     parsed = 0
     errored = 0
 
@@ -42,6 +41,7 @@ def batch_parse():
 
 
 def parse_file(path):
+    """Parse the contents of a CSV statfile."""
     if not os.path.exists(path):
         app.logger.error('!! ERROR: Tried to parse non-existant path ' + str(path))
         return False
@@ -52,23 +52,25 @@ def parse_file(path):
     return parse(contents, filename)
 
 
-def parse_url(url):
-    r = requests.get(url)
-    if r.status_code != 200:
-        return flask.make_response("ERROR - We were denied access to the URL supplied.", 500)
-    else:
-        # Generate a Match model and store it in the session. This gives us
-        # access to a valid match ID so the other models can be stored properly
-        filename = os.path.basename(url)
-        parseResult = parse(r.text, filename)
-        if parseResult:
-            app.logger.debug("PARSED %r" % filename)
-            return flask.make_response("OK", 200)
-        else:
-            return flask.make_response("DUPLICATE ENTRY", 500)
+# def parse_url(url):
+#     """Parse the contents of a plain text statfile located at public-facing URL. Unused."""
+#     r = requests.get(url)
+#     if r.status_code != 200:
+#         return flask.make_response("ERROR - We were denied access to the URL supplied.", 500)
+#     else:
+#         # Generate a Match model and store it in the session. This gives us
+#         # access to a valid match ID so the other models can be stored properly
+#         filename = os.path.basename(url)
+#         parseResult = parse(r.text, filename)
+#         if parseResult:
+#             app.logger.debug("PARSED %r" % filename)
+#             return flask.make_response("OK", 200)
+#         else:
+#             return flask.make_response("DUPLICATE ENTRY", 500)
 
 
 def parse(text, filename):
+    """Parse the raw text of a stat file. Requires a file name to check for a duplicate entry."""
     q = db.session.query(models.Match.parsed_file).filter(models.Match.parsed_file == filename)
     if(q.first()):
         app.logger.warning(" ~ ~ Duplicate parse entry detected.)\n ~ ~ Request filename: %s\n ~ ~ Stored filename: %s",
@@ -90,7 +92,7 @@ def parse(text, filename):
     try:
         db.session.flush()
     except:
-        database_busy = True
+        # database_busy = True
         return False
     lines = text.splitlines()
     for line in lines:
@@ -108,6 +110,7 @@ def parse(text, filename):
 
 # Format is YYYY.MM.DD.HH.MM.SS
 def format_timestamp(timestamp):
+    """Format a timestamp stored in stat files to a DateTime."""
     expected_timestamp_format = '^(\d{4})\.(0?[1-9]|1[012])\.(0?[1-9]|[12][0-9]|3[01])\.(?:(?:([01]?\d|2[0-3])\.)?([0-5]?\d)\.)?([0-5]?\d)$'
     searched = re.search(expected_timestamp_format, timestamp)
     year = int(searched.group(1))
@@ -122,6 +125,7 @@ def format_timestamp(timestamp):
 
 
 def parse_line(line, match):
+    """Parse a single line from a stat file."""
     x = line.split('|')
     x = nullparse(x)
 
@@ -267,14 +271,15 @@ def parse_line(line, match):
 
 
 def nullparse(s):
-    for string in s:
-        if string == '' or string.lower() == 'null':
-            string = None
+    """Convert 'null' or empty entries in a statfile line to None."""
+    for sstring in s:
+        if sstring == '' or sstring.lower() == 'null':
+            sstring = None
     return s
 
 
-# Parses 1/0 to true/false
 def truefalse(s):
+    """Parse 1/0 to true/false."""
     if s == '1':
         return True
     return False

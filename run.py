@@ -1,8 +1,7 @@
 #!flask/bin/python
 
-from flask_script import Manager, Command
+from flask_script import Manager
 from app import app
-import os, config
 
 manager = Manager(app)
 
