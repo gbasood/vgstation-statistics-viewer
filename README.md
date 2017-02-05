@@ -1,6 +1,6 @@
 This is very much a work in progress. Features **will** change over time.
 
-[![Build Status](https://travis-ci.org/gbasood/vgstation-statistics-viewer.svg)](https://travis-ci.org/gbasood/vgstation-statistics-viewer)
+[![Build Status](https://travis-ci.org/gbasood/vgstation-statistics-viewer.svg?branch=master)](https://travis-ci.org/gbasood/vgstation-statistics-viewer)
 [![codecov](https://codecov.io/gh/gbasood/vgstation-statistics-viewer/branch/master/graph/badge.svg)](https://codecov.io/gh/gbasood/vgstation-statistics-viewer)
 
 # Statistics viewer for /vg/station
