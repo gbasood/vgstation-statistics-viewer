@@ -39,7 +39,7 @@ h1,h2 {
 	margin: auto 20%;
 	background: #283845;
 	padding: 1em;
-	border-radius: 25px;
+	border-radius: 2px;
 }
 
 .centerpadded {
@@ -217,7 +217,7 @@ h1,h2 {
 	background: #283845;
 	display: table-cell;
 	padding: .5em;
-	border-radius: 25px;
+	border-radius: 2px;
 }
 
 #promote-github {
