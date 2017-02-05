@@ -307,6 +307,10 @@ a.block {
 	font-weight: bold;
 }
 
+.monthlynav a {
+	font-size: 75%;
+}
+
 .floatcontainer {
 	display: inline-block;
 }
