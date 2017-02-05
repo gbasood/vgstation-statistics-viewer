@@ -1,6 +1,6 @@
 #!flask/bin/python
 
-from flask.ext.script import Manager, Command
+from flask_script import Manager, Command
 from app import app
 import os, config
 
