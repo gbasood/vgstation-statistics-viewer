@@ -1,10 +1,9 @@
 import factory
 import datetime
 import pytz
-from datetime import tzinfo
 from app import models, db
 from testcontent import factories as ourfactory
-from factory.fuzzy import FuzzyInteger, FuzzyChoice, FuzzyDateTime
+from factory.fuzzy import FuzzyInteger, FuzzyDateTime
 
 
 def filename():
@@ -30,7 +29,7 @@ class MatchFactory(factory.alchemy.SQLAlchemyModelFactory):
     @factory.post_generation
     def post(obj, create, extracted, **kwargs):
         if obj.modes_string == 'cult':
-            obj.cultstat = ourfactory.cult.CultStatFactory() # This isn't how factoryboy docs say to do it but it's the only thing that worked woooo
+            obj.cultstat = ourfactory.cult.CultStatFactory()  # This isn't how factoryboy docs say to do it but it's the only thing that worked woooo
         elif obj.modes_string == 'ai malfunction':
             obj.malfstat = ourfactory.malf.MalfStatFactory()
     # to be continued as factories are added

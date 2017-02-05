@@ -37,7 +37,7 @@
           <div id ='player'><span id = 'key'>{{antag.key}}</span><span id ='name'> as {{antag.name}}</span></div>
           <div id = 'actor'>{{antag.role}}</div>
           <ol>
-          {% for objective in match.objs_for_antag(antag.key) -%}
+          {% for objective in match.get_objs_for_antag(antag.key) -%}
               <li class = 'objective'>
               {{objective | obj_pretty}} {{ objective.objective_succeeded | obj_successfail | safe}}
             </li>
