@@ -4,7 +4,7 @@ html,body {
 }
 
 body {
-	background: #444;
+	background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('space.png');
 	color: #DDD;
 	font-family: Arial;
 	margin: 0;
@@ -37,8 +37,9 @@ h1,h2 {
 
 .centerpadded-small {
 	margin: auto 20%;
-	background: #333;
+	background: #283845;
 	padding: 1em;
+	border-radius: 2px;
 }
 
 .centerpadded {
@@ -80,7 +81,7 @@ h1,h2 {
 	height: 18%;
 	float: left;
 	margin: .5%;
-	background: #333;
+	background: #283845;
 	text-align: center;
 	cursor: pointer;
 }
@@ -98,7 +99,7 @@ h1,h2 {
 	display: block;
 	width: 100%;
 	height: 5px;
-	background: #333;
+	background: #283845;
 	transition: background-color .25s ease;
 	margin-bottom: 5px;
 }
@@ -154,7 +155,7 @@ h1,h2 {
 }
 
 .antag {
-	background: #333;
+	background: #283845;
 	padding: 1em;
 	margin-bottom: 1%;
 }
@@ -195,7 +196,7 @@ h1,h2 {
 }
 
 .matchdeath {
-	background: #333;
+	background: #283845;
 	padding: .25em;
 	margin-bottom: 1%;
 }
@@ -213,9 +214,10 @@ h1,h2 {
 }
 
 #header a .nav-button {
-	background: #333;
+	background: #283845;
 	display: table-cell;
 	padding: .5em;
+	border-radius: 2px;
 }
 
 #promote-github {
@@ -313,6 +315,7 @@ a.block {
 
 .floatcontainer {
 	display: inline-block;
+	background-color: #202c39;
 }
 
 .floatleft {
@@ -326,4 +329,15 @@ a.block {
 
 .floatleft p {
 	margin: 0;
+}
+
+.ghost-button {
+  display: inline-block;
+  width: 200px;
+  padding: 8px;
+  color: #fff;
+  border: 1px solid #fff;
+  text-align: center;
+  outline: none;
+  text-decoration: none;
 }
