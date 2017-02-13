@@ -4,25 +4,31 @@
 
 <div id = 'container'>
   {{ render_pagination(pagination, "matchlist") }}
-  <div id = 'match-container'>
+  <table id = 'match-container'>
+	  <thead>
+		  <td></td>
+		  <td>Game Mode</td>
+		  <td>Map</td>
+		  <td>Date &amp; Time</td>
+		  <td>Crew Score</td>
+		  <td>Player Deaths</td>
+		  <td>View</td>
+	  </thead>
 {%- for match in matches %}
-    <a class = 'match block' href='/match/{{match.id}}'>
-        <img src='{{modethumb(match.modes_string)}}'/>
-    {%- if match.is_mixed() -%}
-        <p id ='match-title'>Mixed</p>
-    {%- else -%}
-        <p id = 'match-title'>{{match.modes_string}}</p>
-    {%- endif %}
-		<p class = 'bigger-font'>{{match.mapname}}</p>
-    <p>{{match.date.strftime('%m/%d/%y')}}
-      {%-if match.start_datetime%}
-      {{match.start_datetime.strftime('%H:%M')}}
-    {%-endif %}</p>
-    <p><strong>Crew Score</strong> {{match.crewscore}}</p>
-    <p><strong>Deaths</strong> {{match.player_deaths().count()}}</p>
-    </a>
+   <tr class = 'match block'>
+	<td class="match-title"><img src='{{modethumb(match.modes_string)}}'/></td>
+	<td>{%- if match.is_mixed() -%}Mixed{%- else -%}{{match.modes_string}}{%- endif %}</td>
+	<td>{{match.mapname}}</td>
+	<td>{{match.date.strftime('%m/%d/%y')}}
+      	{%-if match.start_datetime%}
+      	{{match.start_datetime.strftime('%H:%M')}}
+    	{%-endif %}</td>
+	<td class="bigger-font">{{match.crewscore}}</td>
+	<td class="bigger-font">{{match.player_deaths().count()}}</td>
+	<td><a href='/match/{{match.id}}' class="bigger-font">→</a></td>
+    </tr>
 {%- endfor %}
-  </div>
+  </table>
   {{ render_pagination(pagination, "matchlist") }}
 </div>
 {% endblock %}

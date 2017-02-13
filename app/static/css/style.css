@@ -1,10 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Hind|Jockey+One');
 html,body {
 	width: 100%;
 	height: 100%;
 }
 
 body {
-	background: #444;
+	background: #222;
 	color: #DDD;
 	font-family: Arial;
 	margin: 0;
@@ -12,6 +13,7 @@ body {
 
 a,a:hover,a:active {
 	color: #FFF;
+	text-decoration: none;
 }
 
 a:hover {
@@ -19,20 +21,36 @@ a:hover {
 }
 
 h1,h2 {
+	display: block;
+	margin: 1% 5%;
+	border-radius: 2px;
 	text-align: center;
+	font-family: "Hind";
+	font-weight: 400;
+	background: black;
+	padding: 0.5% 0%;
+	width: 90%;
+}
+
+h1 {
+	font-size: 20pt;
+	text-shadow: 0px 0px 1px #333;
+	background: url('/static/img/mapbase1024.png') !important;
 }
 
 #header {
 	width: 100%;
-	border-bottom: 1px solid;
-	text-align: center;
-	padding-bottom: .25%;
+	border-bottom: 1px solid black;
+	padding: 0.25% 1.125%;
 	margin-bottom: .25%;
+	background: #333;
 }
 
 #title {
-	font-family: 'Space Mono',Courier,monospace;
-	font-size: 200%;
+	font-family: "Jockey One";
+	display: inline-block;
+	font-size: 14pt;
+	margin: 0.125% 1%;
 }
 
 .centerpadded-small {
@@ -55,83 +73,72 @@ h1,h2 {
 }
 
 #match-container {
-	display: flex;
-	flex-wrap: wrap;
-	padding-left: 15%;
-	padding-right: 15%;
-	margin: 0 auto;
-}
-
-@media (max-width: 900px) {
-	#match-container {
-		padding: inherit;
-	}
-}
-
-@media (max-width: 1200px) and (min-width: 900px) {
-	#match-container {
-		padding-left: 7.5%;
-		padding-right: 7.5%;
-	}
+	display: table;
+	width: 60%;
+	margin: 0% 20%;
 }
 
 .match {
-	width: 32.5%;
-	height: 18%;
-	float: left;
-	margin: .5%;
 	background: #333;
-	text-align: center;
-	cursor: pointer;
+	margin: 1px;
+	display: table-row;
 }
 
-#match-container .match:nth-of-type(3n) {
-	margin-right: 0;
-}
-
-#match-container .match:nth-of-type(3n+1) {
-	margin-left: 0;
-}
-
-.match::before {
-	content: '';
-	display: block;
-	width: 100%;
-	height: 5px;
-	background: #333;
-	transition: background-color .25s ease;
-	margin-bottom: 5px;
-}
-
-.match p {
-	margin-top: .1em;
-	margin-bottom: .1em;
+.match > * {
+	margin: auto 2%;
+	display: table-cell !important;
 }
 
 .match #match-title {
-	width: 100%;
-	font-size: 1.5em;
+	font-size: 10pt;
 	margin-bottom: .3em;
 	text-transform: capitalize;
+}
+
+thead > * {
+	background: #111111;
+	font-size: 8pt;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	padding: 4px;
+}
+
+td {
+	text-align: center;
+}
+
+.single-match > tbody > tr > td {
+	background: #222;
 }
 
 .match img {
 	margin: 0 auto;
 	width: 32px;
 	height: 32px;
-	display: block;
 }
 
-.match:hover::before {
-	background: #C23B22;
+.gh {
+	padding: 6px 3px;
+	background: #37C837;
+	border-radius: 30px;
+	color: #333;
+	padding: 3px 10px;
 }
 
-.match:hover #match-title {
-	color: #C23B22;
+.hdr {
+	position: absolute;
+	right: 1%;
+	top: 1.5%;
+}
+
+.matchhead {
+	font-size: 10pt;
+	color: #666;
 }
 
 .bigger-font {
 	font-size: 125%;
+	font-weight: 600;
 }
 
 #chart-container {
@@ -168,12 +175,27 @@ h1,h2 {
 	display: inline-block;
 }
 
-.antag .objective .success {
-	color: #779ECB;
+.objective {
+	margin: 1%;
+	padding: 1%;
+	border-radius: 2px;
+	color: #222;
 }
 
-.antag .objective .failure {
-	color: #C23B22;
+.success {
+	background: #779ECB;
+}
+
+.success::before {
+	content: "☑";
+}
+
+.failure {
+	background: #C23B22;
+}
+
+.failure::before {
+	content: "☒";
 }
 
 .gridhalf {
@@ -204,6 +226,11 @@ h1,h2 {
 	float: right;
 }
 
+#roundinfo {
+	margin-top: 2.5%;
+	padding-top: 0.5em;
+}
+
 #roundinfo #mode {
 	text-transform: capitalize;
 }
@@ -212,15 +239,10 @@ h1,h2 {
   text-align: center
 }
 
-#header a .nav-button {
-	background: #333;
-	display: table-cell;
-	padding: .5em;
-}
-
-#promote-github {
-	text-align: center;
-	font-size: 150%;
+#header > a.nav-button {
+	display: inline-block;
+	margin: .5em;
+	text-decoration: none;
 }
 
 .match.singular {
@@ -307,12 +329,12 @@ a.block {
 	font-weight: bold;
 }
 
-.monthlynav a {
-	font-size: 75%;
-}
-
 .floatcontainer {
 	display: inline-block;
+}
+
+.floatcontainer > p {
+	font-weight: bold;
 }
 
 .floatleft {

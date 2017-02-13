@@ -18,26 +18,32 @@
     </div>
   </div>
     <p class = 'centertext'>Everything here is very much a work in progress. As such, match history may be wiped at any time.</p>
-    <div id = 'promote-github'>
-      <p>Found a bug? Have a feature request?</p>
-      <a href = 'https://github.com/gbasood/vgstation-statistics-viewer/issues'>Visit the GitHub repo!</a></p>
-    </div>
-    <div class = 'centertext' style = 'font-size: 80%'>By the way if you have any ideas for grafix to throw around this plain frontpage or the bar up top, let me know over on GitHub as well</div>
     <p class = 'centertext' style = 'margin-bottom: 0'>Last match:</p>
     {%- if lastmatch -%}
-    <div id = 'matches-shortlist'>
-      <a class = 'match singular block' href='/match/{{lastmatch.id}}'>
-          <img src='{{modethumb(lastmatch.modes_string)}}'/>
+    <a href='/match/{{lastmatch.id}}'>
+    <table class="single-match" id='match-container'>
+	    <thead>
+		    <td></td>
+		    <td>Game Mode</td>
+		    <td>Map</td>
+		    <td>Crew Score</td>
+		    <td>Player Deaths</td>
+	    </thead>
+	    <tbody>
+		<tr class="match">
+		<td><img src='{{modethumb(lastmatch.modes_string)}}'/></td>
       {%- if lastmatch.is_mixed() -%}
-          <p id ='match-title'>Mixed</p>
+          <td>Mixed</p>
       {%- else -%}
-          <p id = 'match-title'>{{lastmatch.modes_string}}</p>
-      {%- endif -%}
-          <p class = 'bigger-font'>{{lastmatch.mapname}}</p>
-          <p><strong>Crew Score</strong> {{lastmatch.crewscore}}</p>
-          <p><strong>Deaths</strong> {{lastmatch.player_deaths().count()}}</p>
-      </a>
-    </div>
+          <td>{{lastmatch.modes_string}}</td>
+	  {%- endif -%}
+          <td>{{lastmatch.mapname}}</td>
+          <td>{{lastmatch.crewscore}}</td>
+          <td>{{lastmatch.player_deaths().count()}}</td>
+		</tr>
+	    </tbody>
+    </table>
+    </a>
     {%- endif -%}
 </div>
 {%- endblock -%}
