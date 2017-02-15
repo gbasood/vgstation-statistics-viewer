@@ -59,7 +59,7 @@ class ParseToDBTestCase(unittest.TestCase):  # pragma: no cover
 
         assert match1 is not None
 
-
+# Todo: separate into own file, make it test for HTML elements instead of specific strings
 class ViewsTestCase(unittest.TestCase):  # pragma: no cover
 
     def setUp(self):
@@ -86,7 +86,7 @@ class ViewsTestCase(unittest.TestCase):  # pragma: no cover
     def test_matchpage(self):
         testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
         rv = self.app.get('/match/1')
-        assert b'Player deaths' in rv.data
+        assert b'Deaths' in rv.data
 
 
 class GamemodeTemplatesTestCase(unittest.TestCase):
