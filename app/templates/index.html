@@ -17,8 +17,8 @@
         <p class = 'indented'>Defficiency: {{'%0.2f' % deff|float}}%</p>
     </div>
   </div>
-    <p class = 'centertext'>Everything here is very much a work in progress. As such, match history may be wiped at any time.</p>
-    <p class = 'centertext' style = 'margin-bottom: 0'>Last match:</p>
+    <p class='centertext warn'>Everything here is very much a work in progress. As such, match history may be wiped at any time.</p>
+    <p class='centertext' style = 'margin-bottom: 0'>Last match:</p>
     {%- if lastmatch -%}
     <a href='/match/{{lastmatch.id}}'>
     <table class="single-match" id='match-container'>

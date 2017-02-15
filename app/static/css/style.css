@@ -41,7 +41,6 @@ h1 {
 #header {
 	width: 100%;
 	border-bottom: 1px solid black;
-	padding: 0.25% 1.125%;
 	margin-bottom: .25%;
 	background: #333;
 }
@@ -50,7 +49,8 @@ h1 {
 	font-family: "Jockey One";
 	display: inline-block;
 	font-size: 14pt;
-	margin: 0.125% 1%;
+	margin: 0.75% 2%;
+	margin-right: 0.5em;
 }
 
 .centerpadded-small {
@@ -64,6 +64,14 @@ h1 {
 	padding: 1em;
 	width: 85%;
 	display: table;
+}
+
+.warn {
+	background: #D45500;
+	color: #222;
+	padding: 4px;
+	font-family: "Hind", sans-serif;
+	font-weight: 800;
 }
 
 .indented {
@@ -118,17 +126,21 @@ td {
 }
 
 .gh {
-	padding: 6px 3px;
-	background: #37C837;
 	border-radius: 30px;
+	border: #37C837 2px solid;
+	color: #37C837; 
+	padding: 3px 12px;
+	transition: color 0.25s, background 0.25s;
+}
+
+.gh:hover {
+	background: #37C837;
 	color: #333;
-	padding: 3px 10px;
 }
 
 .hdr {
-	position: absolute;
-	right: 1%;
-	top: 1.5%;
+	margin: 0px auto;
+	float: right;
 }
 
 .matchhead {
@@ -239,7 +251,7 @@ td {
   text-align: center
 }
 
-#header > a.nav-button {
+.nav-button {
 	display: inline-block;
 	margin: .5em;
 	text-decoration: none;
