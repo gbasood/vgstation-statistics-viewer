@@ -1,18 +1,16 @@
 {% extends "_base.html" %}
 {% block content %}
   <div id = 'roundinfo' class = 'centerpadded-small bottom-margin'>
-  <h1>Round #{{match.id}}</h1>
-    <h2 id = 'mode'>{{match.modes_string}} on {{match.mapname}}</h2>
     {% if match.start_datetime %}
-      <h3>{{match.date.strftime('%B %d %Y')}}</h3>
-      <p>Lasted {{match.duration()}} minutes (from {{match.start_datetime}} to {{match.end_datetime}})</p>
+      <span class="matchhead">{{match.date.strftime('%b %d %Y')}} / {{match.duration()}} min. ({{match.start_datetime.strftime('%I:%M %p')}} to {{match.end_datetime.strftime('%I:%M %p')}})</span>
     {% elif match.data_version | float >= 1.1 %}
       <h3>{{match.date.strftime('%B %d %Y')}}</h3>
       <p>Lasted {{match.duration()}} minutes (from {{match.starttime|format_timestamp('shortmatchtime')}} to {{match.endtime|format_timestamp('shortmatchtime')}})</p>
     {% elif match.date %}
       <h3>Match date: {{match.date.strftime('%B %d %Y')}}</h3>
     {% endif %}
-    <p>Player deaths: {{match.player_deaths().count()}} Non-player deaths: {{match.nonplayer_deaths().count()}}</p>
+    <h1>Round #{{match.id}}</h1>
+      <h2 id = 'mode'>{{match.modes_string}} on {{match.mapname}} <b>&#9760;{{match.player_deaths().count()}} / {{match.nonplayer_deaths().count()}}</b></h2>
   </div>
   <div class = 'centerpadded'>
     <div class = 'gridcontainer'>
@@ -21,9 +19,9 @@
         {%- for death in match.player_deaths() -%}
           <div class = 'matchdeath'>
             {% if death.mindkey -%}
-              {{death.mindkey}} as
+	    <i>{{death.mindkey}}</i> as
             {% endif -%}
-            {{death.mindname}}
+	    <b>{{death.mindname}}</b>
             {% if death.last_assailant -%}
             <span class = 'lassailant'>Last assailant is {{death.last_assailant}}</span>
             {% endif -%}
@@ -36,13 +34,11 @@
         <div class = 'antag'>
           <div id ='player'><span id = 'key'>{{antag.key}}</span><span id ='name'> as {{antag.name}}</span></div>
           <div id = 'actor'>{{antag.role}}</div>
-          <ol>
           {% for objective in match.get_objs_for_antag(antag.key) -%}
-              <li class = 'objective'>
-              {{objective | obj_pretty}} {{ objective.objective_succeeded | obj_successfail | safe}}
-            </li>
+	  <div class = 'objective {% if objective.objective_succeeded %}success{% else %}failure{% endif %}'>
+		 {{objective | obj_pretty}}
+          </div>
           {% endfor -%}
-          </ol>
           <ol>
           {%- for uppurchase in match.uplink_buys_by_key(antag.key) %}
             <li class = 'uplinkbuy'> {{uppurchase.bundle_path}}</li>
