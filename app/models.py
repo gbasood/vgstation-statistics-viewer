@@ -256,3 +256,12 @@ class RevsquadStats(db.Model):
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     revsquad_won = db.Column(db.Boolean)
     remaining_heads = db.Column(db.Integer)
+
+
+class PopulationSnapshot(db.Model):
+    """ Population count and timestamp. """
+
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
+    popcount = db.Column(db.Integer)
+    time = db.Column(db.DateTime)
