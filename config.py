@@ -17,8 +17,8 @@ UNPARSABLE_DIR = os.path.join(STATS_DIR, 'unparsable')
 
 # Database
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db/app.db')
-SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db/db_repository')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db', 'app.db')
+SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db', 'db_repository')
 
 # No longer used due to Manager implementation
 # Load from arguments
