@@ -25,10 +25,10 @@ class MatchFactory(factory.alchemy.SQLAlchemyModelFactory):
     parsed_file = "statistics_{}".format(date.evaluate(2, None, False).strftime('%Y.%m.%d.%Y%m%d'))
     data_version = "1.1"
     modes_string = factory.Iterator(['cult', 'ai malfunction'])
-    populationstats = popsnap.PopSnapFactory.create_batch(10)
 
     @factory.post_generation
     def post(obj, create, extracted, **kwargs):
+        populationstats = popsnap.PopSnapFactory.create_batch(10)
         if obj.modes_string == 'cult':
             obj.cultstat = cult.CultStatFactory()  # This isn't how factoryboy docs say to do it but it's the only thing that worked woooo
         elif obj.modes_string == 'ai malfunction':
