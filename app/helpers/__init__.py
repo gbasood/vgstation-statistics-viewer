@@ -45,12 +45,15 @@ def population_timeline_chart_data(matchid):
     ps = models.Match.query.get(matchid).populationstats.all()
     labels = []
     popcounts = []
+    lowestPop = 100
 
     for snapshot in ps:
         labels.append(snapshot.time.strftime('%H:%M'))
         popcounts.append(snapshot.popcount)
+        if snapshot.popcount is None or snapshot.popcount < lowestPop:
+            lowestPop = snapshot.popcount
 
-    return json.dumps(labels), json.dumps(popcounts)
+    return json.dumps(labels), json.dumps(popcounts), lowestPop
 
 
 app.jinja_env.globals.update(population_timeline_chart_data=population_timeline_chart_data)
