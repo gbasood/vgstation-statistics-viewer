@@ -38,6 +38,7 @@ class Match(db.Model):
     blobstat = db.relationship('BlobStats', backref='match', lazy='joined', uselist=False)
     malfstat = db.relationship('MalfStats', backref='match', lazy='joined', uselist=False)
     revsquadstat = db.relationship('RevsquadStats', backref='match', lazy='joined', uselist=False)
+    populationstats = db.relationship('PopulationSnapshot', backref='match', lazy='dynamic')
 
     date = db.Column(db.DateTime)
     start_datetime = db.Column(db.DateTime)
