@@ -50,7 +50,6 @@ def population_timeline_chart_data(matchid):
         labels.append(snapshot.time.strftime('%H:%M'))
         popcounts.append(snapshot.popcount)
 
-
     return json.dumps(labels), json.dumps(popcounts)
 
 
