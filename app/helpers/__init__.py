@@ -47,7 +47,7 @@ def population_timeline_chart_data(matchid):
     popcounts = []
 
     for snapshot in ps:
-        labels.append(snapshot.time.strftime('%H:%M:%S'))
+        labels.append(snapshot.time.strftime('%H:%M'))
         popcounts.append(snapshot.popcount)
 
 

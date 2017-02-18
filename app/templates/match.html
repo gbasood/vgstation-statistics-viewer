@@ -12,9 +12,7 @@
     <h1>Round #{{match.id}}</h1>
       <h2 id = 'mode'>{{match.modes_string}} on {{match.mapname}} <b>&#9760;{{match.player_deaths().count()}} / {{match.nonplayer_deaths().count()}}</b></h2>
       {% with popstats=population_timeline_chart_data(match.id), chartLabels=popstats[0], chartData=popstats[1] %}
-      <h2 class = 'timeline'>
-        {% include "_timeline.html" %}
-      </h2>
+      {% include "_timeline.html" %}
       {% endwith %}
   </div>
   <div class = 'centerpadded'>

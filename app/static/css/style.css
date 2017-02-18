@@ -128,7 +128,7 @@ td {
 .gh {
 	border-radius: 30px;
 	border: #37C837 2px solid;
-	color: #37C837; 
+	color: #37C837;
 	padding: 3px 12px;
 	transition: color 0.25s, background 0.25s;
 }
@@ -360,4 +360,9 @@ a.block {
 
 .floatleft p {
 	margin: 0;
+}
+
+.timeline {
+	height: 50%;
+	max-height: 200%;
 }
