@@ -72,16 +72,6 @@ class Match(db.Model):
         """Return all Death entries associated with this match, whose keys are null."""
         return self.deaths.filter(Death.mindkey == 'null')
 
-    def has_template(self):
-        """Return a boolean based on whether or not this match's mode has an associated Jinja2 template to render."""
-        if self.is_mixed():
-            return False
-        else:
-            for file in listdir(path.join(basedir, 'app', 'templates', 'gamemodes')):
-                if '_' + self.modes_string.lower() + '.html' in file:
-                    return True
-            return False
-
     def duration(self):
         """Return the number of minutes this round was played."""
         if(float(self.data_version) < 1.1):
