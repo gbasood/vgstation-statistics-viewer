@@ -4,7 +4,7 @@ import unittest
 from app import app as sviewer
 import app as ourapp
 from config import basedir
-from testcontent import factories
+from testcontent.factories.match import MatchFactory
 
 dbpath = os.path.join(basedir, 'testcontent', 'db', 'test.db')  # pragma: no cover
 if not os.path.exists(os.path.dirname(dbpath)):  # pragma: no cover
@@ -25,7 +25,7 @@ class ViewsTestCase(unittest.TestCase):  # pragma: no cover
         ourapp.db.drop_all()
 
     def test_global_stats(self):
-        factories.match.MatchFactory()
+        MatchFactory()
 
         rv = self.app.get('/globalstats')
         assert b'matchChart' in rv.data
@@ -40,6 +40,11 @@ class ViewsTestCase(unittest.TestCase):  # pragma: no cover
         rv = self.app.get('/match/1')
         assert b'Deaths' in rv.data
 
+    def test_popcount_matchpage(self):
+        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2017.18.02.100019.txt')
+        rv = self.app.get('/match/1')
+        assert b'timeline' in rv.data
+
 
 class GamemodeTemplatesTestCase(unittest.TestCase):
 
@@ -53,13 +58,13 @@ class GamemodeTemplatesTestCase(unittest.TestCase):
         ourapp.db.drop_all()
 
     def test_malfview(self):
-        match = factories.match.MatchFactory(modes_string='ai malfunction')
+        match = MatchFactory(modes_string='ai malfunction')
         ourapp.db.session.commit()
         rv = self.app.get('/match/{}'.format(match.id))
         assert b'Malf win:' in rv.data
 
     def test_cultview(self):
-        match = factories.match.MatchFactory(modes_string='cult')
+        match = MatchFactory(modes_string='cult')
         ourapp.db.session.commit()
         rv = self.app.get('/match/{}'.format(match.id))
         assert b'Corpses fed to Nar\'sie:' in rv.data
