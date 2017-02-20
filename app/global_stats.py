@@ -66,8 +66,7 @@ def get_formatted_global_stats(timespan):
     matchData['losses'] = json.dumps(losses, ensure_ascii=True)
     matchData['all'] = json.dumps(allplayed, ensure_ascii=True)
     matchData['alltypes'] = json.dumps(list(allMatches.keys()), ensure_ascii=True)
-    print matchData['alltypes'], allMatches
-    print matchData['all']
+
     return matchData
 
 
@@ -88,7 +87,6 @@ def get_global_stats(timespan):
         m = match_stats(timespan)
         for match in m:
             # Pie chart data
-            print match.mode
             if match.mode not in all_matches:
                 all_matches[match.mode] = 1
             else:
@@ -112,7 +110,6 @@ def get_global_stats(timespan):
         all_matches = q[1]
         logging.debug('Cache hit on globalstats')
 
-    print all_matches
     return victories, all_matches
 
 
