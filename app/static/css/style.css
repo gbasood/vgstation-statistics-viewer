@@ -153,10 +153,16 @@ td {
 	font-weight: 600;
 }
 
-#chart-container {
+.chart-container {
 	margin: 0 auto;
 	padding: 1em;
-	width: 80%;
+	width: 40%;
+	display: inline-block;
+}
+
+.gen-contain {
+	margin: 0 auto;
+	text-align: center;
 }
 
 #container {
