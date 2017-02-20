@@ -14,12 +14,14 @@
   <a href="{{ url_for('globalstats', timespan='monthly')}}">Show Monthly</a>
   {%- endif -%}
 </div>
-<div class = 'gen-contain'>
-  <div class = 'chart-container'>
-  <canvas id="matchChart"></canvas>
+<div class='gen-contain'>
+  <div class='chart-container'>
+    <label for='matchChart' class='bigger-font'>Victory Rate</label>
+    <canvas id="matchChart"></canvas>
   </div>
-  <div class = 'chart-container'>
-  <canvas id="matchPieChart"></canvas>
+  <div class='chart-container'>
+    <label for='matchPieChart' class='bigger-font'>Play Rate</label>
+    <canvas id="matchPieChart"></canvas>
   </div>
 </div>
 {% endblock %}
