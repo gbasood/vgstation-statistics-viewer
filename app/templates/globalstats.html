@@ -17,6 +17,10 @@
 <div id = 'chart-container'>
 <canvas id="matchChart"></canvas>
 </div>
+<div id = 'chart-container'>
+<canvas id="matchPieChart"></canvas>
+{{matchData['alltypes']}}
+</div>
 {% endblock %}
 
 {% block after_body %}
@@ -35,6 +39,21 @@ var bardata = {
         backgroundColor: '#C23B22'
   }]
 };
+
+var piedata = {
+  labels: {{matchData['alltypes'] | safe}},
+  datasets: [{
+    type: 'pie',
+    data: {{matchData['all'] | safe}},
+    backgroundColor: [
+
+    ]
+  }]
+}
+{% for mode in matchData['all'] -%}
+piedata.datasets[0].backgroundColor.push(getRandomColor())
+{% endfor -%}
+
 
 var graphOpts = {
   type: 'bar',
@@ -60,12 +79,28 @@ var graphOpts = {
   }
 }
 
+var pieOpts = {
+  type: 'pie',
+  data: piedata
+}
+
 Chart.defaults.global.defaultFontColor = '#fff';
+
+function getRandomColor() {
+    var values = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += values[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
 window.onload = function() {
   var ctx = document.getElementById("matchChart").getContext("2d");
-
   new Chart(ctx, graphOpts);
+
+  var ctx2 = document.getElementById("matchPieChart").getContext("2d");
+  new Chart(ctx2, pieOpts);
 }
 </script>
 {% endblock %}
