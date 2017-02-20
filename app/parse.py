@@ -267,6 +267,25 @@ def parse_line(line, match):
         rss.remaining_heads = x[2]
 
         db.session.add(rss)
+    elif x[0] == 'POPCOUNT':
+        pc = models.PopulationSnapshot(match_id=match.id)
+        pc.popcount = x[2]
+        timestamp_string = x[1]
+        # yyyy-mm-dd hh:mm:ss
+        timestamp_pattern = '(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})'
+        timestamp_regex = re.search(timestamp_pattern, timestamp_string)
+
+        year = int(timestamp_regex.group(1))
+        month = int(timestamp_regex.group(2))
+        day = int(timestamp_regex.group(3))
+        hour = int(timestamp_regex.group(4))
+        minute = int(timestamp_regex.group(5))
+        second = int(timestamp_regex.group(6))
+
+        timestamp_dt = datetime.datetime(year, month, day, hour, minute, second)
+        pc.time = timestamp_dt
+
+        db.session.add(pc)
     return True
 
 

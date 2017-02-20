@@ -6,6 +6,6 @@ python:
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests
-script: nosetests runtests.py --with-coverage --cover-package=app --cover-erase
+script: nosetests testcontent --with-coverage --cover-package=app --cover-erase
 after_success:
   - bash <(curl -s https://codecov.io/bash)

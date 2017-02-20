@@ -1,0 +1,266 @@
+STATLOG_START|1.1|Meta Club|2017.02.18.10.00.19|2017.02.18.11.16.16
+MASTERMODE|secret
+GAMEMODE|AutoTraitor
+TECH_TOTAL|44
+BLOOD_SPILLED|6623.08
+CRATES_ORDERED|8
+ARTIFACTS_DISCOVERED|0
+CREWSCORE|-3782
+ESCAPEES|17
+NUKED|0
+MOB_DEATH|/mob/living/carbon/human|null|2835.320068359375||214|168|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2835.320068359375||223|166|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2835.97998046875||214|166|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2835.97998046875||201|165|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2835.97998046875||224|158|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2836.31005859375||207|144|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2836.31005859375||204|143|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2836.31005859375||206|142|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2836.639892578125||223|326|5|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2836.639892578125||295|155|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2837.300048828125||304|151|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2837.300048828125||303|149|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2837.6298828125||306|148|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2837.6298828125||132|128|2|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2837.6298828125||83|111|2|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2838.2900390625||81|108|2|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2838.2900390625||108|104|2|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2838.2900390625||105|104|2|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2838.949951171875||102|104|2|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2838.949951171875||99|104|2|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2838.949951171875||369|140|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2839.280029296875||0|0|0|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2839.280029296875||191|151|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2839.610107421875||95|246|3|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2839.93994140625||427|116|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2839.93994140625||425|116|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2839.93994140625||423|116|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.60009765625||421|116|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.60009765625||418|116|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.60009765625||427|117|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.60009765625||425|117|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.60009765625||423|117|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.929931640625||421|117|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.929931640625||427|118|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.929931640625||425|118|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.929931640625||423|118|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2840.929931640625||421|118|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2841.590087890625||418|118|6|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2841.590087890625||135|334|3|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2841.590087890625||142|339|3|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2841.590087890625||462|133|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2841.590087890625||458|134|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2841.590087890625||456|135|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|2842.25||462|136|4|null|unknown
+MOB_DEATH|/mob/living/carbon/monkey/tajara|null|3673.18994140625||305|200|1|null|farwa (106)
+MOB_DEATH|/mob/living/carbon/human|null|5492.81005859375||134|428|6|aerlx87|Eddie Newbern
+MOB_DEATH|/mob/living/carbon/monkey|null|9152.83984375||243|175|1|null|monkey (155)
+MOB_DEATH|/mob/living/carbon/monkey|null|10452.7099609375|Lucas Monroe|488|330|4|null|monkey (647)
+MOB_DEATH|/mob/living/carbon/monkey|null|10612.759765625|the grey slime (875)|232|170|1|null|monkey (173)
+MOB_DEATH|/mob/living/carbon/monkey|null|11332.8203125||241|175|1|null|monkey (157)
+MOB_DEATH|/mob/living/carbon/monkey/vox|null|14053.009765625|the chicken (17)|210|160|6|null|chicken (567)
+MOB_DEATH|/mob/living/carbon/monkey/vox|null|14933.1201171875||219|160|6|null|chicken (17)
+MOB_DEATH|/mob/living/carbon/human|null|17172.830078125|Razashii|257|313|5|theu04k|John Stigler
+MOB_DEATH|/mob/living/carbon/human|null|28193.1796875||300|190|5|comito|Hichachi
+MOB_DEATH|/mob/living/carbon/human|null|28412.9609375|Dunsel Hordon|71|200|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|28472.689453125||70|200|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|28932.7109375||69|200|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|30352.69921875||36|185|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human/krampus|null|31707.6796875|Dunsel Hordon|37|185|4|null|Unknown
+MOB_DEATH|/mob/living/carbon/human/krampus|null|31713.2890625|Dunsel Hordon|37|185|4|null|Unknown
+MOB_DEATH|/mob/living/carbon/monkey|null|31732.759765625|Rigatoni|167|282|1|null|Rimshot (333)
+MOB_DEATH|/mob/living/carbon/monkey|null|31733.08984375|Zoey Walker|162|280|1|null|monkey (644)
+MOB_DEATH|/mob/living/carbon/human/krampus|null|31933.0703125|Dunsel Hordon|37|185|4|null|Unknown
+MOB_DEATH|/mob/living/carbon/human/krampus|null|31993.130859375|Dunsel Hordon|37|185|4|null|Unknown
+MOB_DEATH|/mob/living/carbon/human|null|32593.400390625|Unknown (as Seph)|218|277|1|panthid|Maxwell Chapman
+MOB_DEATH|/mob/living/carbon/human|null|33112.8203125||68|200|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|33188.71875|Unknown (as Brooke Burns)|215|289|1|nemod6989|Sir Bigus Dikus Honkington
+MOB_DEATH|/mob/living/carbon/human|null|34352.9609375||72|200|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|34992.828125||64|191|4|null|unknown
+MOB_DEATH|/mob/living/carbon/human|null|35572.640625|Unknown (as Holden Todd)|185|208|1|matto535|Holden Todd
+MOB_DEATH|/mob/living/carbon/human|null|36340.87890625|Unknown (as Brooke Burns)|220|186|1|yclat|Mike Cooper
+MOB_DEATH|/mob/living/carbon/human|traitor|36519.73828125|Unknown (as Holden Todd)|185|208|1|anglosphere|Cypher Reagan
+MOB_DEATH|/mob/living/carbon/human|null|37133.2109375|Weeds|190|263|1|theu04k|John Stigler
+MOB_DEATH|/mob/living/carbon/human|null|37937.75|Number 5|210|217|1|jewishcupboard|Venus Jones
+MOB_DEATH|/mob/living/carbon/human|null|39993.3203125|Rigatoni|206|224|1|jalis|Zoey Walker
+MOB_DEATH|/mob/living/carbon/human|null|39999.921875|Surfer Brooks|214|217|1|avadanatinde|Rigatoni
+MOB_DEATH|/mob/living/carbon/human|null|40133.5703125|Unknown|204|215|1|adrianoking|Machin Drian
+MOB_DEATH|/mob/living/carbon/monkey/punpun|null|40213.1015625|EASY MEAT|253|287|1|null|Pun Pun
+MOB_DEATH|/mob/living/carbon/human|null|40333.55078125|OCCAM|205|221|1|jeush404|Brock Steele
+MOB_DEATH|/mob/living/carbon/human|null|40601.51171875|Unknown (as Rin Fukuimoto)|234|234|1|pootismaniac|Rin Fukuimoto
+MOB_DEATH|/mob/living/carbon/human|null|40613.05859375|Percy Hall|184|275|1|theu04k|John Stigler
+MOB_DEATH|/mob/living/carbon/human|null|40993.55078125|Number 5|216|217|1|glchun|Erwin Ott
+MOB_DEATH|/mob/living/carbon/human|null|41213.66015625|Venus Jones|250|217|1|garrus|Bill Hudson
+MOB_DEATH|/mob/living/carbon/human|null|41254.91015625|Michael Prechtl|234|240|1|kurfurst|Carrie Loyce
+MOB_DEATH|/mob/living/carbon/human|null|41733.078125||236|217|1|midnightglow|Max Baum
+MOB_DEATH|/mob/living/carbon/human|null|41753.5390625|Unknown|151|304|5|mustardtiger|Xlr Mzap
+MOB_DEATH|/mob/living/carbon/monkey/diona|null|41913.58984375|Parasite|0|0|0|assfaget|EASY MEAT
+MOB_DEATH|/mob/living/carbon/human|null|42033.37890625|Unknown|0|0|0|comito|Hichachi
+MOB_DEATH|/mob/living/carbon/human|null|42352.8203125|Ola Stratford|0|0|0|dacendeth|Razashii
+MOB_DEATH|/mob/living/carbon/monkey/diona|null|42373.609375|Parasite|0|0|0|panthid|Glacale
+MOB_DEATH|/mob/living/carbon/human|null|42712.8515625|Percy Hall|205|235|1|theu04k|John Stigler
+MOB_DEATH|/mob/living/carbon/human|null|43293.3203125|Weeds|216|173|1|megatonthrustman|Nochta Iglav
+MOB_DEATH|/mob/living/carbon/human|null|43433.23828125|Number 5|0|0|0|ashdemai|May Owens
+MOB_DEATH|/mob/living/carbon/human|null|43761.921875|Glacale|263|301|1|lucky03|Pedro Pinney
+MOB_DEATH|/mob/living/carbon/human|null|43846.3984375||88|238|3|edwarus|Dunsel Hordon
+MOB_DEATH|/mob/living/carbon/human|traitor|44526.19921875||12|228|2|apelsinsaft|Yatatayachiyachatiyi
+MOB_DEATH|/mob/living/carbon/human|traitor|44633.44921875|Ola Stratford|9|238|2|nuke77|Jeanna Howe
+EXPLOSION|149|252|1|1|2|4|4
+EXPLOSION|149|252|1|1|2|4|4
+EXPLOSION|231|331|5|1|3|5|5
+EXPLOSION|223|321|5|1|3|5|5
+EXPLOSION|225|324|5|-1|1|3|3
+EXPLOSION|241|340|5|1|3|5|5
+EXPLOSION|221|328|5|-1|1|3|3
+EXPLOSION|224|290|5|1|3|5|5
+EXPLOSION|228|294|5|1|3|5|5
+EXPLOSION|232|285|5|1|3|5|5
+EXPLOSION|236|296|5|1|3|5|5
+EXPLOSION|217|276|5|1|3|5|5
+EXPLOSION|210|267|5|1|3|5|5
+EXPLOSION|219|281|5|1|3|5|5
+EXPLOSION|210|278|5|1|3|5|5
+EXPLOSION|203|267|5|1|3|5|5
+EXPLOSION|198|284|5|1|3|5|5
+EXPLOSION|195|290|5|1|3|5|5
+EXPLOSION|194|288|5|1|2|5|5
+EXPLOSION|195|293|5|1|3|5|5
+EXPLOSION|205|289|5|1|3|5|5
+EXPLOSION|204|295|5|1|3|5|5
+EXPLOSION|157|251|1|2|4|6|6
+EXPLOSION|151|265|1|2|4|6|6
+EXPLOSION|162|274|1|-1|1|3|3
+EXPLOSION|169|190|1|-1|1|3|3
+EXPLOSION|176|222|1|2|4|6|6
+EXPLOSION|165|289|1|-1|1|3|3
+EXPLOSION|162|205|1|-1|1|3|3
+EXPLOSION|178|314|1|-1|1|3|3
+EXPLOSION|157|278|1|-1|1|3|3
+EXPLOSION|179|294|1|2|4|6|6
+EXPLOSION|172|195|1|2|4|6|6
+EXPLOSION|178|311|1|-1|1|3|3
+EXPLOSION|238|315|1|-1|1|3|3
+EXPLOSION|169|255|5|1|3|5|5
+EXPLOSION|189|319|1|2|4|6|6
+EXPLOSION|248|324|1|2|4|6|6
+EXPLOSION|206|312|1|-1|1|3|3
+EXPLOSION|244|321|1|-1|1|3|3
+EXPLOSION|193|312|1|2|4|6|6
+EXPLOSION|299|297|1|2|4|6|6
+EXPLOSION|214|312|1|2|4|6|6
+EXPLOSION|266|298|1|2|4|6|6
+EXPLOSION|187|317|1|-1|1|3|3
+EXPLOSION|283|297|1|-1|1|3|3
+EXPLOSION|202|312|1|2|4|6|6
+EXPLOSION|165|291|1|-1|1|3|3
+EXPLOSION|270|297|1|-1|1|3|3
+EXPLOSION|306|269|1|2|4|6|6
+EXPLOSION|203|306|1|-1|1|3|3
+EXPLOSION|179|236|5|1|3|5|5
+EXPLOSION|272|297|1|2|4|6|6
+EXPLOSION|262|304|1|2|4|6|6
+EXPLOSION|305|264|1|2|4|6|6
+EXPLOSION|296|293|1|-1|1|3|3
+EXPLOSION|189|227|5|1|3|5|5
+EXPLOSION|146|261|1|-1|1|3|3
+EXPLOSION|172|193|1|-1|1|3|3
+EXPLOSION|153|245|1|-1|1|3|3
+EXPLOSION|156|208|1|2|4|6|6
+EXPLOSION|178|186|1|2|4|6|6
+EXPLOSION|152|266|1|2|4|6|6
+EXPLOSION|178|304|1|2|4|6|6
+EXPLOSION|153|244|1|-1|1|3|3
+EXPLOSION|160|210|1|-1|1|3|3
+EXPLOSION|163|240|1|2|4|6|6
+EXPLOSION|180|291|1|-1|1|3|3
+EXPLOSION|172|296|1|-1|1|3|3
+EXPLOSION|163|204|1|-1|1|3|3
+EXPLOSION|176|208|1|-1|1|3|3
+EXPLOSION|178|314|1|2|4|6|6
+EXPLOSION|238|316|1|2|4|6|6
+EXPLOSION|224|178|1|2|4|6|6
+EXPLOSION|250|321|1|-1|1|3|3
+EXPLOSION|228|160|1|-1|1|3|3
+EXPLOSION|253|166|1|-1|1|3|3
+EXPLOSION|267|171|1|-1|1|3|3
+EXPLOSION|248|177|1|-1|1|3|3
+EXPLOSION|308|196|1|2|4|6|6
+EXPLOSION|245|161|1|2|4|6|6
+EXPLOSION|181|187|1|-1|1|3|3
+EXPLOSION|308|197|1|-1|1|3|3
+EXPLOSION|272|214|1|-1|1|3|3
+EXPLOSION|172|198|1|-1|1|3|3
+EXPLOSION|193|177|1|2|4|6|6
+EXPLOSION|282|210|1|-1|1|3|3
+EXPLOSION|210|178|1|-1|1|3|3
+EXPLOSION|303|223|1|-1|1|3|3
+EXPLOSION|330|224|1|-1|1|3|3
+EXPLOSION|160|210|1|2|4|6|6
+EXPLOSION|300|221|1|2|4|6|6
+EXPLOSION|329|224|1|-1|1|3|3
+EXPLOSION|309|198|1|-1|1|3|3
+EXPLOSION|164|241|1|2|4|6|6
+EXPLOSION|167|212|1|-1|1|3|3
+EXPLOSION|301|224|1|-1|1|3|3
+EXPLOSION|352|250|1|-1|1|3|3
+EXPLOSION|344|241|1|-1|1|3|3
+EXPLOSION|314|236|1|-1|1|3|3
+EXPLOSION|211|186|5|1|3|5|5
+EXPLOSION|208|188|5|1|2|5|5
+EXPLOSION|208|179|5|1|3|5|5
+EXPLOSION|203|182|5|1|3|5|5
+EXPLOSION|305|199|1|7|14|28|28
+EXPLOSION|209|220|5|-1|1|3|3
+EXPLOSION|199|220|5|1|3|5|5
+EXPLOSION|213|221|1|7|14|28|28
+EXPLOSION|218|238|1|1|2|4|4
+EXPLOSION|197|206|1|1|2|4|4
+EXPLOSION|211|234|1|1|2|4|4
+EXPLOSION|226|209|1|1|2|4|4
+UPLINK_ITEM|anglosphere|Cypher Reagan|1|/datum/uplink_item/jobspecific/drunkbullets|/obj/item/weapon/storage/box/syndie_kit/boolets
+UPLINK_ITEM|anglosphere|Cypher Reagan|1|/datum/uplink_item/stealthy_weapons/para_pen|/obj/item/weapon/pen/paralysis
+UPLINK_ITEM|anglosphere|Cypher Reagan|1|/datum/uplink_item/stealthy_weapons/knuckles|/obj/item/clothing/gloves/knuckles
+UPLINK_ITEM|anglosphere|Cypher Reagan|1|/datum/uplink_item/stealthy_weapons/soap|/obj/item/weapon/soap/syndie
+UPLINK_ITEM|anglosphere|Cypher Reagan|1|/datum/uplink_item/stealthy_weapons/soap|/obj/item/weapon/soap/syndie
+UPLINK_ITEM|anglosphere|Cypher Reagan|1|/datum/uplink_item/stealthy_weapons/soap|/obj/item/weapon/soap/syndie
+UPLINK_ITEM|lionfire1234|Leon Strough|1|/datum/uplink_item/device_tools/emag|/obj/item/weapon/card/emag
+UPLINK_ITEM|apelsinsaft|Yatatayachiyachatiyi|1|/datum/uplink_item/stealthy_tools/syndigaloshes|/obj/item/clothing/shoes/syndigaloshes
+UPLINK_ITEM|lionfire1234|Leon Strough|1|/datum/uplink_item/stealthy_tools/agent_card|/obj/item/weapon/card/id/syndicate
+UPLINK_ITEM|plaugewalker|Lucas Monroe|0|/datum/uplink_item/stealthy_tools/syndigaloshes|/obj/item/clothing/shoes/syndigaloshes
+UPLINK_ITEM|plaugewalker|Lucas Monroe|0|/datum/uplink_item/stealthy_weapons/knuckles|/obj/item/clothing/gloves/knuckles
+UPLINK_ITEM|plaugewalker|Lucas Monroe|0|/datum/uplink_item/stealthy_weapons/knuckles|/obj/item/clothing/gloves/knuckles
+UPLINK_ITEM|mustardtiger|Xlr Mzap|0|/datum/uplink_item/stealthy_tools/decoy_balloon|/obj/item/toy/balloon/decoy
+UPLINK_ITEM|jewishcupboard|Venus Jones|0|/datum/uplink_item/dangerous/sword|/obj/item/weapon/melee/energy/sword
+UPLINK_ITEM|nuke77|Jeanna Howe|1|/datum/uplink_item/device_tools/emag|/obj/item/weapon/card/emag
+UPLINK_ITEM|nuke77|Jeanna Howe|1|/datum/uplink_item/stealthy_weapons/para_pen|/obj/item/weapon/pen/paralysis
+UPLINK_ITEM|apelsinsaft|Yatatayachiyachatiyi|1|/datum/uplink_item/device_tools/emag|/obj/item/weapon/card/emag
+CULTSTATS|0|0|0|0|0|0|0|0|0
+XENOSTATS|0|0|0
+BLOBSTATS|0|0|0|0
+MALFSTATS|0|0|4
+REVSQUADSTATS|0|6
+ANTAG_OBJ|Yatatayachiyachatiyi|Apelsinsaft|traitor|/datum/objective/steal|0|Steal the captain's pinpointer.
+ANTAG_OBJ|Yatatayachiyachatiyi|Apelsinsaft|traitor|/datum/objective/escape|0|Escape on the shuttle or an escape pod alive and free.
+ANTAG_OBJ|Jeanna Howe|Nuke77|traitor|/datum/objective/steal|0|Steal the captain's antique laser gun.
+ANTAG_OBJ|Jeanna Howe|Nuke77|traitor|/datum/objective/hijack|0|Hijack the emergency shuttle by escaping without any organic life-forms other than yourself.
+ANTAG_OBJ|Ricky Stick|BoosterRooster|traitor|/datum/objective/steal|0|Steal a piece of corgi meat.
+ANTAG_OBJ|Ricky Stick|BoosterRooster|traitor|/datum/objective/escape|0|Escape on the shuttle or an escape pod alive and free.
+ANTAG_OBJ|Cypher Reagan|Anglosphere|traitor|/datum/objective/steal|0|Steal the law planning frame.
+ANTAG_OBJ|Cypher Reagan|Anglosphere|traitor|/datum/objective/escape|0|Escape on the shuttle or an escape pod alive and free.
+ANTAG_OBJ|Leon Strough|Lionfire1234|traitor|/datum/objective/steal|1|Steal the chief medical officer's jumpsuit.
+ANTAG_OBJ|Leon Strough|Lionfire1234|traitor|/datum/objective/escape|1|Escape on the shuttle or an escape pod alive and free.
+POPCOUNT|2017-02-18 10:05:26|38
+POPCOUNT|2017-02-18 10:11:24|41
+POPCOUNT|2017-02-18 10:17:23|39
+POPCOUNT|2017-02-18 10:23:21|37
+POPCOUNT|2017-02-18 10:28:28|39
+POPCOUNT|2017-02-18 10:33:36|41
+POPCOUNT|2017-02-18 10:38:43|47
+POPCOUNT|2017-02-18 10:43:50|49
+POPCOUNT|2017-02-18 10:48:57|51
+POPCOUNT|2017-02-18 10:54:04|54
+POPCOUNT|2017-02-18 10:59:12|55
+POPCOUNT|2017-02-18 11:05:10|57
+POPCOUNT|2017-02-18 11:10:17|56
+POPCOUNT|2017-02-18 11:15:24|58
+WRITE_COMPLETE

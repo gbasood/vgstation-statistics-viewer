@@ -1,6 +1,7 @@
 """Helper functions for Jinja2 templates."""
 import datetime
 import calendar
+import json
 import flask
 import os
 from config import basedir
@@ -37,3 +38,22 @@ def add_months(sourcedate, months):
 
 
 app.jinja_env.globals.update(add_months=add_months)
+
+
+def population_timeline_chart_data(matchid):
+    """Get some population data for Chart.JS in JSON format."""
+    ps = models.Match.query.get(matchid).populationstats.all()
+    labels = []
+    popcounts = []
+    lowestPop = 100
+
+    for snapshot in ps:
+        labels.append(snapshot.time.strftime('%H:%M'))
+        popcounts.append(snapshot.popcount)
+        if snapshot.popcount is None or snapshot.popcount < lowestPop:
+            lowestPop = snapshot.popcount
+
+    return json.dumps(labels), json.dumps(popcounts), lowestPop
+
+
+app.jinja_env.globals.update(population_timeline_chart_data=population_timeline_chart_data)

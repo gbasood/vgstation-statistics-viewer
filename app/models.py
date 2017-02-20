@@ -38,6 +38,7 @@ class Match(db.Model):
     blobstat = db.relationship('BlobStats', backref='match', lazy='joined', uselist=False)
     malfstat = db.relationship('MalfStats', backref='match', lazy='joined', uselist=False)
     revsquadstat = db.relationship('RevsquadStats', backref='match', lazy='joined', uselist=False)
+    populationstats = db.relationship('PopulationSnapshot', backref='match', lazy='dynamic')
 
     date = db.Column(db.DateTime)
     start_datetime = db.Column(db.DateTime)
@@ -70,16 +71,6 @@ class Match(db.Model):
     def nonplayer_deaths(self):
         """Return all Death entries associated with this match, whose keys are null."""
         return self.deaths.filter(Death.mindkey == 'null')
-
-    def has_template(self):
-        """Return a boolean based on whether or not this match's mode has an associated Jinja2 template to render."""
-        if self.is_mixed():
-            return False
-        else:
-            for file in listdir(path.join(basedir, 'app', 'templates', 'gamemodes')):
-                if '_' + self.modes_string.lower() + '.html' in file:
-                    return True
-            return False
 
     def duration(self):
         """Return the number of minutes this round was played."""
@@ -256,3 +247,12 @@ class RevsquadStats(db.Model):
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     revsquad_won = db.Column(db.Boolean)
     remaining_heads = db.Column(db.Integer)
+
+
+class PopulationSnapshot(db.Model):
+    """ Population count and timestamp. """
+
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
+    popcount = db.Column(db.Integer)
+    time = db.Column(db.DateTime)

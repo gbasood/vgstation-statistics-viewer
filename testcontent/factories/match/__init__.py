@@ -2,7 +2,7 @@ import factory
 import datetime
 import pytz
 from app import models, db
-from testcontent import factories as ourfactory
+from testcontent.factories import cult, malf, popsnap
 from factory.fuzzy import FuzzyInteger, FuzzyDateTime
 
 
@@ -28,10 +28,11 @@ class MatchFactory(factory.alchemy.SQLAlchemyModelFactory):
 
     @factory.post_generation
     def post(obj, create, extracted, **kwargs):
+        populationstats = popsnap.PopSnapFactory.create_batch(10)
         if obj.modes_string == 'cult':
-            obj.cultstat = ourfactory.cult.CultStatFactory()  # This isn't how factoryboy docs say to do it but it's the only thing that worked woooo
+            obj.cultstat = cult.CultStatFactory()  # This isn't how factoryboy docs say to do it but it's the only thing that worked woooo
         elif obj.modes_string == 'ai malfunction':
-            obj.malfstat = ourfactory.malf.MalfStatFactory()
+            obj.malfstat = malf.MalfStatFactory()
     # to be continued as factories are added
 
 

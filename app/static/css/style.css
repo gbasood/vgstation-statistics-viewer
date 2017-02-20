@@ -128,7 +128,7 @@ td {
 .gh {
 	border-radius: 30px;
 	border: #37C837 2px solid;
-	color: #37C837; 
+	color: #37C837;
 	padding: 3px 12px;
 	transition: color 0.25s, background 0.25s;
 }
@@ -153,10 +153,16 @@ td {
 	font-weight: 600;
 }
 
-#chart-container {
+.chart-container {
 	margin: 0 auto;
 	padding: 1em;
-	width: 80%;
+	width: 40%;
+	display: inline-block;
+}
+
+.gen-contain {
+	margin: 0 auto;
+	text-align: center;
 }
 
 #container {
@@ -360,4 +366,10 @@ a.block {
 
 .floatleft p {
 	margin: 0;
+}
+
+.timeline {
+	height: 50%;
+	max-height: 200%;
+	background-color: rgba(100,100,100,0);
 }

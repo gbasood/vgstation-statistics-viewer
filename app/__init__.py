@@ -34,5 +34,3 @@ logFormat = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s\n'
                               '[in %(pathname)s:%(lineno)d]')
 errorHandler.setFormatter(logFormat)
 app.logger.handlers[0].setFormatter(logFormat)
-
-app.logger.info('Logging enabled.')

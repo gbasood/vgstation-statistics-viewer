@@ -47,23 +47,34 @@ class MatchTypeVictory:
 def get_formatted_global_stats(timespan):
     """Return a big ol' object that contains all the matches in two separate arrays of JSON."""  # TODO more documentation
     stats = get_global_stats(timespan)
+    winrateStats = stats[0]
+    allMatches = stats[1]
+
+    allplayed = []
 
     matchData = {}
-    matchData['types'] = json.dumps(list(stats.keys()), ensure_ascii=True)
-    matchData['matches'] = json.dumps(stats, ensure_ascii=True)
+    matchData['types'] = json.dumps(list(winrateStats.keys()), ensure_ascii=True)
+    matchData['matches'] = json.dumps(winrateStats, ensure_ascii=True)
     wins = []
     losses = []
-    for mode in stats:
-        wins.append(stats[mode]['wins'])
-        losses.append(stats[mode]['losses'])
+    for mode in winrateStats:
+        wins.append(winrateStats[mode]['wins'])
+        losses.append(winrateStats[mode]['losses'])
+    for mode in allMatches:
+        allplayed.append(allMatches[mode])
     matchData['wins'] = json.dumps(wins, ensure_ascii=True)
     matchData['losses'] = json.dumps(losses, ensure_ascii=True)
+    matchData['all'] = json.dumps(allplayed, ensure_ascii=True)
+    matchData['alltypes'] = json.dumps(list(allMatches.keys()), ensure_ascii=True)
+
     return matchData
 
 
 def get_global_stats(timespan):
     """Handle the querying of match win/loss info. Returns an array of match types."""
     victories = dict()
+    all_matches = dict()
+
     cachestring = "globalstatsalltime"
     if timespan[0] != "all":
         cachestring = 'globalstats{}{}'.format(timespan[1].year, timespan[1].month)
@@ -75,6 +86,15 @@ def get_global_stats(timespan):
 
         m = match_stats(timespan)
         for match in m:
+            # Pie chart data
+            if match.mode not in all_matches:
+                all_matches[match.mode] = 1
+            else:
+                all_matches[match.mode] = all_matches[match.mode] + 1
+
+        # Global winrate
+            if match.mode.lower() in do_not_show:
+                continue
             if match.mode not in victories:
                 victories[match.mode] = {'wins': 0, 'losses': 0}
                 victories[match.mode]['wins'] = 0
@@ -84,11 +104,13 @@ def get_global_stats(timespan):
             else:
                 victories[match.mode]['losses'] = victories[match.mode]['losses'] + 1
 
-        cache.set(cachestring, victories, timeout=15 * 60)  # 15 minutes
+        cache.set(cachestring, (victories, all_matches), timeout=15 * 60)  # 15 minutes
     else:
-        victories = q
+        victories = q[0]
+        all_matches = q[1]
         logging.debug('Cache hit on globalstats')
-    return victories
+
+    return victories, all_matches
 
 
 def match_stats(timespan):
@@ -117,8 +139,6 @@ def match_stats(timespan):
     matches = []
 
     for match in q:
-        if match.modes_string.lower() in do_not_show:
-            continue
         if match.is_mixed():
             continue
         victory = checkModeVictory(match)

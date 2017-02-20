@@ -59,63 +59,8 @@ class ParseToDBTestCase(unittest.TestCase):  # pragma: no cover
 
         assert match1 is not None
 
-# Todo: separate into own file, make it test for HTML elements instead of specific strings
-class ViewsTestCase(unittest.TestCase):  # pragma: no cover
+    def test_parse_popcount_match(self):
+        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2017.18.02.100019.txt')
+        match1 = ourapp.models.Match.query.first()
 
-    def setUp(self):
-        sviewer.logger.setLevel(logging.ERROR)
-        sviewer.config['TESTING'] = True
-        self.app = sviewer.test_client()
-        with sviewer.app_context():
-            ourapp.db.create_all()
-
-    def tearDown(self):
-        ourapp.db.drop_all()
-
-    def test_global_stats(self):
-        factories.match.MatchFactory()
-
-        rv = self.app.get('/globalstats')
-        assert b'matchChart' in rv.data
-
-    def test_matchlist(self):
-        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
-        rv = self.app.get('/matchlist')
-        assert b'match-title' in rv.data
-
-    def test_matchpage(self):
-        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
-        rv = self.app.get('/match/1')
-        assert b'Deaths' in rv.data
-
-
-class GamemodeTemplatesTestCase(unittest.TestCase):
-
-    def setUp(self):
-        self.app = sviewer.test_client()
-        sviewer.config['TESTING'] = True
-        with sviewer.app_context():
-            ourapp.db.create_all()
-
-    def tearDown(self):
-        ourapp.db.drop_all()
-
-    def test_malfview(self):
-        match = factories.match.MatchFactory(modes_string='ai malfunction')
-        ourapp.db.session.commit()
-        rv = self.app.get('/match/{}'.format(match.id))
-        assert b'Malf win:' in rv.data
-
-    def test_cultview(self):
-        match = factories.match.MatchFactory(modes_string='cult')
-        ourapp.db.session.commit()
-        rv = self.app.get('/match/{}'.format(match.id))
-        assert b'Corpses fed to Nar\'sie:' in rv.data
-
-
-if __name__ == '__main__':  # pragma: no cover
-    # unittest.main()
-    test_suite = unittest.defaultTestLoader.discover('.', '*tests.py')
-    test_runner = unittest.TextTestRunner(resultclass=TextTestResult)
-    result = test_runner.run(test_suite)
-    sys.exit(not result.wasSuccessful())
+        assert match1 is not None

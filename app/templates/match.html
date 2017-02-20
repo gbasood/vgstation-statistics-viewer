@@ -11,6 +11,11 @@
     {% endif %}
     <h1>Round #{{match.id}}</h1>
       <h2 id = 'mode'>{{match.modes_string}} on {{match.mapname}} <b>&#9760;{{match.player_deaths().count()}} / {{match.nonplayer_deaths().count()}}</b></h2>
+      {% with popstats=population_timeline_chart_data(match.id) %}
+      {% if popstats %}
+      {% with chartLabels=popstats[0], chartData=popstats[1], chartMinY=popstats[2] %}
+      {% include "_timeline.html" %}
+      {% endwith %}{% endif %}{% endwith %}
   </div>
   <div class = 'centerpadded'>
     <div class = 'gridcontainer'>
@@ -54,11 +59,7 @@
         </div>
       {% endfor -%}
       </div>
-      {% if match.has_template() %}
-        {% include "gamemodes/_" + match.modes_string.lower() + ".html"%}
-      {% else %}
-        {% include "_gamemode.html" %}
-      {% endif %}
+      {% include ["gamemodes/_" + match.modes_string.lower() + ".html", "_gamemode.html"] %}
     </div>
   </div>
 {% endblock %}

@@ -14,8 +14,13 @@
   <a href="{{ url_for('globalstats', timespan='monthly')}}">Show Monthly</a>
   {%- endif -%}
 </div>
-<div id = 'chart-container'>
-<canvas id="matchChart"></canvas>
+<div class = 'gen-contain'>
+  <div class = 'chart-container'>
+  <canvas id="matchChart"></canvas>
+  </div>
+  <div class = 'chart-container'>
+  <canvas id="matchPieChart"></canvas>
+  </div>
 </div>
 {% endblock %}
 
@@ -35,6 +40,38 @@ var bardata = {
         backgroundColor: '#C23B22'
   }]
 };
+
+var piedata = {
+  labels: {{matchData['alltypes'] | safe}},
+  datasets: [{
+    type: 'pie',
+    data: {{matchData['all'] | safe}},
+    backgroundColor: [
+      '#779ECB', // blue
+      '#C23B22', // red
+      '#77DD77', // light green
+      '#836953', // brown
+      '#FFb347', // orange
+      '#B39EB5', // pastel purple
+      '#CFCFC4', // pastel 'gray'
+      '#FDFD96', // light yellow
+      '#AEC6CF', // light blue
+      '#DEA5A4', // light red
+      '#CB99C9', // violet
+      '#966FD6', // purple
+      '#FA9AC2', // magenta/pink
+      '#0077BE', // deep blue
+      '#FF6961', // bright red
+      '#03c03c', // green
+      '#9C2542', // dark violet
+      '#317873', // dark green
+      '#8A3324', // burnt umber
+      '#E51A4C', // spanish crimson
+      '#44D7A8', // eucalyptus
+      '#0A7E8C', // 'metallic seaweed'
+    ]
+  }]
+}
 
 var graphOpts = {
   type: 'bar',
@@ -60,12 +97,19 @@ var graphOpts = {
   }
 }
 
+var pieOpts = {
+  type: 'pie',
+  data: piedata
+}
+
 Chart.defaults.global.defaultFontColor = '#fff';
 
 window.onload = function() {
   var ctx = document.getElementById("matchChart").getContext("2d");
-
   new Chart(ctx, graphOpts);
+
+  var ctx2 = document.getElementById("matchPieChart").getContext("2d");
+  new Chart(ctx2, pieOpts);
 }
 </script>
 {% endblock %}
