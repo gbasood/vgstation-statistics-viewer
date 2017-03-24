@@ -258,7 +258,9 @@ def parse_line(line, match):
         db.session.add(ms)
     elif x[0] == 'MALFMODULES':
         try:
-            match.malfstat.malf_modules = '|'.join(x.pop(0))
+            mods = x
+            mods.pop(0)
+            match.malfstat.malf_modules = '|'.join(mods)
         except:
             raise
     elif x[0] == 'REVSQUADSTATS':
