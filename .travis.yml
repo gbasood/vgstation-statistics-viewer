@@ -3,9 +3,16 @@ cache: pip
 python:
   - "2.7"
   - "3.5"
+addons:
+  sonarqube:
+    organization: "sood"
+    token:
+      secure: 1bdcd8624f3d753e1d2e605ec5159786ce92a4d4
 # command to install dependencies
 install: "pip install -r requirements.txt"
 # command to run tests
-script: nosetests testcontent --with-coverage --cover-package=app --cover-erase
+script:
+  - nosetests testcontent --with-coverage --cover-package=app --cover-erase
+  - sonar-scanner
 after_success:
   - bash <(curl -s https://codecov.io/bash)
