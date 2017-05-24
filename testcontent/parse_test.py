@@ -1,6 +1,7 @@
 import logging
 import os
 import unittest
+import flask
 from app import app as sviewer
 import app as ourapp
 from config import basedir
@@ -21,46 +22,52 @@ class ParseToDBTestCase(unittest.TestCase):  # pragma: no cover
             ourapp.db.create_all()
 
     def tearDown(self):
-        ourapp.db.drop_all()
+        with sviewer.app_context():
+            ourapp.db.drop_all()
 
     # Let's make sure our DB is clean before we continue.
     def test_empty_db(self):
-        rv = self.app.get('/')
-        assert b'Last match:' in rv.data
-        a = ourapp.models.Match.query.first()
-        assert a is None
+        with sviewer.app_context():
+            rv = self.app.get('/')
+            assert b'Last match:' in rv.data
+            a = ourapp.models.Match.query.first()
+            assert a is None
 
     def test_parse_valid_match(self):
-        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
-        # assert testresult
-        match1 = ourapp.models.Match.query.first()
-        assert testresult and match1 and match1.mapname and match1.crewscore
+        with sviewer.app_context():
+            testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
+            # assert testresult
+            match1 = ourapp.models.Match.query.first()
+            assert testresult and match1 and match1.mapname and match1.crewscore
 
     def test_parse_invalid_match(self):
-        print('Next test should not pass!')
-        try:
-            testresult = ourapp.parse.parse_file('testcontent/invalid/statistics_2015.14.testfile.txt')
-            assert ourapp.models.Match.query.first() is None
-            assert len(ourapp.models.Match.query.all()) is None
-            self.fail("Test did not fail as expected")
-            return False
-        except:
-            return True
+        with sviewer.app_context():
+            try:
+                testresult = ourapp.parse.parse_file('testcontent/invalid/statistics_2015.14.testfile.txt')
+                assert ourapp.models.Match.query.first() is None
+                assert len(ourapp.models.Match.query.all()) is None
+                self.fail("Test did not fail as expected")
+                return False
+            except:
+                return True
 
     def test_parse_weird_match(self):
-        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2016.05.10.HH10SS.txt')
-        match1 = ourapp.models.Match.query.first()
+        with sviewer.app_context():
+            testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2016.05.10.HH10SS.txt')
+            match1 = ourapp.models.Match.query.first()
 
-        assert testresult and match1 and match1.mapname and match1.crewscore and "HH10SS" in match1.parsed_file
+            assert testresult and match1 and match1.mapname and match1.crewscore and "HH10SS" in match1.parsed_file
 
     def test_parse_sqlinjection_test(self):
-        testresult = ourapp.parse.parse_file('testcontent/invalid/statistics_2015.14.12.sqlinjectiontestfile.txt')
-        match1 = ourapp.models.Match.query.first()
+        with sviewer.app_context():
+            testresult = ourapp.parse.parse_file('testcontent/invalid/statistics_2015.14.12.sqlinjectiontestfile.txt')
+            match1 = ourapp.models.Match.query.first()
 
-        assert match1 is not None
+            assert match1 is not None
 
     def test_parse_popcount_match(self):
-        testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2017.18.02.100019.txt')
-        match1 = ourapp.models.Match.query.first()
+        with sviewer.app_context():
+            testresult = ourapp.parse.parse_file('testcontent/valid/statistics_2017.18.02.100019.txt')
+            match1 = ourapp.models.Match.query.first()
 
-        assert match1 is not None
+            assert match1 is not None
