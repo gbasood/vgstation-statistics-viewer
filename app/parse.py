@@ -1,12 +1,14 @@
 """This file handles code for parsing CSV-formatted statfiles into the database."""
 from __future__ import unicode_literals
-import os
+import datetime
 import fnmatch
+import os
+import re
 import shutil
 import sys
-import datetime
-import re
-from app import app, models, db
+from app import app
+from app import models
+from app import db
 from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
 database_busy = False
@@ -28,7 +30,7 @@ def batch_parse():
                 parse_file(os.path.join(STATS_DIR, file))
                 parsed += 1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(PROCESSED_DIR, file))
-            except:
+            except Exception:
                 if database_busy:
                     app.logger.warning('Could not write file changes: database busy. Try again later.')
                     return 530
@@ -91,14 +93,14 @@ def parse(text, filename):
     db.session.add(match)
     try:
         db.session.flush()
-    except:
+    except Exception:
         # database_busy = True
         return False
     lines = text.splitlines()
     for line in lines:
         try:
             parse_line(line, match)
-        except:
+        except Exception:
             app.logger.error('Error parsing line: %r' % line)
             db.session.rollback()
             raise
@@ -124,173 +126,6 @@ def format_timestamp(timestamp):
     return dated
 
 
-def parse_line(line, match):
-    """Parse a single line from a stat file."""
-    x = line.split('|')
-    x = nullparse(x)
-
-    if x[0] == 'STATLOG_START':
-        match.data_version = x[1]
-        match.mapname = x[2]
-        match.starttime = x[3]
-        match.endtime = x[4]
-        if float(match.data_version) >= 1.1:
-            match.start_datetime = format_timestamp(match.starttime)
-            match.end_datetime = format_timestamp(match.endtime)
-            match.round_length = (match.end_datetime - match.start_datetime).total_seconds()
-            # TODO: Test this once PR merges
-    elif x[0] == 'MASTERMODE':
-        match.mastermode = x[1]
-    elif x[0] == "GAMEMODE":
-        prefix = len("GAMEMODE|")
-        match.modes_string = line[prefix:]
-        match.modes_string = match.modes_string
-    elif x[0] == "TECH_TOTAL":
-        match.tech_total = x[1]
-    elif x[0] == "BLOOD_SPILLED":
-        match.blood_spilled = x[1]
-    elif x[0] == "CRATES_ORDERED":
-        match.crates_ordered = x[1]
-    elif x[0] == "ARTIFACTS_DISCOVERED":
-        match.artifacts_discovered = x[1]
-    elif x[0] == "CREWSCORE":
-        match.crewscore = x[1]
-    elif x[0] == "NUKED":
-        match.nuked = truefalse(x[1])
-    elif x[0] == "ESCAPEES":
-        match.escapees = x[1]
-    elif x[0] == "MOB_DEATH":
-        d = models.Death(match_id=match.id)
-        d.mindname = nullparse(x[9])
-        d.mindkey = nullparse(x[8])
-        d.timeofdeath = x[3]
-        d.typepath = x[1]
-        d.special_role = x[2]
-        d.last_assailant = x[4]
-        d.death_x = x[5]
-        d.death_y = x[6]
-        d.death_z = x[7]
-
-        db.session.add(d)
-    elif x[0] == "ANTAG_OBJ":
-        a = models.AntagObjective(match_id=match.id)
-        a.mindname = nullparse(x[1])
-        a.mindkey = nullparse(x[2])
-        a.special_role = x[3]
-        a.objective_type = x[4]
-        a.objective_desc = x[6]
-        # Check if this is a targeted objective or not.
-        if x[5].isdigit():
-            a.objective_succeeded = int(x[5])
-        else:
-            a.objective_succeeded = int(x[8])
-            a.target_name = x[7]
-            a.target_role = x[6]
-        if a.objective_succeeded >= 2:  # Mutiny gives 2 as an additional success value.
-            a.objective_succeeded = 1
-        db.session.add(a)
-    elif x[0] == "EXPLOSION":
-        e = models.Explosion(match_id=match.id)
-        e.epicenter_x = x[1]
-        e.epicenter_y = x[2]
-        e.epicenter_z = x[3]
-        e.devestation_range = x[4]
-        e.heavy_impact_range = x[5]
-        e.light_impact_range = x[6]
-        e.max_range = x[7]
-
-        db.session.add(e)
-    elif x[0] == "UPLINK_ITEM":
-        u = models.UplinkBuy(match_id=match.id)
-        u.mindname = x[2]
-        u.mindkey = x[1]
-        u.traitor_buyer = truefalse(x[3])
-        u.bundle_path = x[4]
-        u.item_path = x[5]
-
-        db.session.add(u)
-    elif x[0] == "BADASS_BUNDLE":
-        bb = models.BadassBundleBuy(match_id=match.id)
-        bb.mindname = x[2]
-        bb.mindkey = x[1]
-        bb.traitor_buyer = truefalse(x[3])
-
-        db.session.add(bb)
-        items = x[4]
-        for item in items:
-            i = models.BadassBundleItem(badass_bundle_id=bb.id)
-            i.item_path = item
-            db.session.add(i)
-    elif x[0] == "CULTSTATS":
-        c = models.CultStats(match_id=match.id)
-        c.runes_written = x[1]
-        c.runes_fumbled = x[2]
-        c.runes_nulled = x[3]
-        c.converted = x[4]
-        c.tomes_created = x[5]
-        c.narsie_summoned = truefalse(x[6])
-        c.narsie_corpses_fed = x[7]
-        c.surviving_cultists = x[8]
-        c.deconverted = x[9]
-
-        db.session.add(c)
-    elif x[0] == "XENOSTATS":
-        xn = models.XenoStats(match_id=match.id)
-        xn.eggs_laid = x[1]
-        xn.faces_hugged = x[2]
-        xn.faces_protected = x[3]
-
-        db.session.add(xn)
-    elif x[0] == 'BLOBSTATS':
-        bs = models.BlobStats(match_id=match.id)
-        bs.blob_wins = x[1]
-        bs.spawned_blob_players = x[2]
-        bs.spores_spawned = x[3]
-        bs.res_generated = x[3]
-
-        db.session.add(bs)
-    elif x[0] == 'MALFSTATS':
-        ms = models.MalfStats(match_id=match.id)
-        ms.malf_won = x[1]
-        ms.malf_shunted = x[2]
-        ms.borgs_at_roundend = x[3]
-
-        db.session.add(ms)
-    elif x[0] == 'MALFMODULES':
-        try:
-            mods = x
-            mods.pop(0)
-            match.malfstat.malf_modules = '|'.join(mods)
-        except:
-            raise
-    elif x[0] == 'REVSQUADSTATS':
-        rss = models.RevsquadStats(match_id=match.id)
-        rss.revsquad_won = x[1]
-        rss.remaining_heads = x[2]
-
-        db.session.add(rss)
-    elif x[0] == 'POPCOUNT':
-        pc = models.PopulationSnapshot(match_id=match.id)
-        pc.popcount = x[2]
-        timestamp_string = x[1]
-        # yyyy-mm-dd hh:mm:ss
-        timestamp_pattern = '(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})'
-        timestamp_regex = re.search(timestamp_pattern, timestamp_string)
-
-        year = int(timestamp_regex.group(1))
-        month = int(timestamp_regex.group(2))
-        day = int(timestamp_regex.group(3))
-        hour = int(timestamp_regex.group(4))
-        minute = int(timestamp_regex.group(5))
-        second = int(timestamp_regex.group(6))
-
-        timestamp_dt = datetime.datetime(year, month, day, hour, minute, second)
-        pc.time = timestamp_dt
-
-        db.session.add(pc)
-    return True
-
-
 def nullparse(s):
     """Convert 'null' or empty entries in a statfile line to None."""
     for sstring in s:
@@ -304,3 +139,248 @@ def truefalse(s):
     if s == '1':
         return True
     return False
+
+
+lineParseFunctions = {}
+
+
+def lineparse_function(string):
+    """Decorate a function so we don't have to type an otherwise cumbersome array addition."""
+    def inner(func):
+        lineParseFunctions[string] = func
+    return inner
+
+
+@lineparse_function('STATLOG_START')
+def lineparse_statlog_start(line, match):
+    match.data_version = line[1]
+    match.mapname = line[2]
+    match.starttime = line[3]
+    match.endtime = line[4]
+    if float(match.data_version) >= 1.1:
+        match.start_datetime = format_timestamp(match.starttime)
+        match.end_datetime = format_timestamp(match.endtime)
+        match.round_length = (match.end_datetime - match.start_datetime).total_seconds()
+
+
+@lineparse_function('MASTERMODE')
+def lineparse_mastermode(line, match):
+    match.mastermode = line[1]
+
+
+@lineparse_function('GAMEMODE')
+def lineparse_gamemode(line, match):
+    match.modes_string = '|'.join(line.pop(0))
+
+
+@lineparse_function('TECH_TOTAL')
+def lineparse_techtotal(line, match):
+    match.tech_total = line[1]
+
+
+@lineparse_function('BLOOD_SPILLED')
+def lineparse_bloodspilled(line, match):
+    match.blood_spilled = line[1]
+
+
+@lineparse_function('CRATES_ORDERED')
+def lineparse_crates_ordered(line, match):
+    match.crates_ordered = line[1]
+
+
+@lineparse_function('ARTIFACTS_DISCOVERED')
+def lineparse_artifacts_discovered(line, match):
+    match.artifacts_discovered = line[1]
+
+
+@lineparse_function('CREWSCORE')
+def lineparse_crewscore(line, match):
+    match.crewscore = line[1]
+
+
+@lineparse_function('NUKED')
+def lineparse_nuked(line, match):
+    match.nuked = truefalse(line[1])
+
+
+@lineparse_function('ESCAPEES')
+def lineparse_escapees(line, match):
+    match.escapees = line[1]
+
+
+@lineparse_function('MOB_DEATH')
+def lineparse_mobdeath(line, match):
+    d = models.Death(match_id=match.id)
+    d.mindname = nullparse(line[9])
+    d.mindkey = nullparse(line[8])
+    d.timeofdeath = line[3]
+    d.typepath = line[1]
+    d.special_role = line[2]
+    d.last_assailant = line[4]
+    d.death_x = line[5]
+    d.death_y = line[6]
+    d.death_z = line[7]
+
+    db.session.add(d)
+
+
+@lineparse_function('ANTAG_OBJ')
+def lineparse_antagobj(line, match):
+    a = models.AntagObjective(match_id=match.id)
+    a.mindname = nullparse(line[1])
+    a.mindkey = nullparse(line[2])
+    a.special_role = line[3]
+    a.objective_type = line[4]
+    a.objective_desc = line[6]
+    # Check if this is a targeted objective or not.
+    if line[5].isdigit():
+        a.objective_succeeded = int(line[5])
+    else:
+        a.objective_succeeded = int(line[8])
+        a.target_name = line[7]
+        a.target_role = line[6]
+    if a.objective_succeeded >= 2:  # Mutiny gives 2 as an additional success value.
+        a.objective_succeeded = 1
+
+    db.session.add(a)
+
+
+@lineparse_function('EXPLOSION')
+def lineparse_explosion(line, match):
+    e = models.Explosion(match_id=match.id)
+    e.epicenter_x = line[1]
+    e.epicenter_y = line[2]
+    e.epicenter_z = line[3]
+    e.devestation_range = line[4]
+    e.heavy_impact_range = line[5]
+    e.light_impact_range = line[6]
+    e.max_range = line[7]
+
+    db.session.add(e)
+
+
+@lineparse_function('UPLINK_ITEM')
+def lineparse_uplinkitem(line, match):
+    u = models.UplinkBuy(match_id=match.id)
+    u.mindname = line[2]
+    u.mindkey = line[1]
+    u.traitor_buyer = truefalse(line[3])
+    u.bundle_path = line[4]
+    u.item_path = line[5]
+
+    db.session.add(u)
+
+
+@lineparse_function('BADASS_BUNDLE')
+def lineparse_badassbundle(line, match):
+    bb = models.BadassBundleBuy(match_id=match.id)
+    bb.mindname = line[2]
+    bb.mindkey = line[1]
+    bb.traitor_buyer = truefalse(line[3])
+
+    db.session.add(bb)
+    items = line[4]
+    for item in items:
+        i = models.BadassBundleItem(badass_bundle_id=bb.id)
+        i.item_path = item
+        db.session.add(i)
+
+
+@lineparse_function('CULTSTATS')
+def lineparse_cultstats(line, match):
+    c = models.CultStats(match_id=match.id)
+    c.runes_written = line[1]
+    c.runes_fumbled = line[2]
+    c.runes_nulled = line[3]
+    c.converted = line[4]
+    c.tomes_created = line[5]
+    c.narsie_summoned = truefalse(line[6])
+    c.narsie_corpses_fed = line[7]
+    c.surviving_cultists = line[8]
+    c.deconverted = line[9]
+
+    db.session.add(c)
+
+
+@lineparse_function('XENOSTATS')
+def lineparse_xenostats(line, match):
+    xn = models.XenoStats(match_id=match.id)
+    xn.eggs_laid = line[1]
+    xn.faces_hugged = line[2]
+    xn.faces_protected = line[3]
+
+    db.session.add(xn)
+
+
+@lineparse_function('BLOBSTATS')
+def lineparse_blobstats(line, match):
+    bs = models.BlobStats(match_id=match.id)
+    bs.blob_wins = line[1]
+    bs.spawned_blob_players = line[2]
+    bs.spores_spawned = line[3]
+    bs.res_generated = line[3]
+
+    db.session.add(bs)
+
+
+@lineparse_function('MALFSTATS')
+def lineparse_malfstats(line, match):
+    ms = models.MalfStats(match_id=match.id)
+    ms.malf_won = line[1]
+    ms.malf_shunted = line[2]
+    ms.borgs_at_roundend = line[3]
+
+    db.session.add(ms)
+
+
+@lineparse_function('MALFMODULES')
+def lineparse_malfmodules(line, match):
+    try:
+        mods = line.pop(0)
+        match.malfstat.malf_modules = '|'.join(mods)
+    except Exception:
+        raise
+
+
+@lineparse_function('REVSQUADSTATS')
+def lineparse_revsquadstats(line, match):
+    rss = models.RevsquadStats(match_id=match.id)
+    rss.revsquad_won = line[1]
+    rss.remaining_heads = line[2]
+
+    db.session.add(rss)
+
+
+@lineparse_function('POPCOUNT')
+def lineparse_popcount(line, match):
+    pc = models.PopulationSnapshot(match_id=match.id)
+    pc.popcount = line[2]
+    timestamp_string = line[1]
+    # yyyy-mm-dd hh:mm:ss
+    timestamp_pattern = '(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})'
+    timestamp_regex = re.search(timestamp_pattern, timestamp_string)
+
+    year = int(timestamp_regex.group(1))
+    month = int(timestamp_regex.group(2))
+    day = int(timestamp_regex.group(3))
+    hour = int(timestamp_regex.group(4))
+    minute = int(timestamp_regex.group(5))
+    second = int(timestamp_regex.group(6))
+
+    timestamp_dt = datetime.datetime(year, month, day, hour, minute, second)
+    pc.time = timestamp_dt
+
+    db.session.add(pc)
+
+
+def parse_line(line, match):
+    """Parse a single line from a stat file."""
+    x = line.split('|')
+    x = nullparse(x)
+
+    if x[0] in lineParseFunctions:
+        lineParseFunctions[x[0]](x, match)
+    elif x[0] not in 'WRITE_COMPLETE':
+        app.logger.warning('Unhandled line during parsing: ' + str(x[0]) + '\n Full line:\n' + '|'.join(x))
+
+    return True
