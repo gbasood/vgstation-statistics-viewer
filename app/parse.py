@@ -153,9 +153,7 @@ def lineparse_mastermode(line, match):
 
 @lineparse_function('GAMEMODE')
 def lineparse_gamemode(line, match):
-    prefix = len("GAMEMODE|")
-    match.modes_string = line[prefix:]
-    match.modes_string = match.modes_string
+    match.modes_string = line.pop(0).join('|')
 
 
 @lineparse_function('TECH_TOTAL')
