@@ -28,11 +28,11 @@ class Match(db.Model):
     # Calculated value in seconds
     round_length = db.Column(db.Integer)
 
-    explosions = db.relationship('Explosion', backref='match')
-    deaths = db.relationship('Death', backref='match')
-    antagobjs = db.relationship('AntagObjective', backref='match')
-    uplinkbuys = db.relationship('UplinkBuy', backref='match')
-    badassbuy = db.relationship('BadassBundleBuy', backref='match')
+    explosions = db.relationship('Explosion', backref='match', lazy='dynamic')
+    deaths = db.relationship('Death', backref='match', lazy='dynamic')
+    antagobjs = db.relationship('AntagObjective', backref='match', lazy='dynamic')
+    uplinkbuys = db.relationship('UplinkBuy', backref='match', lazy='dynamic')
+    badassbuy = db.relationship('BadassBundleBuy', backref='match', lazy='dynamic')
     cultstat = db.relationship('CultStats', backref='match', lazy='select', uselist=False)
     xenostat = db.relationship('XenoStats', backref='match', lazy='select', uselist=False)
     blobstat = db.relationship('BlobStats', backref='match', lazy='select', uselist=False)
