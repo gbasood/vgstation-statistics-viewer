@@ -9,15 +9,19 @@ from app.models import Explosion
 from app.models import Match
 from app.helpers import add_months
 from config import MATCHES_PER_PAGE
+from flask import Flask
+from flask import Blueprint
 from flask import render_template
 from flask import request
 from sqlalchemy import func
 
 parse_lock = threading.RLock()
 
+public = Blueprint('public', __name__)
 
-@app.route('/')
-@app.route('/index')
+
+@public.route('/')
+@public.route('/index')
 def index():
     """Respond with view for index page."""
     matchesTotal = Match.query.count()
@@ -36,7 +40,7 @@ def index():
                            deathratio=deathratio, lastmatch=lastmatch,
                            mapPlayrate=mapPlayrate)
 
-# @app.route('/import')
+# @public.route('/import')
 # def test():
 #     url='http://game.ss13.moe/stats/statistics_2016.31.01.7.txt'
 #     if request.args.get('url'):
@@ -45,8 +49,8 @@ def index():
 #     return parse.parse_url(url)
 
 
-@app.route('/matchlist')
-@app.route('/matchlist/<int:page>')
+@public.route('/matchlist')
+@public.route('/matchlist/<int:page>')
 def matchlist(page=1):
     """Respond with view for paginated match list."""
     query = Match.query.order_by(Match.id.desc())
@@ -54,7 +58,7 @@ def matchlist(page=1):
     return render_template('matchlist.html', matches=paginatedMatches.items, pagination=paginatedMatches)
 
 
-@app.route('/globalstats')
+@public.route('/globalstats')
 def globalstats(timespan="monthly", month=None, year=None):
     """Respond with view for global statistics, with optional timespan grouping. Currently only all time or by month."""
     query_timespan = request.args.get("timespan") if request.args.get("timespan") else "monthly"
@@ -72,14 +76,14 @@ def globalstats(timespan="monthly", month=None, year=None):
                            prevpage=prev_page)
 
 
-@app.route('/match/<id>')
+@public.route('/match/<id>')
 def match(id=0):
     """Respond with view for a match."""
     return render_template('match.html', match=Match.query.get(id))
 
 
 # This is the route that the bot will use to notify the app to process files.
-@app.route('/alert_new_file')
+@public.route('/alert_new_file')
 def alert_new_file():
     """A GET request for this URL will cause the server to check for new statfiles in the configured dir."""
     with parse_lock:
@@ -92,14 +96,14 @@ def alert_new_file():
     return 'Already parsing.', 531
 
 
-@app.errorhandler(404)
+@public.errorhandler(404)
 def page_not_found(e):
     """404 view."""
     return render_template('404.html'), 404
 
 
-@app.errorhandler(500)
-@app.route('/error')
+@public.errorhandler(500)
+@public.route('/error')
 def errorpage():
     """Error view."""
     return render_template('500.html'), 500

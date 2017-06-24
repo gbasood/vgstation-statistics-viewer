@@ -24,6 +24,8 @@ def create_app(config_path):
     from app.models import db
     db = db.init_app(app)
 
+    app.register_blueprint(views.public)
+
     logging.basicConfig(format="%(asctime)s %(msg)s", filename="statsserv_log.txt")
 
     errorHandler = RotatingFileHandler('statsserv_error.txt', maxBytes=100000, backupCount=1)

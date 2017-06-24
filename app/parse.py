@@ -42,7 +42,7 @@ def batch_parse():
                                              .format(str(sys.exc_info()[0])))
                 errored += 1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(UNPARSABLE_DIR, file))
-                raise
+                raise Exception
 
     with app.app_context():
         current_app.logger.debug('# DEBUG: Batch parsed %r files with %r exceptions.', parsed, errored)

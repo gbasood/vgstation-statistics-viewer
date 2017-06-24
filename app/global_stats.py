@@ -132,12 +132,11 @@ def match_stats(timespan):
     if timespan[0] != "all":
         query_start = timespan[1]
         query_end = add_months(query_start, 1)
-
+        print query_start, query_end
         q = q.filter(and_(models.Match.date is not None, models.Match.date.between(query_start, query_end)))
 
     q = q.filter(~models.Match.modes_string.contains('|'), ~models.Match.mastermode.contains('mixed'))
     print(str(q))  # TODO remove
-    print query_start, query_end
     q = q.all()
 
     matches = []

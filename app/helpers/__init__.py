@@ -1,7 +1,7 @@
 """Helper functions for Jinja2 templates."""
-from app import app
 from app import models
 from app.models import db
+from app.views import public
 import calendar
 from config import basedir
 import datetime
@@ -19,7 +19,7 @@ def add_months(sourcedate, months):
     return datetime.date(year, month, day)
 
 
-@app.context_processor
+@public.context_processor
 def utility_processor():
     """Define helper methods for Jinja2 templates."""
     def modethumb(name):
