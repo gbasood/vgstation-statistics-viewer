@@ -1,10 +1,10 @@
 """Model definitions for SQLAlchemy models used in this app."""
-from app import db
-from os import listdir, path
-from config import basedir
-from sqlalchemy import and_
 import datetime
+from app import app
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import and_
 
+db = SQLAlchemy(app)
 
 class Match(db.Model):
     """Match model."""

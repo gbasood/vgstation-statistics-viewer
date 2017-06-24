@@ -6,7 +6,6 @@ import os
 import re
 import shutil
 import sys
-from app import app
 from app import models
 from app import db
 from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
@@ -103,7 +102,6 @@ def parse(text, filename):
         except Exception:
             app.logger.error('Error parsing line: %r' % line)
             db.session.rollback()
-            raise
             return
         db.session.flush()
     db.session.commit()

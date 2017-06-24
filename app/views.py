@@ -1,11 +1,17 @@
 """View routing."""
 
-from app import app, parse, models, global_stats
-from app.helpers import add_months
-from config import MATCHES_PER_PAGE
-from flask import render_template, request
 import datetime
 import threading
+from app import app, parse, global_stats
+from app import db
+from app.models import Death
+from app.models import Explosion
+from app.models import Match
+from app.helpers import add_months
+from config import MATCHES_PER_PAGE
+from flask import render_template
+from flask import request
+from sqlalchemy import func
 
 parse_lock = threading.RLock()
 
@@ -14,18 +20,18 @@ parse_lock = threading.RLock()
 @app.route('/index')
 def index():
     """Respond with view for index page."""
-    matchesTotal = models.Match.query.count()
+    matchesTotal = Match.query.count()
     if matchesTotal is 0:
         matchesTotal = 1
-    explosionratio = models.Explosion.query.count() / float(matchesTotal)
-    deathratio = models.Death.query.count() / float(matchesTotal)
-    nuked = models.Match.query.filter(models.Match.nuked).count()
-    lastmatch = models.Match.query.order_by(models.Match.id.desc()).first()
-
+    explosionratio = Explosion.query.count() / float(matchesTotal)
+    deathratio = Death.query.count() / float(matchesTotal)
+    nuked = Match.query.filter(Match.nuked).count()
+    lastmatch = Match.query.order_by(Match.id.desc()).first()
+    matchCounts = db.session.query(func.count(Match.id)).group_by(Match.mapname).all()
     # Map percentage
-    matchesBox = models.Match.query.filter(models.Match.mapname.contains('box')).count() / float(matchesTotal) * 100
-    matchesDeff = models.Match.query.filter(models.Match.mapname.contains('deff')).count() / float(matchesTotal) * 100
-    matchesMeta = models.Match.query.filter(models.Match.mapname.contains('meta')).count() / float(matchesTotal) * 100
+    matchesBox = Match.query.filter(Match.mapname.contains('box')).count() / float(matchesTotal) * 100
+    matchesDeff = Match.query.filter(Match.mapname.contains('deff')).count() / float(matchesTotal) * 100
+    matchesMeta = Match.query.filter(Match.mapname.contains('meta')).count() / float(matchesTotal) * 100
 
     return render_template('index.html', matchcount=matchesTotal, nukedcount=nuked, explosionratio=explosionratio,
                            deathratio=deathratio, lastmatch=lastmatch,
@@ -44,7 +50,7 @@ def index():
 @app.route('/matchlist/<int:page>')
 def matchlist(page=1):
     """Respond with view for paginated match list."""
-    query = models.Match.query.order_by(models.Match.id.desc())
+    query = Match.query.order_by(Match.id.desc())
     paginatedMatches = query.paginate(page, MATCHES_PER_PAGE, False)
     return render_template('matchlist.html', matches=paginatedMatches.items, pagination=paginatedMatches)
 
@@ -70,7 +76,7 @@ def globalstats(timespan="monthly", month=None, year=None):
 @app.route('/match/<id>')
 def match(id=0):
     """Respond with view for a match."""
-    return render_template('match.html', match=models.Match.query.get(id))
+    return render_template('match.html', match=Match.query.get(id))
 
 
 # This is the route that the bot will use to notify the app to process files.

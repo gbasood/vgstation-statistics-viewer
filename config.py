@@ -1,4 +1,4 @@
-import sys, os
+import os
 
 # Non-Flask, SQLAlchemy, lib stuff, just for our use!
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -29,4 +29,4 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db', 'db_repository')
 
 
 # App settings
-MATCHES_PER_PAGE = 24 # Works best as a multiple of 3
+MATCHES_PER_PAGE = 24  # Works best as a multiple of 3
