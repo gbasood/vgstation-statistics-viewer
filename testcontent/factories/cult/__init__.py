@@ -1,5 +1,6 @@
 import factory
-from app import models, db
+from app import models
+from app.models import db
 from factory.fuzzy import FuzzyInteger, FuzzyChoice
 truefalse = [True, False]
 

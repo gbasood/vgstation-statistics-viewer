@@ -1,7 +1,8 @@
 import factory
 import datetime
 import pytz
-from app import models, db
+from app import models
+from app.models import db
 from testcontent.factories import cult, malf, popsnap
 from factory.fuzzy import FuzzyInteger, FuzzyDateTime
 

@@ -16,9 +16,8 @@ PROCESSED_DIR = os.path.join(STATS_DIR, 'processed')
 UNPARSABLE_DIR = os.path.join(STATS_DIR, 'unparsable')
 
 # Database
-SQLALCHEMY_TRACK_MODIFICATIONS = False  # On production, set this to false.
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db', 'app.db')
-SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db', 'db_repository')
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+SQLALCHEMY_DATABASE_URI = 'sqlite://'
 SQLALCHEMY_TRACK_MODIFICATIONS = debug  # Track on debug
 
 # No longer used due to Manager implementation

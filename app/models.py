@@ -1,10 +1,14 @@
 """Model definitions for SQLAlchemy models used in this app."""
 import datetime
-from app import app
+from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 
-db = SQLAlchemy(app)
+app = Flask(__name__)
+with app.app_context():
+    db = SQLAlchemy(current_app)
+    db.create_all(app=current_app)
+
 
 class Match(db.Model):
     """Match model."""
@@ -65,7 +69,9 @@ class Match(db.Model):
         return self.antagobjs.filter(AntagObjective.mindkey == antagkey)
 
     def player_deaths(self):
-        """Return all Death entries associated with this match, whose keys are not null, and are not manifested ghosts."""
+        """
+        Return all Death entries associated with this match, whose keys are not null, and are not manifested ghosts.
+        """
         return self.deaths.filter(and_(Death.mindkey != 'null', Death.mindname != 'Manifested Ghost'))
 
     def nonplayer_deaths(self):
@@ -84,8 +90,10 @@ class Match(db.Model):
         s = self.starttime.split('.')
         e = self.endtime.split('.')
         # yyyy mm dd hh mm ss
-        start = datetime.datetime(year=int(s[0]), month=int(s[1]), day=int(s[2]), hour=int(s[3]), minute=int(s[4]), second=int(s[5]))
-        end = datetime.datetime(year=int(e[0]), month=int(e[1]), day=int(e[2]), hour=int(e[3]), minute=int(e[4]), second=int(e[5]))
+        start = datetime.datetime(year=int(s[0]), month=int(s[1]), day=int(s[2]),
+                                  hour=int(s[3]), minute=int(s[4]), second=int(s[5]))
+        end = datetime.datetime(year=int(e[0]), month=int(e[1]), day=int(e[2]),
+                                hour=int(e[3]), minute=int(e[4]), second=int(e[5]))
 
         delta = start - end
         return int(abs((delta.total_seconds() - delta.total_seconds() % 60) / 60))
@@ -157,7 +165,9 @@ class AntagObjective(db.Model):
 
     def __repr__(self):
         """Represent self for debug purposes."""
-        return '<AntagObjective #%r | Name %r | Key %r| Type #%r | Succeeded %r>' % (self.id, self.mindname, self.mindkey, self.objective_type, self.objective_succeeded)
+        return '<AntagObjective #%r | Name %r | Key %r| Type #%r | Succeeded %r>' % (self.id, self.mindname,
+                                                                                     self.mindkey, self.objective_type,
+                                                                                     self.objective_succeeded)
 
 
 class UplinkBuy(db.Model):

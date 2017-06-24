@@ -11,10 +11,10 @@
         <p class = 'indented'>Deaths per match: {{'%0.2f' % deathratio|float}}</p>
     </div>
     <div class = 'floatleft'>
-        <p class>Map play percentage:</p>
-        <p class = 'indented'>Boxstation: {{'%0.2f' % box|float}}%</p>
-        <p class = 'indented'>Metastation: {{'%0.2f' % meta|float}}%</p>
-        <p class = 'indented'>Defficiency: {{'%0.2f' % deff|float}}%</p>
+      <p class>Map play percentage:</p>
+      {%- for mapx in mapPlayrate -%}
+        <p class = 'indented'>{{mapx[0]}}: {{'%0.2f' % ((mapx[1] / matchcount|float) * 100)}}%</p>
+      {%- endfor -%}
     </div>
   </div>
     <p class='centertext warn'>Everything here is very much a work in progress. As such, match history may be wiped at any time.</p>

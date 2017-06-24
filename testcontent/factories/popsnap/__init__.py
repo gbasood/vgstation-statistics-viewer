@@ -1,6 +1,7 @@
 import factory
 import datetime
-from app import models, db
+from app import models
+from app.models import db
 from factory.fuzzy import FuzzyInteger, FuzzyNaiveDateTime
 
 class PopSnapFactory(factory.alchemy.SQLAlchemyModelFactory):

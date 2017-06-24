@@ -3,7 +3,7 @@
 import datetime
 import threading
 from app import app, parse, global_stats
-from app import db
+from app.models import db
 from app.models import Death
 from app.models import Explosion
 from app.models import Match
@@ -27,15 +27,14 @@ def index():
     deathratio = Death.query.count() / float(matchesTotal)
     nuked = Match.query.filter(Match.nuked).count()
     lastmatch = Match.query.order_by(Match.id.desc()).first()
-    matchCounts = db.session.query(func.count(Match.id)).group_by(Match.mapname).all()
+    mapPlayrate = db.session.query(Match.mapname, func.count(Match.id)).group_by(Match.mapname).all()
     # Map percentage
-    matchesBox = Match.query.filter(Match.mapname.contains('box')).count() / float(matchesTotal) * 100
-    matchesDeff = Match.query.filter(Match.mapname.contains('deff')).count() / float(matchesTotal) * 100
-    matchesMeta = Match.query.filter(Match.mapname.contains('meta')).count() / float(matchesTotal) * 100
+    # for mapx in matchCounts:
+    #     mapx[1] = mapx[1] / float(matchesTotal) * 100
 
     return render_template('index.html', matchcount=matchesTotal, nukedcount=nuked, explosionratio=explosionratio,
                            deathratio=deathratio, lastmatch=lastmatch,
-                           box=matchesBox, deff=matchesDeff, meta=matchesMeta)
+                           mapPlayrate=mapPlayrate)
 
 # @app.route('/import')
 # def test():

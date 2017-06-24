@@ -1,13 +1,15 @@
 """This file handles code for parsing CSV-formatted statfiles into the database."""
 from __future__ import unicode_literals
+from app import app
+from app import models
+from app.models import db
+from flask import current_app
 import datetime
 import fnmatch
 import os
 import re
 import shutil
 import sys
-from app import models
-from app import db
 from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
 database_busy = False
@@ -21,7 +23,8 @@ def batch_parse():
     database_busy = False  # Just in case
 
     if not os.path.exists(STATS_DIR):
-        app.logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
+        with app.app_context():
+            current_app.logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
         return -1
     for file in os.listdir(STATS_DIR):
         if fnmatch.fnmatch(file, 'statistics_*.txt'):
@@ -31,20 +34,25 @@ def batch_parse():
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(PROCESSED_DIR, file))
             except Exception:
                 if database_busy:
-                    app.logger.warning('Could not write file changes: database busy. Try again later.')
+                    with app.app_context():
+                        current_app.logger.warning('Could not write file changes: database busy. Try again later.')
                     return 530
-                app.logger.error('!! ERROR: File could not be parsed. Details: \n${0}'.format(str(sys.exc_info()[0])))
+                with app.app_context():
+                    current_app.logger.error('!! ERROR: File could not be parsed. Details: \n${0}'
+                                             .format(str(sys.exc_info()[0])))
                 errored += 1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(UNPARSABLE_DIR, file))
                 raise
 
-    app.logger.debug('# DEBUG: Batch parsed ' + str(parsed) + ' files with ' + str(errored) + ' exceptions.')
+    with app.app_context():
+        current_app.logger.debug('# DEBUG: Batch parsed %r files with %r exceptions.', parsed, errored)
 
 
 def parse_file(path):
     """Parse the contents of a CSV statfile."""
     if not os.path.exists(path):
-        app.logger.error('!! ERROR: Tried to parse non-existant path ' + str(path))
+        with app.app_context():
+            current_app.logger.error('!! ERROR: Tried to parse non-existant path %r', str(path))
         return False
     f = open(path, 'r+')
     contents = f.read()
@@ -73,45 +81,55 @@ def parse_file(path):
 def parse(text, filename):
     """Parse the raw text of a stat file. Requires a file name to check for a duplicate entry."""
     q = db.session.query(models.Match.parsed_file).filter(models.Match.parsed_file == filename)
-    if(q.first()):
-        app.logger.warning(" ~ ~ Duplicate parse entry detected.)\n ~ ~ Request filename: %s\n ~ ~ Stored filename: %s",
-                           filename, q.first().parsed_file)
-        return False
-    else:
-        app.logger.debug('Starting parse of %r' % filename)
-
-    match = models.Match()
-    match.parsed_file = filename
-    # Regex is in format yyyy-dd-mm
-    search_str = '^statistics_((?:19|20)\d{2})[\. .](0[1-9]|[12][0-9]|3[01])[\. .](0[1-9]|1[012])(?:.*)\.txt$'
-    file_date = re.search(search_str, filename)
-    if file_date is None or len(file_date.groups()) != 3:
-        app.logger.warning('Invalid filename for timestamp: %r' % filename)
-        return False
-    match.date = datetime.date(int(file_date.group(1)), int(file_date.group(3)), int(file_date.group(2)))
-    db.session.add(match)
     try:
-        db.session.flush()
-    except Exception:
-        # database_busy = True
-        return False
-    lines = text.splitlines()
-    for line in lines:
+        if(q.first()):
+            with app.app_context():
+                current_app.logger.warning(" ~ ~ Duplicate parse entry detected.)\n ~ ~ Request filename: %s\n ~ ~ Stored filename: %s",
+                                           filename, q.first().parsed_file)
+            return False
+        else:
+            with app.app_context():
+                current_app.logger.debug('Starting parse of %r' % filename)
+
+        match = models.Match()
+        match.parsed_file = filename
+        # Regex is in format yyyy-dd-mm
+        search_str = '^statistics_((?:19|20)\d{2})[\. .](0[1-9]|[12][0-9]|3[01])[\. .](0[1-9]|1[012])(?:.*)\.txt$'
+        file_date = re.search(search_str, filename)
+        if file_date is None or len(file_date.groups()) != 3:
+            with app.app_context():
+                current_app.logger.warning('Invalid filename for timestamp: %r' % filename)
+            return False
+        match.date = datetime.date(int(file_date.group(1)), int(file_date.group(3)), int(file_date.group(2)))
+        print db.session.add(match)
         try:
-            parse_line(line, match)
+            db.session.flush()
         except Exception:
-            app.logger.error('Error parsing line: %r' % line)
-            db.session.rollback()
-            return
-        db.session.flush()
-    db.session.commit()
+            with app.app_context():
+                current_app.logger.error('Error flushing DB session: %r' % Exception.message)
+            return False
+        lines = text.splitlines()
+        for line in lines:
+            try:
+                parse_line(line, match)
+            except Exception:
+                with app.app_context():
+                    current_app.logger.error('Error parsing line: %r\n%r' % line, Exception.message)
+                db.session.rollback()
+                return False
+            db.session.flush()
+        db.session.commit()
+    except Exception:
+        with app.app_context():
+            current_app.logger.error('Error parsing line: %r\n%r' % line, Exception.message)
+        return False
     return True
 
 
 # Format is YYYY.MM.DD.HH.MM.SS
 def format_timestamp(timestamp):
     """Format a timestamp stored in stat files to a DateTime."""
-    expected_timestamp_format = '^(\d{4})\.(0?[1-9]|1[012])\.(0?[1-9]|[12][0-9]|3[01])\.(?:(?:([01]?\d|2[0-3])\.)?([0-5]?\d)\.)?([0-5]?\d)$'
+    expected_timestamp_format = '^(\d{4})\.(0?[1-9]|1[012])\.(0?[1-9]|[12][0-9]|3[01])\.(?:(?:([01]?\d|2[0-3])\.)?([0-5]?\d)\.)?([0-5]?\d)$'  # noqa: E501
     searched = re.search(expected_timestamp_format, timestamp)
     year = int(searched.group(1))
     month = int(searched.group(2))
@@ -168,7 +186,8 @@ def lineparse_mastermode(line, match):
 
 @lineparse_function('GAMEMODE')
 def lineparse_gamemode(line, match):
-    match.modes_string = '|'.join(line.pop(0))
+    del line[0]
+    match.modes_string = '|'.join(line)
 
 
 @lineparse_function('TECH_TOTAL')
@@ -333,11 +352,8 @@ def lineparse_malfstats(line, match):
 
 @lineparse_function('MALFMODULES')
 def lineparse_malfmodules(line, match):
-    try:
-        mods = line.pop(0)
-        match.malfstat.malf_modules = '|'.join(mods)
-    except Exception:
-        raise
+    del line[0]
+    match.malfstat.malf_modules = '|'.join(line)
 
 
 @lineparse_function('REVSQUADSTATS')
@@ -379,6 +395,7 @@ def parse_line(line, match):
     if x[0] in lineParseFunctions:
         lineParseFunctions[x[0]](x, match)
     elif x[0] not in 'WRITE_COMPLETE':
-        app.logger.warning('Unhandled line during parsing: ' + str(x[0]) + '\n Full line:\n' + '|'.join(x))
+        with app.app_context():
+            current_app.logger.warning('Unhandled line during parsing: %r\n Full line:\n%r', str(x[0]), '|'.join(x))
 
     return True

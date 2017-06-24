@@ -7,12 +7,14 @@ from __future__ import unicode_literals
 from app import models, logging
 from app.helpers import add_months
 from sqlalchemy import and_
+from sqlalchemy import between
 from werkzeug.contrib.cache import SimpleCache
 import json
 
 cache = SimpleCache()
 
-antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire", 'wizard', 'ragin\' mages', 'revolution']
+antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling",
+                                 "vampire", 'wizard', 'ragin\' mages', 'revolution']
 do_not_show = ['extended', 'heist', 'meteor']
 objective_success_threshold = 0.49
 
@@ -45,7 +47,7 @@ class MatchTypeVictory:
 
 
 def get_formatted_global_stats(timespan):
-    """Return a big ol' object that contains all the matches in two separate arrays of JSON."""  # TODO more documentation
+    """Return a big ol' object that contains all the matches in two separate arrays of JSON."""  # TODO more doc
     stats = get_global_stats(timespan)
     winrateStats = stats[0]
     allMatches = stats[1]
@@ -131,10 +133,11 @@ def match_stats(timespan):
         query_start = timespan[1]
         query_end = add_months(query_start, 1)
 
-        q = q.filter(and_(models.Match.date is not None, models.Match.date >= query_start, models.Match.date < query_end))
+        q = q.filter(and_(models.Match.date is not None, models.Match.date.between(query_start, query_end)))
 
     q = q.filter(~models.Match.modes_string.contains('|'), ~models.Match.mastermode.contains('mixed'))
     print(str(q))  # TODO remove
+    print query_start, query_end
     q = q.all()
 
     matches = []
