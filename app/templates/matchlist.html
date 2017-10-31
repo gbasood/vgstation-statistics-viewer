@@ -3,7 +3,7 @@
 {% block content %}
 
 <div id = 'container'>
-  {{ render_pagination(pagination, "matchlist") }}
+  {{ render_pagination(pagination, "blueprint.matchlist") }}
   <table id = 'match-container'>
 	  <thead>
 		  <td></td>
@@ -29,6 +29,6 @@
     </tr>
 {%- endfor %}
   </table>
-  {{ render_pagination(pagination, "matchlist") }}
+  {{ render_pagination(pagination, "blueprint.matchlist") }}
 </div>
 {% endblock %}

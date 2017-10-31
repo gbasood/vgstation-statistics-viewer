@@ -4,10 +4,11 @@ This includes queries, logical operations, and formatting so that the view can r
 """
 
 from __future__ import unicode_literals
-from app import models, logging
+from app import models
+from app.app import logging
 from app.helpers import add_months
 from sqlalchemy import and_
-from sqlalchemy import between
+# from sqlalchemy import between
 from werkzeug.contrib.cache import SimpleCache
 import json
 
@@ -132,7 +133,7 @@ def match_stats(timespan):
     if timespan[0] != "all":
         query_start = timespan[1]
         query_end = add_months(query_start, 1)
-        print query_start, query_end
+        print(query_start, query_end)
         q = q.filter(and_(models.Match.date is not None, models.Match.date.between(query_start, query_end)))
 
     q = q.filter(~models.Match.modes_string.contains('|'), ~models.Match.mastermode.contains('mixed'))
@@ -163,27 +164,18 @@ def checkModeVictory(match):
         else:
             return False
     elif "cult" in modestring:
-        if match.cultstat.narsie_summoned is True:
+        if match.cult_narsie_summoned is True:
             return True
         else:
             return False
     elif "meteor" in modestring:
         return False  # No one wins in meteor let's be honest
     elif "blob" in modestring:
-        if match.blobstat:
-            return match.blobstat.blob_wins
-        else:
-            return None
+        return match.blob_wins
     elif "ai malfunction" in modestring:
-        if match.malfstat:
-            return match.malfstat.malf_won
-        else:
-            return None
+        return match.malf_won
     elif "revolution squad" in modestring:
-        if match.revsquadstat:
-            return match.revsquadstat.revsquad_won
-        else:
-            return None
+        return match.revsquad_won
     elif any(modestring in s for s in antag_objective_victory_modes):
         succeeded = 0
         total = 0

@@ -1,9 +1,9 @@
 """This file handles code for parsing CSV-formatted statfiles into the database."""
 from __future__ import unicode_literals
-from app import app
 from app import models
 from app.models import db
 from flask import current_app
+from werkzeug.local import LocalProxy
 import datetime
 import fnmatch
 import os
@@ -14,45 +14,48 @@ from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
 database_busy = False
 
+logger = LocalProxy(lambda: current_app.logger)
+
 
 def batch_parse():
     """Parse all statfiles in configured directory."""
-    parsed = 0
     errored = 0
 
     database_busy = False  # Just in case
 
     if not os.path.exists(STATS_DIR):
-        with app.app_context():
-            current_app.logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
+        logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
         return -1
-    for file in os.listdir(STATS_DIR):
+    files = os.listdir(STATS_DIR)
+    files = fnmatch.filter(files, "statistics_*.txt")
+    total_files = len(files)
+
+    print("{0} files to parse, starting...".format(total_files))
+    count = 0
+    for file in files:
+        count += 1
+        if count % 250 is 0:
+            print("Parsing file {0} of {1}".format(count, total_files))
         if fnmatch.fnmatch(file, 'statistics_*.txt'):
             try:
                 parse_file(os.path.join(STATS_DIR, file))
-                parsed += 1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(PROCESSED_DIR, file))
             except Exception:
                 if database_busy:
-                    with app.app_context():
-                        current_app.logger.warning('Could not write file changes: database busy. Try again later.')
+                    logger.warning('Could not write file changes: database busy. Try again later.')
                     return 530
-                with app.app_context():
-                    current_app.logger.error('!! ERROR: File could not be parsed. Details: \n${0}'
-                                             .format(str(sys.exc_info()[0])))
+                logger.error('!! ERROR: File could not be parsed. Details: \n${0}'
+                             .format(str(sys.exc_info()[0])))
                 errored += 1
                 shutil.move(os.path.join(STATS_DIR, file), os.path.join(UNPARSABLE_DIR, file))
-                raise Exception
 
-    with app.app_context():
-        current_app.logger.debug('# DEBUG: Batch parsed %r files with %r exceptions.', parsed, errored)
+    logger.debug('# DEBUG: Batch parsed %r files with %r exceptions.', count, errored)
 
 
 def parse_file(path):
     """Parse the contents of a CSV statfile."""
     if not os.path.exists(path):
-        with app.app_context():
-            current_app.logger.error('!! ERROR: Tried to parse non-existant path %r', str(path))
+        logger.error('!! ERROR: Tried to parse non-existant path %r', str(path))
         return False
     f = open(path, 'r+')
     contents = f.read()
@@ -72,7 +75,7 @@ def parse_file(path):
 #         filename = os.path.basename(url)
 #         parseResult = parse(r.text, filename)
 #         if parseResult:
-#             app.logger.debug("PARSED %r" % filename)
+#             logger.debug("PARSED %r" % filename)
 #             return flask.make_response("OK", 200)
 #         else:
 #             return flask.make_response("DUPLICATE ENTRY", 500)
@@ -83,13 +86,12 @@ def parse(text, filename):
     q = db.session.query(models.Match.parsed_file).filter(models.Match.parsed_file == filename)
     try:
         if(q.first()):
-            with app.app_context():
-                current_app.logger.warning(" ~ ~ Duplicate parse entry detected.)\n ~ ~ Request filename: %s\n ~ ~ Stored filename: %s",
-                                           filename, q.first().parsed_file)
-            return False
+                logger.warning(" ~ ~ Duplicate parse entry detected.)\n ~ ~ Request filename: %s" +
+                               "\n ~ ~ Stored filename: %s",
+                               filename, q.first().parsed_file)
+                return False
         else:
-            with app.app_context():
-                current_app.logger.debug('Starting parse of %r' % filename)
+                logger.debug('Starting parse of %r' % filename)
 
         match = models.Match()
         match.parsed_file = filename
@@ -97,31 +99,29 @@ def parse(text, filename):
         search_str = '^statistics_((?:19|20)\d{2})[\. .](0[1-9]|[12][0-9]|3[01])[\. .](0[1-9]|1[012])(?:.*)\.txt$'
         file_date = re.search(search_str, filename)
         if file_date is None or len(file_date.groups()) != 3:
-            with app.app_context():
-                current_app.logger.warning('Invalid filename for timestamp: %r' % filename)
+            logger.warning('Invalid filename for timestamp: %r' % filename)
             return False
         match.date = datetime.date(int(file_date.group(1)), int(file_date.group(3)), int(file_date.group(2)))
-        print db.session.add(match)
+        db.session.add(match)
         try:
             db.session.flush()
         except Exception:
-            with app.app_context():
-                current_app.logger.error('Error flushing DB session: %r' % Exception.message)
+            print("PANIC")
+            logger.error('Error flushing DB session: {0}'.format(Exception.message))
             return False
         lines = text.splitlines()
         for line in lines:
             try:
                 parse_line(line, match)
             except Exception:
-                with app.app_context():
-                    current_app.logger.error('Error parsing line: %r\n%r' % line, Exception.message)
+                print("PANIC")
+                logger.error('Error parsing line: {0}\n{1}'.format(line, Exception.message))
                 db.session.rollback()
                 return False
             db.session.flush()
         db.session.commit()
     except Exception:
-        with app.app_context():
-            current_app.logger.error('Error parsing line: %r\n%r' % line, Exception.message)
+        logger.error('Error parsing line: {0}\n{1}'.format(line, Exception.message))
         return False
     return True
 
@@ -232,7 +232,7 @@ def lineparse_mobdeath(line, match):
     d.mindkey = nullparse(line[8])
     d.timeofdeath = line[3]
     d.typepath = line[1]
-    d.special_role = line[2]
+    d.special_role = nullparse(line[2])
     d.last_assailant = line[4]
     d.death_x = line[5]
     d.death_y = line[6]
@@ -246,7 +246,7 @@ def lineparse_antagobj(line, match):
     a = models.AntagObjective(match_id=match.id)
     a.mindname = nullparse(line[1])
     a.mindkey = nullparse(line[2])
-    a.special_role = line[3]
+    a.special_role = nullparse(line[3])
     a.objective_type = line[4]
     a.objective_desc = line[6]
     # Check if this is a targeted objective or not.
@@ -305,64 +305,49 @@ def lineparse_badassbundle(line, match):
 
 @lineparse_function('CULTSTATS')
 def lineparse_cultstats(line, match):
-    c = models.CultStats(match_id=match.id)
-    c.runes_written = line[1]
-    c.runes_fumbled = line[2]
-    c.runes_nulled = line[3]
-    c.converted = line[4]
-    c.tomes_created = line[5]
-    c.narsie_summoned = truefalse(line[6])
-    c.narsie_corpses_fed = line[7]
-    c.surviving_cultists = line[8]
-    c.deconverted = line[9]
-
-    db.session.add(c)
+    match.cult_runes_written = line[1]
+    match.cult_runes_fumbled = line[2]
+    match.cult_runes_nulled = line[3]
+    match.cult_converted = line[4]
+    match.cult_tomes_created = line[5]
+    match.cult_narsie_summoned = truefalse(line[6])
+    match.cult_narsie_corpses_fed = line[7]
+    match.cult_surviving_cultists = line[8]
+    match.cult_deconverted = line[9]
 
 
 @lineparse_function('XENOSTATS')
 def lineparse_xenostats(line, match):
-    xn = models.XenoStats(match_id=match.id)
-    xn.eggs_laid = line[1]
-    xn.faces_hugged = line[2]
-    xn.faces_protected = line[3]
-
-    db.session.add(xn)
+    match.xeno_eggs_laid = line[1]
+    match.xeno_faces_hugged = line[2]
+    match.xeno_faces_protected = line[3]
 
 
 @lineparse_function('BLOBSTATS')
 def lineparse_blobstats(line, match):
-    bs = models.BlobStats(match_id=match.id)
-    bs.blob_wins = line[1]
-    bs.spawned_blob_players = line[2]
-    bs.spores_spawned = line[3]
-    bs.res_generated = line[3]
-
-    db.session.add(bs)
+    match.blob_wins = line[1]
+    match.blob_spawned_blob_players = line[2]
+    match.spores_spawned = line[3]
+    match.res_generated = line[3]
 
 
 @lineparse_function('MALFSTATS')
 def lineparse_malfstats(line, match):
-    ms = models.MalfStats(match_id=match.id)
-    ms.malf_won = line[1]
-    ms.malf_shunted = line[2]
-    ms.borgs_at_roundend = line[3]
-
-    db.session.add(ms)
+    match.malf_won = line[1]
+    match.malf_shunted = line[2]
+    match.borgs_at_roundend = line[3]
 
 
 @lineparse_function('MALFMODULES')
 def lineparse_malfmodules(line, match):
     del line[0]
-    match.malfstat.malf_modules = '|'.join(line)
+    match.malf_modules = '|'.join(line)
 
 
 @lineparse_function('REVSQUADSTATS')
 def lineparse_revsquadstats(line, match):
-    rss = models.RevsquadStats(match_id=match.id)
-    rss.revsquad_won = line[1]
-    rss.remaining_heads = line[2]
-
-    db.session.add(rss)
+    match.revsquad_won = line[1]
+    match.remaining_heads = line[2]
 
 
 @lineparse_function('POPCOUNT')
@@ -395,7 +380,6 @@ def parse_line(line, match):
     if x[0] in lineParseFunctions:
         lineParseFunctions[x[0]](x, match)
     elif x[0] not in 'WRITE_COMPLETE':
-        with app.app_context():
-            current_app.logger.warning('Unhandled line during parsing: %r\n Full line:\n%r', str(x[0]), '|'.join(x))
+        logger.warning('Unhandled line during parsing: %r\n Full line:\n%r', str(x[0]), '|'.join(x))
 
     return True
