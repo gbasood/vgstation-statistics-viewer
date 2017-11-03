@@ -86,4 +86,4 @@ statsserv_gevent_error.txt
 statsserv_gevent_log.txt
 
 # Testing suite
-testcontent/db/*
+tests/db/*

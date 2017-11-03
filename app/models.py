@@ -19,18 +19,24 @@ def dict_to_json(d):
 
 
 def dict_to_safe_for_json(d):
+    # TODO add a serialize method to classes that need special handling
+    # e.g. deaths/explosions can have their xyz converted to an array instead of three separate values
     if '_sa_instance_state' in d:
         d.pop('_sa_instance_state')
     for key, value in d.items():
-        print(type(value))
         if type(value) is datetime.datetime:
             d[key] = value.isoformat()
         elif type(value) is dict:
             d[key] = dict_to_safe_for_json(value)
         elif type(value) is list:
             for n, i in enumerate(value):
+                # should only hit this line if one-to-many model,
+                # so it should always be a list
                 if isinstance(i, db.Model):
-                    value[n] = dict_to_safe_for_json(i.__dict__)
+                    if hasattr(value, "serialize_to_json"):
+                        d[key] = value.serialize_to_json()
+                    else:
+                        value[n] = dict_to_safe_for_json(i.__dict__)
     return d
 
 
@@ -198,6 +204,18 @@ class Explosion(db.Model):
     light_impact_range = db.Column(db.Integer)
     max_range = db.Column(db.Integer)
 
+    def serialize_to_json(self):
+        """
+        Return self as JSON.
+        """
+        d = self.__dict__
+        x = d.pop('epicenter_x')
+        y = d.pop('epicenter_y')
+        z = d.pop('epicenter_z')
+        d['epicenter'] = [x, y, z]
+
+        return dict_to_safe_for_json(d)
+
 
 class Death(db.Model):
     """Death model."""
@@ -215,8 +233,14 @@ class Death(db.Model):
     death_z = db.Column(db.Integer)
     realname = db.Column(db.String)
 
-    # def __repr__(self):
-    #     return '<Death #%r>' % (self.id)
+    def serialize_to_json(self):
+        d = self.__dict__
+        x = d.pop("death_x")
+        y = d.pop("death_y")
+        z = d.pop("death_z")
+        d['location'] = [x, y, z]
+
+        return dict_to_safe_for_json(d)
 
 
 class AntagObjective(db.Model):
