@@ -1,7 +1,8 @@
-import app as ourapp
 import logging
 import os
 import unittest
+
+import app as ourapp
 # from app import public
 from app.app import create_app
 # from app import parse

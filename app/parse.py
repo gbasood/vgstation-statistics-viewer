@@ -1,15 +1,18 @@
 """This file handles code for parsing CSV-formatted statfiles into the database."""
 from __future__ import unicode_literals
-from app import models
-from app.models import db
-from flask import current_app
-from werkzeug.local import LocalProxy
+
 import datetime
 import fnmatch
 import os
 import re
 import shutil
 import sys
+
+from flask import current_app
+from werkzeug.local import LocalProxy
+
+from app import models
+from app.models import db
 
 database_busy = False
 
@@ -38,7 +41,8 @@ def batch_parse():
         if fnmatch.fnmatch(file, 'statistics_*.txt'):
             try:
                 parse_file(os.path.join(current_app.config['STATS_DIR'], file))
-                shutil.move(os.path.join(current_app.config['STATS_DIR'], file), os.path.join(current_app.config['PROCESSED_DIR'], file))
+                shutil.move(os.path.join(current_app.config['STATS_DIR'], file),
+                            os.path.join(current_app.config['PROCESSED_DIR'], file))
             except Exception:
                 if database_busy:
                     logger.warning('Could not write file changes: database busy. Try again later.')
@@ -46,7 +50,8 @@ def batch_parse():
                 logger.error('!! ERROR: File could not be parsed. Details: \n${0}'
                              .format(str(sys.exc_info()[0])))
                 errored += 1
-                shutil.move(os.path.join(current_app.config['STATS_DIR'], file), os.path.join(current_app.config['UNPARSABLE_DIR'], file))
+                shutil.move(os.path.join(current_app.config['STATS_DIR'], file),
+                            os.path.join(current_app.config['UNPARSABLE_DIR'], file))
 
     logger.debug('# DEBUG: Batch parsed %r files with %r exceptions.', count, errored)
 

@@ -1,8 +1,10 @@
 #!flask/bin/python
 
-from flask import current_app
-from app.app import create_app
 import os
+
+from flask import current_app
+
+from app.app import create_app
 
 ourapp = create_app(os.path.realpath('config.py'))
 with ourapp.app_context():

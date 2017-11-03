@@ -1,11 +1,13 @@
-from app.app import create_app
-import app as ourapp
 import logging
 import os
 import unittest
+
+import app as ourapp
 from app import models
+from app.app import create_app
 from app.models import db
 from config import basedir  # dumb but oh well
+
 # from tests import factories
 
 

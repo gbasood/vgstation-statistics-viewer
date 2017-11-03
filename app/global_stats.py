@@ -4,13 +4,16 @@ This includes queries, logical operations, and formatting so that the view can r
 """
 
 from __future__ import unicode_literals
-from app import models
-from app.app import logging
-from app.helpers import add_months
+
+import json
+
 from sqlalchemy import and_
 # from sqlalchemy import between
 from werkzeug.contrib.cache import SimpleCache
-import json
+
+from app import models
+from app.app import logging
+from app.helpers import add_months
 
 cache = SimpleCache()
 

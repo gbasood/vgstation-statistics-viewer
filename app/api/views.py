@@ -1,5 +1,6 @@
-from app.models import Match
 from flask import Blueprint
+
+from app.models import Match
 
 blueprint = Blueprint('api', __name__)
 

@@ -1,13 +1,13 @@
-import config
-import os
 import logging
-from os import path
-from app import commands
-from app.extensions import db, migrate
+import os
 from logging.handlers import RotatingFileHandler
+from os import path
+
 from flask import Flask
 
-from app import public, api
+import config
+from app import api, commands, public
+from app.extensions import db, migrate
 
 
 def create_app(config_path):

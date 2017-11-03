@@ -2,23 +2,18 @@
 
 import calendar
 import datetime
-import flask
-import threading
-import os
 import json
-from app import parse, global_stats
-from app.models import db
-from app.models import AntagObjective
-from app.models import Death
-from app.models import Explosion
-from app.models import Match
-from app.helpers import add_months
-from config import basedir
-from flask import Blueprint
-from flask import render_template
-from flask import request
-from flask import current_app
+import os
+import threading
+
+import flask
+from flask import Blueprint, current_app, render_template, request
 from sqlalchemy import func
+
+from app import global_stats, parse
+from app.helpers import add_months
+from app.models import AntagObjective, Death, Explosion, Match, db
+from config import basedir
 
 parse_lock = threading.RLock()
 
