@@ -51,7 +51,6 @@ class MatchFactory(factory.alchemy.SQLAlchemyModelFactory):
     malf_won = FuzzyChoice([True, False])
     malf_shunted = FuzzyChoice([True, False])
 
-
     @factory.post_generation
     def post(obj, create, extracted, **kwargs):
         populationstats = popsnap.PopSnapFactory.create_batch(10) # noqa F841
