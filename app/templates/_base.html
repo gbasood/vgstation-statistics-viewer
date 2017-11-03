@@ -9,6 +9,7 @@
     <link href='{{ url_for('static', filename='css/style.css') }}' rel='stylesheet'>
     <link rel='shortcut icon' href='{{ url_for('static', filename='favicon.png') }}'>
     <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     {% block before_body %}{% endblock -%}
   </head>
@@ -17,7 +18,8 @@
       <a class="nav-button" id='title' href="/">/vg/stats</a>
       <a class="nav-button" href="/matchlist">Match History</a>
       <a class="nav-button" href="/globalstats">Global Stats</a>
-      <a class="nav-button hdr gh" href='https://github.com/gbasood/vgstation-statistics-viewer/issues'>GitHub</a>
+      <a class="nav-button" href="/changelog">Changelog</a>
+      <a class="nav-button hdr gh" href='https://github.com/gbasood/vgstation-statistics-viewer/issues'> <i class='fa fa-github'></i> GitHub</a>
     </div>
     {% block content %}{% endblock %}
   </body>
