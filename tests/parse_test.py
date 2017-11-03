@@ -5,13 +5,14 @@ import os
 import unittest
 from app import models
 from app.models import db
+from config import basedir
 # from tests import factories
 
 
 class ParseToDBTestCase(unittest.TestCase):  # pragma: no cover
 
     def setUp(self):
-        self.sviewer = create_app(os.path.join('..', 'config_unittest.py'))
+        self.sviewer = create_app(os.path.join(basedir, 'config_unittest.py'))
         self.sviewer.logger.setLevel(logging.ERROR)
         self.sviewer.testing = True
         self.app = self.sviewer.test_client()
