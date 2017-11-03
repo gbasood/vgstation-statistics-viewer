@@ -1,15 +1,12 @@
 <div id = 'gamemode-stats' class = 'gridhalf'>
-  {% if match.cultstat %}<h3>Cult Stats:</h3>
-  <p><strong>Cult win:</strong> {{match.cultstat.narsie_summoned}}</p>
-  <p><strong>Cultists who survived:</strong> {{match.cultstat.surviving_cultists}}</p>
-  <p><strong>Num. of conversions:</strong> {{match.cultstat.converted}}</p>
-  <p><strong>Num. of deconversions:</strong> {{match.cultstat.deconverted}}</p>
-  <p><strong>Tomes created:</strong> {{match.cultstat.tomes_created}}</p>
-  <p><strong>Corpses fed to Nar'sie:</strong> {{match.cultstat.narsie_corpses_fed}}</p>
-  <p><strong>Runes written:</strong> {{match.cultstat.runes_written}}</p>
-  <p><strong>Runes fumbled:</strong> {{match.cultstat.runes_fumbled}}</p>
-  <p><strong>Runes nulled:</strong> {{match.cultstat.runes_nulled}}</p>
-  {%- else %}
-  This match is too old to have recorded gamemode-specific stats. Sorry!
-  {% endif -%}
+  <h3>Cult Stats:</h3>
+  <p><strong>Cult win:</strong> {{match.cult_narsie_summoned}}</p>
+  <p><strong>Cultists who survived:</strong> {{match.cult_surviving_cultists}}</p>
+  <p><strong>Num. of conversions:</strong> {{match.cult_converted}}</p>
+  <p><strong>Num. of deconversions:</strong> {{match.cult_deconverted}}</p>
+  <p><strong>Tomes created:</strong> {{match.cult_tomes_created}}</p>
+  <p><strong>Corpses fed to Nar'sie:</strong> {{match.cult_narsie_corpses_fed}}</p>
+  <p><strong>Runes written:</strong> {{match.cult_runes_written}}</p>
+  <p><strong>Runes fumbled:</strong> {{match.cult_runes_fumbled}}</p>
+  <p><strong>Runes nulled:</strong> {{match.cult_runes_nulled}}</p>
 </div>

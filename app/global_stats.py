@@ -4,15 +4,21 @@ This includes queries, logical operations, and formatting so that the view can r
 """
 
 from __future__ import unicode_literals
-from app import models, logging
-from app.helpers import add_months
-from sqlalchemy import and_
-from werkzeug.contrib.cache import SimpleCache
+
 import json
+
+from sqlalchemy import and_
+# from sqlalchemy import between
+from werkzeug.contrib.cache import SimpleCache
+
+from app import models
+from app.app import logging
+from app.helpers import add_months
 
 cache = SimpleCache()
 
-antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling", "vampire", 'wizard', 'ragin\' mages', 'revolution']
+antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling",
+                                 "vampire", 'wizard', 'ragin\' mages', 'revolution']
 do_not_show = ['extended', 'heist', 'meteor']
 objective_success_threshold = 0.49
 
@@ -45,7 +51,7 @@ class MatchTypeVictory:
 
 
 def get_formatted_global_stats(timespan):
-    """Return a big ol' object that contains all the matches in two separate arrays of JSON."""  # TODO more documentation
+    """Return a big ol' object that contains all the matches in two separate arrays of JSON."""  # TODO more doc
     stats = get_global_stats(timespan)
     winrateStats = stats[0]
     allMatches = stats[1]
@@ -130,8 +136,8 @@ def match_stats(timespan):
     if timespan[0] != "all":
         query_start = timespan[1]
         query_end = add_months(query_start, 1)
-
-        q = q.filter(and_(models.Match.date is not None, models.Match.date >= query_start, models.Match.date < query_end))
+        print(query_start, query_end)
+        q = q.filter(and_(models.Match.date is not None, models.Match.date.between(query_start, query_end)))
 
     q = q.filter(~models.Match.modes_string.contains('|'), ~models.Match.mastermode.contains('mixed'))
     print(str(q))  # TODO remove
@@ -161,27 +167,18 @@ def checkModeVictory(match):
         else:
             return False
     elif "cult" in modestring:
-        if match.cultstat.narsie_summoned is True:
+        if match.cult_narsie_summoned is True:
             return True
         else:
             return False
     elif "meteor" in modestring:
         return False  # No one wins in meteor let's be honest
     elif "blob" in modestring:
-        if match.blobstat:
-            return match.blobstat.blob_wins
-        else:
-            return None
+        return match.blob_wins
     elif "ai malfunction" in modestring:
-        if match.malfstat:
-            return match.malfstat.malf_won
-        else:
-            return None
+        return match.malf_won
     elif "revolution squad" in modestring:
-        if match.revsquadstat:
-            return match.revsquadstat.revsquad_won
-        else:
-            return None
+        return match.revsquad_won
     elif any(modestring in s for s in antag_objective_victory_modes):
         succeeded = 0
         total = 0

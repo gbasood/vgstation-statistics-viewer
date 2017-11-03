@@ -1,9 +1,10 @@
-from gevent.pywsgi import WSGIServer
-from app import app
 import logging
 from logging.handlers import RotatingFileHandler
 
+from app import app
 from gevent import monkey
+from gevent.pywsgi import WSGIServer
+
 monkey.patch_all()
 
 ourLog = logging.getLogger('gevent.log')

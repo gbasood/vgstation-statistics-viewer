@@ -1,9 +1,47 @@
-"""Model definitions for SQLAlchemy models used in this app."""
-from app import db
-from os import listdir, path
-from config import basedir
-from sqlalchemy import and_
+"""
+Model definitions for SQLAlchemy models used in this app.
+"""
 import datetime
+import json
+
+from sqlalchemy import and_
+
+from .extensions import db
+
+
+def to_json(mdl):
+    """
+    Jsonify a SQLAlchemy model.
+    """
+    d = mdl.__dict__
+    return dict_to_json(d)
+
+
+def dict_to_json(d):
+    d = dict_to_safe_for_json(d)
+    return json.dumps(d, ensure_ascii=False)
+
+
+def dict_to_safe_for_json(d):
+    # TODO add a serialize method to classes that need special handling
+    # e.g. deaths/explosions can have their xyz converted to an array instead of three separate values
+    if '_sa_instance_state' in d:
+        d.pop('_sa_instance_state')
+    for key, value in d.items():
+        if type(value) is datetime.datetime:
+            d[key] = value.isoformat()
+        elif type(value) is dict:
+            d[key] = dict_to_safe_for_json(value)
+        elif type(value) is list:
+            for n, i in enumerate(value):
+                # should only hit this line if one-to-many model,
+                # so it should always be a list
+                if isinstance(i, db.Model):
+                    if hasattr(value, "serialize_to_json"):
+                        d[key] = value.serialize_to_json()
+                    else:
+                        value[n] = dict_to_safe_for_json(i.__dict__)
+    return d
 
 
 class Match(db.Model):
@@ -33,11 +71,39 @@ class Match(db.Model):
     antagobjs = db.relationship('AntagObjective', backref='match', lazy='dynamic')
     uplinkbuys = db.relationship('UplinkBuy', backref='match', lazy='dynamic')
     badassbuy = db.relationship('BadassBundleBuy', backref='match', lazy='dynamic')
-    cultstat = db.relationship('CultStats', backref='match', lazy='select', uselist=False)
-    xenostat = db.relationship('XenoStats', backref='match', lazy='select', uselist=False)
-    blobstat = db.relationship('BlobStats', backref='match', lazy='select', uselist=False)
-    malfstat = db.relationship('MalfStats', backref='match', lazy='select', uselist=False)
-    revsquadstat = db.relationship('RevsquadStats', backref='match', lazy='select', uselist=False)
+
+    # Cult
+    cult_runes_written = db.Column(db.Integer)
+    cult_runes_nulled = db.Column(db.Integer)
+    cult_runes_fumbled = db.Column(db.Integer)
+    cult_converted = db.Column(db.Integer)
+    cult_tomes_created = db.Column(db.Integer)
+    cult_narsie_summoned = db.Column(db.Boolean)
+    cult_narsie_corpses_fed = db.Column(db.Integer)
+    cult_surviving_cultists = db.Column(db.Integer)
+    cult_deconverted = db.Column(db.Integer)
+
+    # Xeno
+    xeno_eggs_laid = db.Column(db.Integer)
+    xeno_faces_hugged = db.Column(db.Integer)
+    xeno_faces_protected = db.Column(db.Integer)
+
+    # Blob
+    blob_wins = db.Column(db.Boolean)
+    blob_spawned_blob_players = db.Column(db.Integer)
+    blob_spores_spawned = db.Column(db.Integer)
+    blob_res_generated = db.Column(db.Integer)
+
+    # Malf
+    malf_won = db.Column(db.Boolean)
+    malf_shunted = db.Column(db.Boolean)
+    borgs_at_roundend = db.Column(db.Integer)
+    malf_modules = db.Column(db.String)
+
+    # Revsquad
+    revsquad_won = db.Column(db.Boolean)
+    remaining_heads = db.Column(db.Integer)
+
     populationstats = db.relationship('PopulationSnapshot', backref='match', lazy='dynamic')
 
     date = db.Column(db.DateTime)
@@ -65,7 +131,9 @@ class Match(db.Model):
         return self.antagobjs.filter(AntagObjective.mindkey == antagkey)
 
     def player_deaths(self):
-        """Return all Death entries associated with this match, whose keys are not null, and are not manifested ghosts."""
+        """
+        Return all Death entries associated with this match, whose keys are not null, and are not manifested ghosts.
+        """
         return self.deaths.filter(and_(Death.mindkey != 'null', Death.mindname != 'Manifested Ghost'))
 
     def nonplayer_deaths(self):
@@ -84,8 +152,10 @@ class Match(db.Model):
         s = self.starttime.split('.')
         e = self.endtime.split('.')
         # yyyy mm dd hh mm ss
-        start = datetime.datetime(year=int(s[0]), month=int(s[1]), day=int(s[2]), hour=int(s[3]), minute=int(s[4]), second=int(s[5]))
-        end = datetime.datetime(year=int(e[0]), month=int(e[1]), day=int(e[2]), hour=int(e[3]), minute=int(e[4]), second=int(e[5]))
+        start = datetime.datetime(year=int(s[0]), month=int(s[1]), day=int(s[2]),
+                                  hour=int(s[3]), minute=int(s[4]), second=int(s[5]))
+        end = datetime.datetime(year=int(e[0]), month=int(e[1]), day=int(e[2]),
+                                hour=int(e[3]), minute=int(e[4]), second=int(e[5]))
 
         delta = start - end
         return int(abs((delta.total_seconds() - delta.total_seconds() % 60) / 60))
@@ -106,6 +176,24 @@ class Match(db.Model):
                 badbuys.append(badbuy)
         return badbuys
 
+    def as_json(self):
+        """Return self and children as JSON data."""
+        # if we don't convert it to a dict we'll get a whole bunch of 'can't be serialized' things
+        # match = self.__dict__
+        # match.pop('_sa_instance_state', None)
+        # for k in match:
+        #
+        # match['date'] = match['date'].isoformat()
+        m = self.__dict__
+        m['explosions'] = self.explosions.all()
+        m['deaths'] = self.deaths.all()
+        m['antagobjs'] = self.antagobjs.all()
+        m['uplinkbuys'] = self.uplinkbuys.all()
+        m['badassbuys'] = self.badassbuy.all()
+        m['populationstats'] = self.populationstats.all()
+
+        return dict_to_json(m)
+
 
 class Explosion(db.Model):
     """Explosion model."""
@@ -119,6 +207,18 @@ class Explosion(db.Model):
     heavy_impact_range = db.Column(db.Integer)
     light_impact_range = db.Column(db.Integer)
     max_range = db.Column(db.Integer)
+
+    def serialize_to_json(self):
+        """
+        Return self as JSON.
+        """
+        d = self.__dict__
+        x = d.pop('epicenter_x')
+        y = d.pop('epicenter_y')
+        z = d.pop('epicenter_z')
+        d['epicenter'] = [x, y, z]
+
+        return dict_to_safe_for_json(d)
 
 
 class Death(db.Model):
@@ -137,8 +237,14 @@ class Death(db.Model):
     death_z = db.Column(db.Integer)
     realname = db.Column(db.String)
 
-    # def __repr__(self):
-    #     return '<Death #%r>' % (self.id)
+    def serialize_to_json(self):
+        d = self.__dict__
+        x = d.pop("death_x")
+        y = d.pop("death_y")
+        z = d.pop("death_z")
+        d['location'] = [x, y, z]
+
+        return dict_to_safe_for_json(d)
 
 
 class AntagObjective(db.Model):
@@ -157,7 +263,9 @@ class AntagObjective(db.Model):
 
     def __repr__(self):
         """Represent self for debug purposes."""
-        return '<AntagObjective #%r | Name %r | Key %r| Type #%r | Succeeded %r>' % (self.id, self.mindname, self.mindkey, self.objective_type, self.objective_succeeded)
+        return '<AntagObjective #%r | Name %r | Key %r| Type #%r | Succeeded %r>' % (self.id, self.mindname,
+                                                                                     self.mindkey, self.objective_type,
+                                                                                     self.objective_succeeded)
 
 
 class UplinkBuy(db.Model):
@@ -190,63 +298,6 @@ class BadassBundleItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     badass_bundle_id = db.Column(db.Integer, db.ForeignKey('badass_bundle_buy.id'), index=True)
     item_path = db.Column(db.String)
-
-
-class CultStats(db.Model):
-    """Cult statistics for a match."""
-
-    id = db.Column(db.Integer, primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
-    runes_written = db.Column(db.Integer)
-    runes_fumbled = db.Column(db.Integer)
-    runes_nulled = db.Column(db.Integer)
-    converted = db.Column(db.Integer)
-    tomes_created = db.Column(db.Integer)
-    narsie_summoned = db.Column(db.Boolean)
-    narsie_corpses_fed = db.Column(db.Integer)
-    surviving_cultists = db.Column(db.Integer)
-    deconverted = db.Column(db.Integer)
-
-
-class XenoStats(db.Model):
-    """Xenomorph statistics for a match."""
-
-    id = db.Column(db.Integer, primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
-    eggs_laid = db.Column(db.Integer)
-    faces_hugged = db.Column(db.Integer)
-    faces_protected = db.Column(db.Integer)
-
-
-class BlobStats(db.Model):
-    """Blob statistics for a match."""
-
-    id = db.Column(db.Integer, primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
-    blob_wins = db.Column(db.Boolean)
-    spawned_blob_players = db.Column(db.Integer)
-    spores_spawned = db.Column(db.Integer)
-    res_generated = db.Column(db.Integer)
-
-
-class MalfStats(db.Model):
-    """AI malfunction statistics."""
-
-    id = db.Column(db.Integer, primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
-    malf_won = db.Column(db.Boolean)
-    malf_shunted = db.Column(db.Boolean)
-    borgs_at_roundend = db.Column(db.Integer)
-    malf_modules = db.Column(db.String)
-
-
-class RevsquadStats(db.Model):
-    """Revolution Squad statistics."""
-
-    id = db.Column(db.Integer, primary_key=True)
-    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
-    revsquad_won = db.Column(db.Boolean)
-    remaining_heads = db.Column(db.Integer)
 
 
 class PopulationSnapshot(db.Model):

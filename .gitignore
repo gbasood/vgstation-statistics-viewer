@@ -9,6 +9,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 venv/
+venv3/
 build/
 develop-eggs/
 dist/
@@ -85,4 +86,4 @@ statsserv_gevent_error.txt
 statsserv_gevent_log.txt
 
 # Testing suite
-testcontent/db/*
+tests/db/*

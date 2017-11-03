@@ -1,11 +1,13 @@
 dist: trusty
+sudo: required
 language: python
 cache: pip
+env:
+- FLASK_APP=run.py FLASK_DEBUG=1
 python:
-  - "2.7"
-  - "3.5"
+  - "3.6.1"
 addons:
-  sonarqube:
+  sonarcloud:
     organization: "gbasood-github"
     token:
       secure: 1bdcd8624f3d753e1d2e605ec5159786ce92a4d4
@@ -13,7 +15,7 @@ addons:
 install: "pip install -r requirements.txt"
 # command to run tests
 script:
-  - nosetests testcontent --with-coverage --cover-package=app --cover-erase
+  - flask test
   - sonar-scanner
 after_success:
   - bash <(curl -s https://codecov.io/bash)
