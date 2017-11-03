@@ -2,11 +2,11 @@ import app as ourapp
 import logging
 import os
 import unittest
-from app import views
-from app import create_app
+# from app import public
+from app.app import create_app
 # from app import parse
 from app.models import db
-from testcontent.factories.match import MatchFactory
+from tests.factories.match import MatchFactory
 
 
 # Todo: separate into own file, make it test for HTML elements instead of specific strings
@@ -28,7 +28,7 @@ class ViewsTestCase(unittest.TestCase):  # pragma: no cover
         with self.sviewer.app_context():
             MatchFactory()
         rv = self.app.get('/')
-        print rv
+        print(rv)
         assert b'container-front' in rv.data
 
     def test_global_stats(self):
@@ -39,19 +39,19 @@ class ViewsTestCase(unittest.TestCase):  # pragma: no cover
 
     def test_matchlist(self):
         with self.sviewer.app_context():
-            ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
+            ourapp.parse.parse_file('tests/valid/statistics_2015.14.12.testfile.txt')
             rv = self.app.get('/matchlist')
             assert b'match-title' in rv.data
 
     def test_matchpage(self):
         with self.sviewer.app_context():
-            ourapp.parse.parse_file('testcontent/valid/statistics_2015.14.12.testfile.txt')
+            ourapp.parse.parse_file('tests/valid/statistics_2015.14.12.testfile.txt')
             rv = self.app.get('/match/1')
             assert b'Deaths' in rv.data
 
     def test_popcount_matchpage(self):
         with self.sviewer.app_context():
-            ourapp.parse.parse_file('testcontent/valid/statistics_2017.18.02.100019.txt')
+            ourapp.parse.parse_file('tests/valid/statistics_2017.18.02.100019.txt')
             rv = self.app.get('/match/1')
             assert b'timeline' in rv.data
 

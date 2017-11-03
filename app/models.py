@@ -1,4 +1,6 @@
-"""Model definitions for SQLAlchemy models used in this app."""
+"""
+Model definitions for SQLAlchemy models used in this app.
+"""
 import datetime
 import json
 from sqlalchemy import and_

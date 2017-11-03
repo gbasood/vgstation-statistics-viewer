@@ -2,6 +2,7 @@ import config
 import os
 import logging
 from os import path
+from app import commands
 from app.extensions import db, migrate
 from logging.handlers import RotatingFileHandler
 from flask import Flask
@@ -24,6 +25,7 @@ def create_app(config_path):
 
     register_extensions(app)
     register_blueprints(app)
+    register_commands(app)
 
     create_db_if_necessary(app, db)
 
@@ -51,6 +53,11 @@ def register_blueprints(app):
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(api.views.blueprint)
     return None
+
+
+def register_commands(app):
+    """Register Click commands."""
+    app.cli.add_command(commands.test)
 
 
 def create_db_if_necessary(app, db):

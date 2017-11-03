@@ -1,10 +1,14 @@
+"""
+Factory for Match
+"""
+
 import factory
 import datetime
 import pytz
 from app import models
 from app.models import db
-from testcontent.factories import cult, malf, popsnap
-from factory.fuzzy import FuzzyInteger, FuzzyDateTime
+from tests.factories import popsnap
+from factory.fuzzy import FuzzyInteger, FuzzyDateTime, FuzzyChoice
 
 
 def filename():
@@ -18,7 +22,8 @@ class MatchFactory(factory.alchemy.SQLAlchemyModelFactory):
         model = models.Match
         sqlalchemy_session = db.session
 
-    # modes_string = FuzzyChoice(['cult', 'revolution', 'vampire', 'autotraitor', 'nuclear emergency', 'blob', 'wizard', 'ragin\' mages', 'ai malfunction', 'changeling'])
+    # modes_string = FuzzyChoice(['cult', 'revolution', 'vampire', 'autotraitor', 'nuclear emergency',
+    # 'blob', 'wizard', 'ragin\' mages', 'ai malfunction', 'changeling'])
     # id = factory.Sequence(int)
     date = FuzzyDateTime(datetime.datetime(2012, 1, 1, tzinfo=pytz.timezone('US/Eastern')))
     start_datetime = date
@@ -27,13 +32,29 @@ class MatchFactory(factory.alchemy.SQLAlchemyModelFactory):
     data_version = "1.1"
     modes_string = factory.Iterator(['cult', 'ai malfunction'])
 
+    # General stats
+    borgs_at_roundend = FuzzyInteger(0, 30)
+
+    # Cult
+    cult_runes_written = FuzzyInteger(0, 100)
+    cult_runes_fumbled = FuzzyInteger(0, 100)
+    cult_runes_nulled = FuzzyInteger(0, 100)
+    cult_converted = FuzzyInteger(0, 100)
+    cult_tomes_created = FuzzyInteger(0, 100)
+    cult_narsie_summoned = FuzzyChoice([True, False])
+    if cult_narsie_summoned:
+        cult_narsie_corpses_fed = FuzzyInteger(0, 100)
+    cult_surviving_cultists = FuzzyInteger(0, 100)
+    cult_deconverted = FuzzyInteger(0, 100)
+
+    # Malfunction
+    malf_won = FuzzyChoice([True, False])
+    malf_shunted = FuzzyChoice([True, False])
+
+
     @factory.post_generation
     def post(obj, create, extracted, **kwargs):
-        populationstats = popsnap.PopSnapFactory.create_batch(10)
-        if obj.modes_string == 'cult':
-            obj.cultstat = cult.CultStatFactory()  # This isn't how factoryboy docs say to do it but it's the only thing that worked woooo
-        elif obj.modes_string == 'ai malfunction':
-            obj.malfstat = malf.MalfStatFactory()
+        populationstats = popsnap.PopSnapFactory.create_batch(10) # noqa F841
     # to be continued as factories are added
 
 
