@@ -96,14 +96,13 @@ def alert_new_file():
     return 'Already parsing.', 531
 
 
-@blueprint.errorhandler(404)
-def page_not_found(e):
-    """404 view."""
-    return render_template('404.html'), 404
+@blueprint.route('/changelog')
+def changelog_view():
+    """wow a changelog"""
+    return render_template('changelog.html')
 
 
-@blueprint.errorhandler(500)
-@blueprint.route('/error')
+@blueprint.route('/error') # legacy
 def errorpage():
     """Error view."""
     return render_template('500.html'), 500

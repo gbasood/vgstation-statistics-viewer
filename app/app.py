@@ -3,7 +3,7 @@ import os
 from logging.handlers import RotatingFileHandler
 from os import path
 
-from flask import Flask
+from flask import Flask, render_template
 
 import config
 from app import api, commands, public
@@ -25,6 +25,7 @@ def create_app(config_path):
 
     register_extensions(app)
     register_blueprints(app)
+    register_errorhandlers(app)
     register_commands(app)
 
     create_db_if_necessary(app, db)
@@ -63,3 +64,13 @@ def register_commands(app):
 def create_db_if_necessary(app, db):
     if not path.exists(path.join(config.SQLALCHEMY_DATABASE_URI, "app.db")):
         db.create_all(app=app)
+
+
+def register_errorhandlers(app):
+    """register error handlers"""
+    def render_error(error):
+        error_code = getattr(error, 'code', 500)
+        return render_template('{0}.html'.format(error_code)), error_code
+    for errcode in [401, 404, 500]:
+        app.errorhandler(errcode)(render_error)
+    return None
