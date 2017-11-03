@@ -5,15 +5,18 @@ html,body {
 }
 
 body {
-	background: #222;
-	color: #DDD;
-	font-family: Arial;
 	margin: 0;
+
+	color: #DDD;
+	background: #222;
+
+	font-family: Arial;
 }
 
 a,a:hover,a:active {
-	color: #FFF;
 	text-decoration: none;
+
+	color: #FFF;
 }
 
 a:hover {
@@ -22,93 +25,115 @@ a:hover {
 
 h1,h2 {
 	display: block;
+
+	width: 90%;
 	margin: 1% 5%;
-	border-radius: 2px;
+	padding: 0.5% 0%;
+
 	text-align: center;
+
+	border-radius: 2px;
+	background: black;
+
 	font-family: "Hind";
 	font-weight: 400;
-	background: black;
-	padding: 0.5% 0%;
-	width: 90%;
 }
 
 h1 {
-	font-size: 20pt;
-	text-shadow: 0px 0px 1px #333;
 	background: url('/static/img/mapbase1024.png') !important;
+	text-shadow: 0px 0px 1px #333;
+
+	font-size: 20pt;
 }
 
 #header {
 	width: 100%;
-	border-bottom: 1px solid black;
 	margin-bottom: .25%;
+
+	border-bottom: 1px solid black;
 	background: #333;
 }
 
 #title {
-	font-family: "Jockey One";
 	display: inline-block;
-	font-size: 14pt;
+
 	margin: 0.75% 2%;
 	margin-right: 0.5em;
+
+	font-family: "Jockey One";
+	font-size: 14pt;
 }
 
 .centerpadded-small {
 	margin: auto 20%;
-	background: #333;
 	padding: 1em;
+
+	background: #333;
 }
 
 .centerpadded {
+	display: table;
+
+	width: 85%;
 	margin: auto 5%;
 	padding: 1em;
-	width: 85%;
-	display: table;
 }
 
 .warn {
-	background: #D45500;
-	color: #222;
 	padding: 4px;
+
+	color: #222;
+	background: #D45500;
+
 	font-family: "Hind", sans-serif;
 	font-weight: 800;
 }
 
 .indented {
 	text-indent: .75em;
+
 	-webkit-margin-before: .25em;
 	-webkit-margin-after: .25em;
 }
 
 #match-container {
 	display: table;
+
 	width: 60%;
 	margin: 0% 20%;
 }
 
 .match {
-	background: #333;
-	margin: 1px;
 	display: table-row;
+
+	margin: 1px;
+
+	background: #333;
 }
 
 .match > * {
-	margin: auto 2%;
 	display: table-cell !important;
+
+	margin: auto 2%;
 }
 
 .match #match-title {
-	font-size: 10pt;
 	margin-bottom: .3em;
+
 	text-transform: capitalize;
+
+	font-size: 10pt;
 }
 
 thead > * {
-	background: #111111;
-	font-size: 8pt;
-	text-transform: uppercase;
-	letter-spacing: 2px;
 	padding: 4px;
+
+	letter-spacing: 2px;
+	text-transform: uppercase;
+
+	background: #111111;
+
+	font-size: 8pt;
 }
 
 td {
@@ -120,32 +145,36 @@ td {
 }
 
 .match img {
-	margin: 0 auto;
 	width: 32px;
 	height: 32px;
+	margin: 0 auto;
 }
 
 .gh {
-	border-radius: 30px;
-	border: #37C837 2px solid;
-	color: #37C837;
 	padding: 3px 12px;
+
 	transition: color 0.25s, background 0.25s;
+
+	color: #37C837;
+	border: #37C837 2px solid;
+	border-radius: 30px;
 }
 
 .gh:hover {
-	background: #37C837;
 	color: #333;
+	background: #37C837;
 }
 
 .hdr {
-	margin: 0px auto;
 	float: right;
+
+	margin: 0px auto;
 }
 
 .matchhead {
-	font-size: 10pt;
 	color: #666;
+
+	font-size: 10pt;
 }
 
 .bigger-font {
@@ -154,14 +183,16 @@ td {
 }
 
 .chart-container {
+	display: inline-block;
+
+	width: 40%;
 	margin: 0 auto;
 	padding: 1em;
-	width: 40%;
-	display: inline-block;
 }
 
 .gen-contain {
 	margin: 0 auto;
+
 	text-align: center;
 }
 
@@ -171,6 +202,7 @@ td {
 
 .pagination {
 	text-align: center;
+
 	color: #aaa;
 }
 
@@ -179,9 +211,10 @@ td {
 }
 
 .antag {
-	background: #333;
-	padding: 1em;
 	margin-bottom: 1%;
+	padding: 1em;
+
+	background: #333;
 }
 
 .antag #player {
@@ -189,15 +222,16 @@ td {
 }
 
 .antag #actor {
-	float: right;
 	display: inline-block;
+	float: right;
 }
 
 .objective {
 	margin: 1%;
 	padding: 1%;
-	border-radius: 2px;
+
 	color: #222;
+	border-radius: 2px;
 }
 
 .success {
@@ -217,8 +251,9 @@ td {
 }
 
 .gridhalf {
-	width: 49.5%;
 	float: left;
+
+	width: 49.5%;
 	margin-left: 1%;
 }
 
@@ -235,9 +270,10 @@ td {
 }
 
 .matchdeath {
-	background: #333;
-	padding: .25em;
 	margin-bottom: 1%;
+	padding: .25em;
+
+	background: #333;
 }
 
 .matchdeath .lassailant {
@@ -259,13 +295,17 @@ td {
 
 .nav-button {
 	display: inline-block;
+
 	margin: .5em;
+
 	text-decoration: none;
 }
 
 .match.singular {
 	float: none;
+
 	margin: 0 auto;
+
 	background: #2a2a2a;
 }
 
@@ -274,17 +314,21 @@ td {
 }
 
 .errorpage > div {
-	margin: 0 auto;
-	text-align: center;
 	position: relative;
 	top: 50%;
+
+	margin: 0 auto;
+
 	transform: translateY(-50%);
+	text-align: center;
+
 	font-family: 'Space Mono',monospace;
 }
 
 .errorpage > div > p {
-	font-size: 2000%;
 	margin: 0;
+
+	font-size: 2000%;
 }
 
 .errorpage > div > a {
@@ -292,16 +336,19 @@ td {
 }
 
 .errorpage {
+	overflow: hidden;
+
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
-	background-position: 0 0;
+
 	background-repeat: repeat;
+	background-position: 0 0;
 }
 
 #notfound {
-	background: url(../img/mapbase1024.png);
 	animation: animatedBackground 40s linear infinite;
+
+	background: url(../img/mapbase1024.png);
 }
 
 @keyframes animatedBackground {
@@ -320,29 +367,35 @@ td {
 }
 
 #error > div {
-	background: rgba(50,50,50,0.5);
 	padding-top: 50px;
 	padding-bottom: 50px;
+
+	background: rgba(50,50,50,0.5);
 }
 
 #error > div > p {
 	padding: 10px;
+
 	font-size: 400%;
 }
 
 #error > div > a,#error > div > a:hover {
-	border: 5px solid #fff;
 	text-decoration: none;
+
+	border: 5px solid #fff;
 }
 
 a.block {
 	display: block;
+
 	text-decoration: none;
 }
 
 .monthlynav {
-	text-align: center;
 	margin: 0 auto;
+
+	text-align: center;
+
 	font-size: 150%;
 	font-weight: bold;
 }
@@ -357,6 +410,7 @@ a.block {
 
 .floatleft {
 	display: inline-block;
+
 	margin-left: 2em;
 }
 
@@ -371,6 +425,7 @@ a.block {
 .timeline {
 	height: 50%;
 	max-height: 200%;
+
 	background-color: rgba(100,100,100,0);
 }
 
@@ -384,15 +439,93 @@ a.block {
 }
 
 .tooltip {
-	visibility: hidden;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 1;
 	position: absolute;
-	padding: 5px 0;
-	text-align: center;
-	font-size: 9pt;
+	z-index: 1;
 	top: 120%;
 	left: -25%;
+
+	visibility: hidden;
+
 	width: 200px;
+	padding: 5px 0;
+
+	text-align: center;
+
 	border-radius: 5px;
+	background-color: rgba(0, 0, 0, 0.5);
+
+	font-size: 9pt;
+}
+
+.mostwidth {
+	width: 70%;
+}
+
+.centerdiv {
+	margin: 0 auto;
+}
+
+.changelog {
+	margin-top: 1em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+
+	background: #333;
+}
+
+.changelog-date {
+	font-size: 14pt;
+}
+
+.changelog-entry {
+	margin-right: 1em;
+	margin-left: 1em;
+	padding: 0.5em;
+	padding-right: 1em;
+	padding-left: 1em;
+
+	border: 1px solid rgba(100, 100, 100, 0.5);
+
+	font-size: 13pt;
+}
+
+.changelog-entry ul {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	padding: 0;
+
+	list-style: none;
+}
+
+.changelog-entry ul li {
+	padding-left: 1.5em;
+}
+
+.changelog-entry ul li::before {
+	display: inline-block;
+
+	width: 1.3em; /* same as padding-left set on li */
+	margin-left: -1.3em; /* same as padding-left set on li */
+
+	content: "\f141";
+
+	font-family: "FontAwesome";
+}
+
+.changelog-entry ul li.honk::before {
+	content: "\f0a1";
+
+	color: rgb(203, 189, 67);
+}
+
+.changelog-entry ul li.added::before {
+	content: "\f067";
+
+	color: rgb(85, 186, 85);
+}
+
+.changelog-entry ul li.removed::before {
+	content: '\f056';
+
+	color: rgb(163, 61, 61);
 }
