@@ -2,6 +2,8 @@ dist: trusty
 sudo: required
 language: python
 cache: pip
+env:
+- FLASK_APP=run.py FLASK_DEBUG=1
 python:
   - "3.6.1"
 addons:
