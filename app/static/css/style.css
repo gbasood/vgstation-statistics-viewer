@@ -373,3 +373,26 @@ a.block {
 	max-height: 200%;
 	background-color: rgba(100,100,100,0);
 }
+
+.deaths {
+	position: relative;
+}
+
+/*any element with a tooltip as direct descendant being hovered on*/
+*:hover > .tooltip {
+	visibility: visible;
+}
+
+.tooltip {
+	visibility: hidden;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1;
+	position: absolute;
+	padding: 5px 0;
+	text-align: center;
+	font-size: 9pt;
+	top: 120%;
+	left: -25%;
+	width: 200px;
+	border-radius: 5px;
+}
