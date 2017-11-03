@@ -5,7 +5,8 @@ import os
 import unittest
 from app import models
 from app.models import db
-from config import basedir
+from app.app import config
+from config import basedir  # dumb but oh well
 # from tests import factories
 
 

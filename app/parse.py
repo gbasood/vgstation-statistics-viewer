@@ -10,7 +10,6 @@ import os
 import re
 import shutil
 import sys
-from config import STATS_DIR, PROCESSED_DIR, UNPARSABLE_DIR
 
 database_busy = False
 
@@ -23,10 +22,10 @@ def batch_parse():
 
     database_busy = False  # Just in case
 
-    if not os.path.exists(STATS_DIR):
-        logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + STATS_DIR)
+    if not os.path.exists(current_app.config['STATS_DIR']):
+        logger.debug('!! ERROR: Statfile dir path is invalid. Path used: ' + current_app.config['STATS_DIR'])
         return -1
-    files = os.listdir(STATS_DIR)
+    files = os.listdir(current_app.config['STATS_DIR'])
     files = fnmatch.filter(files, "statistics_*.txt")
     total_files = len(files)
 
@@ -38,8 +37,8 @@ def batch_parse():
             print("Parsing file {0} of {1}".format(count, total_files))
         if fnmatch.fnmatch(file, 'statistics_*.txt'):
             try:
-                parse_file(os.path.join(STATS_DIR, file))
-                shutil.move(os.path.join(STATS_DIR, file), os.path.join(PROCESSED_DIR, file))
+                parse_file(os.path.join(current_app.config['STATS_DIR'], file))
+                shutil.move(os.path.join(current_app.config['STATS_DIR'], file), os.path.join(current_app.config['PROCESSED_DIR'], file))
             except Exception:
                 if database_busy:
                     logger.warning('Could not write file changes: database busy. Try again later.')
@@ -47,7 +46,7 @@ def batch_parse():
                 logger.error('!! ERROR: File could not be parsed. Details: \n${0}'
                              .format(str(sys.exc_info()[0])))
                 errored += 1
-                shutil.move(os.path.join(STATS_DIR, file), os.path.join(UNPARSABLE_DIR, file))
+                shutil.move(os.path.join(current_app.config['STATS_DIR'], file), os.path.join(current_app.config['UNPARSABLE_DIR'], file))
 
     logger.debug('# DEBUG: Batch parsed %r files with %r exceptions.', count, errored)
 

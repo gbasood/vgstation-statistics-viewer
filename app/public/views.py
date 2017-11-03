@@ -13,10 +13,11 @@ from app.models import Death
 from app.models import Explosion
 from app.models import Match
 from app.helpers import add_months
-from config import MATCHES_PER_PAGE, basedir
+from config import basedir
 from flask import Blueprint
 from flask import render_template
 from flask import request
+from flask import current_app
 from sqlalchemy import func
 
 parse_lock = threading.RLock()
@@ -58,7 +59,7 @@ def index():
 def matchlist(page=1):
     """Respond with view for paginated match list."""
     query = Match.query.order_by(Match.id.desc())
-    paginatedMatches = query.paginate(page, MATCHES_PER_PAGE, False)
+    paginatedMatches = query.paginate(page, current_app.config['MATCHES_PER_PAGE'], False)
     return render_template('matchlist.html', matches=paginatedMatches.items, pagination=paginatedMatches)
 
 
@@ -119,7 +120,8 @@ def utility_processor():
     def modethumb(name):
         """Return a URL for an image related to the match mode."""
         name = name.lower()
-        if os.path.isfile(os.path.join(basedir, 'app', 'static', 'img', 'modethumbs', name + '.png')):
+        if os.path.isfile(os.path.join(basedir,
+                          'app', 'static', 'img', 'modethumbs', name + '.png')):
             return flask.url_for('static', filename='img/modethumbs/' + name + '.png')
         else:
             return flask.url_for('static', filename='img/modethumbs/othermode.png')

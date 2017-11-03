@@ -7,9 +7,6 @@ env:
 python:
   - "3.6.1"
 addons:
-  apt:
-    packages:
-      - sqlite3
   sonarcloud:
     organization: "gbasood-github"
     token:

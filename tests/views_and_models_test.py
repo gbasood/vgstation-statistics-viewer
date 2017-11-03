@@ -15,6 +15,7 @@ class ViewsTestCase(unittest.TestCase):  # pragma: no cover
 
     def setUp(self):
         self.sviewer = create_app(os.path.join(basedir, 'config_unittest.py'))
+        self.sviewer.SQLALCHEMY_DATABASE_URI = 'sqlite:///'
         self.sviewer.logger.setLevel(logging.ERROR)
         self.sviewer.testing = True
         self.app = self.sviewer.test_client()
