@@ -5,12 +5,7 @@ import os
 import unittest
 from app import models
 from app.models import db
-from config import basedir
 # from tests import factories
-
-dbpath = os.path.join(basedir, 'tests', 'db', 'test.db')  # pragma: no cover
-if not os.path.exists(os.path.dirname(dbpath)):  # pragma: no cover
-    os.makedirs(os.path.dirname(dbpath))  # pragma: no cover
 
 
 class ParseToDBTestCase(unittest.TestCase):  # pragma: no cover

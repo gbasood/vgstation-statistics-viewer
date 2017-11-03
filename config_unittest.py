@@ -18,7 +18,7 @@ UNPARSABLE_DIR = os.path.join(STATS_DIR, 'unparsable')
 
 # Database
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = os.path.join('sqlite://', basedir, 'tests', 'db', 'test.db')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///'
 SQLALCHEMY_TRACK_MODIFICATIONS = debug  # Track on debug
 
 # No longer used due to Manager implementation
