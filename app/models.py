@@ -60,6 +60,8 @@ class Match(db.Model):
     artifacts_discovered = db.Column(db.Integer)
     tech_total = db.Column(db.Integer)
     mapname = db.Column(db.String)
+    borgs_at_roundend = db.Column(db.Integer)
+    remaining_heads = db.Column(db.Integer)
 
     starttime = db.Column(db.Integer)
     endtime = db.Column(db.Integer)
@@ -97,12 +99,11 @@ class Match(db.Model):
     # Malf
     malf_won = db.Column(db.Boolean)
     malf_shunted = db.Column(db.Boolean)
-    borgs_at_roundend = db.Column(db.Integer)
     malf_modules = db.Column(db.String)
 
     # Revsquad
     revsquad_won = db.Column(db.Boolean)
-    remaining_heads = db.Column(db.Integer)
+    revsquad_items =
 
     populationstats = db.relationship('PopulationSnapshot', backref='match', lazy='dynamic')
 
@@ -230,12 +231,19 @@ class Death(db.Model):
     mindkey = db.Column(db.String(30))
     typepath = db.Column(db.String(200))
     special_role = db.Column(db.String(100))
-    last_assailant = db.Column(db.String(100))
+    assigned_role = db.Column(db.String(100))
     time_of_death = db.Column(db.Integer)
+
     death_x = db.Column(db.Integer)
     death_y = db.Column(db.Integer)
     death_z = db.Column(db.Integer)
-    realname = db.Column(db.String)
+
+    damage_brute = db.Column(db.Integer)
+    damage_fire = db.Column(db.Integer)
+    damage_toxin = db.Column(db.Integer)
+    damage_oxygen = db.Column(db.Integer)
+    damage_clone = db.Column(db.Integer)
+    damage_brain = db.Column(db.Integer)
 
     def serialize_to_json(self):
         d = self.__dict__
@@ -301,9 +309,31 @@ class BadassBundleItem(db.Model):
 
 
 class PopulationSnapshot(db.Model):
-    """ Population count and timestamp. """
+    """Population count and timestamp."""
 
     id = db.Column(db.Integer, primary_key=True)
     match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
     popcount = db.Column(db.Integer)
     time = db.Column(db.DateTime)
+
+
+class Survivor(db.Model):
+    """Players who were alive at round end."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), index=True)
+    # mind stuff
+    mindname = db.Column(db.String)
+    mindkey = db.Column(db.String(30))
+    special_role = db.Column(db.String)
+    mob_typepath = db.Column(db.String)
+    # damage stuff
+    damage_brute = db.Column(db.Integer)
+    damage_fire = db.Column(db.Integer)
+    damage_toxin = db.Column(db.Integer)
+    damage_oxygen = db.Column(db.Integer)
+    damage_clone = db.Column(db.Integer)
+    damage_brain = db.Column(db.Integer)
+
+
+# Bridge models

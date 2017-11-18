@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-from app import app
+from app.app import create_app
 from gevent import monkey
 from gevent.pywsgi import WSGIServer
 
@@ -18,5 +18,5 @@ elogHandler = RotatingFileHandler('statsserv_gevent_log.txt', maxBytes=100000, b
 ourLog.addHandler(logHandler)
 ourELog.addHandler(elogHandler)
 
-http_server = WSGIServer(('', 8080), app, log=ourLog, error_log=ourELog)
+http_server = WSGIServer(('', 8080), create_app('absolute/path/to/config.py'), log=ourLog, error_log=ourELog)
 http_server.serve_forever()
