@@ -8,7 +8,7 @@ from flask import current_app
 from werkzeug import LocalProxy
 from typing import Text, Union
 from app.models import Match, Death, AntagObjective, BadassBundleBuy, BadassBundleItem, \
-    Survivor, Explosion, UplinkBuy, RevsquadItem, MalfModule, MatchMalfModule, MatchRevsquadItem
+    Survivor, Explosion, UplinkBuy, RevsquadItem, MalfModule, MatchMalfModule, MatchRevsquadItem, PopulationSnapshot
 import json
 from datetime import datetime
 
@@ -44,6 +44,7 @@ def parse(filepath: Text, filename: Text):
     parse_explosions(js, m)
     parse_antag_objectives(js, m)
     parse_badass_buys(js, m)
+    parse_population_snapshots(js, m)
 
 
 def timestamp_to_datetime(timestring: Text) -> datetime:
@@ -238,3 +239,12 @@ def parse_badass_buys(js: dict, match: Match) -> None:
 
             db.add(i)
             db.commit()
+
+
+def parse_population_snapshots(js: dict, match: Match) -> None:
+    for snapdata in js['population_polls']:
+        snap = PopulationSnapshot(match_id=match.id)
+        snap.time = timestamp_to_datetime(snapdata['time'])
+        snap.popcount = snapdata['popcount']
+        db.add(snap)
+    db.commit()

@@ -7,13 +7,16 @@ from __future__ import unicode_literals
 
 import json
 
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 # from sqlalchemy import between
 from werkzeug.contrib.cache import SimpleCache
 
 from app import models
 from app.app import logging
 from app.helpers import add_months
+
+from flask import current_app
+from werkzeug import LocalProxy
 
 cache = SimpleCache()
 
@@ -52,9 +55,9 @@ class MatchTypeVictory:
 
 def get_formatted_global_stats(timespan):
     """Return a big ol' object that contains all the matches in two separate arrays of JSON."""  # TODO more doc
-    stats = get_global_stats(timespan)
-    winrateStats = stats[0]
-    allMatches = stats[1]
+    (winrateStats, allMatches, counts) = get_global_stats(timespan)
+    # winrateStats = stats[0]
+    # allMatches = stats[1]
 
     allplayed = []
 
@@ -73,13 +76,14 @@ def get_formatted_global_stats(timespan):
     matchData['all'] = json.dumps(allplayed, ensure_ascii=True)
     matchData['alltypes'] = json.dumps(list(allMatches.keys()), ensure_ascii=True)
 
-    return matchData
+    return matchData, counts
 
 
 def get_global_stats(timespan):
     """Handle the querying of match win/loss info. Returns an array of match types."""
     victories = dict()
     all_matches = dict()
+    counts = None
 
     cachestring = "globalstatsalltime"
     if timespan[0] != "all":
@@ -90,7 +94,7 @@ def get_global_stats(timespan):
     if q is None:
         logging.debug('Cache miss on globalstats')
 
-        m = match_stats(timespan)
+        m, counts = match_stats(timespan)
         for match in m:
             # Pie chart data
             if match.mode not in all_matches:
@@ -110,13 +114,12 @@ def get_global_stats(timespan):
             else:
                 victories[match.mode]['losses'] = victories[match.mode]['losses'] + 1
 
-        cache.set(cachestring, (victories, all_matches), timeout=15 * 60)  # 15 minutes
+        cache.set(cachestring, (victories, all_matches, counts), timeout=15 * 60)  # 15 minutes
     else:
-        victories = q[0]
-        all_matches = q[1]
+        victories, all_matches, counts = q
         logging.debug('Cache hit on globalstats')
 
-    return victories, all_matches
+    return victories, all_matches, counts
 
 
 def match_stats(timespan):
@@ -126,21 +129,32 @@ def match_stats(timespan):
     Return all matches that match timespan. Then checks the match's victory conditions in checkModeVictory.
 
     Parameters:
-        timespan(tuple): Three-part tuple. First part is "monthly" or "all". Second part is a datetime with month and year as the starting month.
+        timespan(tuple): Three-part tuple. First part is "monthly" or "all".
+        Second part is a datetime with month and year as the starting month.
 
     Returns:
         array: Array of MatchTypeVictory.
 
     """
+    db = LocalProxy(lambda: current_app.db.session)
     q = models.Match.query
+    timespan_criteria = None
+    count_query = db.query(models.Match.modes_string, func.count(models.Match.id))
     if timespan[0] != "all":
         query_start = timespan[1]
         query_end = add_months(query_start, 1)
         print(query_start, query_end)
-        q = q.filter(and_(models.Match.start_datetime is not None, models.Match.start_datetime.between(query_start, query_end)))
+        timespan_criteria = and_(models.Match.start_datetime is not None,
+                                 models.Match.start_datetime.between(query_start, query_end))
+        q = q.filter(timespan_criteria)
+        count_query = count_query.filter(timespan_criteria)
+
+    # completion-agnostic playrate first
+
+    counts = count_query.group_by(models.Match.modes_string).all()
+    formattedCounts = [list(a) for a in (zip(*counts))]
 
     q = q.filter(~models.Match.modes_string.contains('|'), ~models.Match.mastermode.contains('mixed'))
-    print(str(q))  # TODO remove
     q = q.all()
 
     matches = []
@@ -155,7 +169,7 @@ def match_stats(timespan):
         t = match.modes_string
         m = MatchTypeVictory(victory, s, t)
         matches.append(m)
-    return matches
+    return matches, formattedCounts
 
 
 def checkModeVictory(match):

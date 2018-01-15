@@ -69,10 +69,12 @@ def globalstats(timespan="monthly", month=None, year=None):
     request_timespan = (query_timespan, request_starttime)
     next_page = add_months(request_starttime, 1)
     prev_page = add_months(request_starttime, -1)
-    stats = global_stats.get_formatted_global_stats(request_timespan)
+    (stats, counts) = global_stats.get_formatted_global_stats(request_timespan)
     return render_template('globalstats.html', matchData=stats,
                            timespan=query_timespan,
-                           query_start=request_starttime, nextpage=next_page,
+                           query_start=request_starttime,
+                           matchCounts=counts,
+                           nextpage=next_page,
                            prevpage=prev_page)
 
 

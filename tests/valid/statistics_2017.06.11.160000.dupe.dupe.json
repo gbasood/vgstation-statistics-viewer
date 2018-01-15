@@ -245,7 +245,7 @@
 		"special_role": null,
 		"realname": "Kameron Pycroft",
 		"mob_typepath": "/mob/living/carbon/human",
-		"time_of_death": 0,
+		"escaped": 1,
 		"damagevalues": {
 			"BRUTE": 0,
 			"FIRE": 0,
