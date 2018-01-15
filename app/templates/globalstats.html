@@ -28,7 +28,7 @@
 
 {% block after_body %}
 <script>
-var bardata = {
+var barData = {
   labels: {{matchData['types'] | safe}},
   datasets: [{
     title: 'Antag Victory',
@@ -40,17 +40,17 @@ var bardata = {
   }]
 };
 
-var piedata = {
-  labels: {{matchData['alltypes'] | safe}},
+var percentData = {
+  labels: {{matchCounts[0] | safe}},
   datasets: [{
     title: "Playrate",
-    values:{{matchData['all'] | safe}}
+    values:{{matchCounts[1] | safe}}
   }]
 }
 
 let barChart = new Chart({
   parent: "#matchChart",
-  data: bardata,
+  data: barData,
   height: 250,
   type: "bar",
   colors: [
@@ -61,7 +61,7 @@ let barChart = new Chart({
 let pieChart = new Chart({
   parent: "#matchPieChart",
   // title: "Play Rate",
-  data: piedata,
+  data: percentData,
   type: "percentage",
   height: 250,
   colors: [

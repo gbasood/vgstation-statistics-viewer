@@ -187,12 +187,11 @@ td {
 
 	width: 40%;
 	margin: 0 auto;
-	padding: 1em;
 }
 
 .chart-wrapper .chart-container .tick .y-value-text,
 .chart-wrapper .chart-container .tick .x-value-text  {
-	fill: #CCC;
+	fill: #777;
 }
 
 #timelineChart .chart-container>.title,
@@ -200,7 +199,19 @@ td {
 	margin-top: 0;
 	margin-bottom: 0;
 	text-align: center;
-	color: #CCC;
+	color: #777;
+}
+
+#matchChart .chart-container .axis line {
+	stroke: #333;
+}
+
+#timelineChart .chart-container .axis line {
+	stroke: #444;
+}
+
+#matchPieChart .chart-container .indicator {
+	color: #777;
 }
 
 .gen-contain {
