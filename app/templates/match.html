@@ -2,12 +2,12 @@
 {% block content %}
   <div id = 'roundinfo' class = 'centerpadded-small bottom-margin'>
     {% if match.start_datetime %}
-      <span class="matchhead">{{match.date.strftime('%b %d %Y')}} / {{match.duration()}} min. ({{match.start_datetime.strftime('%I:%M %p')}} to {{match.end_datetime.strftime('%I:%M %p')}})</span>
+      <span class="matchhead">{{match.start_datetime.strftime('%b %d %Y')}} / {{match.duration()}} min. ({{match.start_datetime.strftime('%I:%M %p')}} to {{match.end_datetime.strftime('%I:%M %p')}})</span>
     {% elif match.data_version | float >= 1.1 %}
-      <h3>{{match.date.strftime('%B %d %Y')}}</h3>
+      <h3>{{match.start_datetime.strftime('%B %d %Y')}}</h3>
       <p>Lasted {{match.duration()}} minutes (from {{match.starttime|format_timestamp('shortmatchtime')}} to {{match.endtime|format_timestamp('shortmatchtime')}})</p>
-    {% elif match.date %}
-      <h3>Match date: {{match.date.strftime('%B %d %Y')}}</h3>
+    {% elif match.start_date %}
+      <h3>Match date: {{match.start_datetime.strftime('%B %d %Y')}}</h3>
     {% endif %}
     <h1>Round #{{match.id}}</h1>
       <h2 id = 'mode'>{{match.modes_string}} on {{match.mapname}}

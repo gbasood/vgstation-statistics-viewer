@@ -3,19 +3,21 @@
 # If I had kept names consistent between the model defintiions
 # and the JSON generated files, I could just load it all in naively.
 # But I didn't, and so we have most of this file.
+# TODO: future self, find a way to write this that actually seems good
 from flask import current_app
 from werkzeug import LocalProxy
 from typing import Text, Union
 from app.models import Match, Death, AntagObjective, BadassBundleBuy, BadassBundleItem, \
-    Survivor
+    Survivor, Explosion, UplinkBuy, RevsquadItem, MalfModule, MatchMalfModule, MatchRevsquadItem
 import json
-import os
 from datetime import datetime
 
 logger = LocalProxy(lambda: current_app.logger)
-db = LocalProxy(lambda: current_app.db)
+db = LocalProxy(lambda: current_app.db.session)
 
 
+# because even though we're using JSON which has bools, BYOND does not
+# so it exports only 1 or 0
 def boolify(s: Union[int, None]) -> Union[bool, int]:
     if s == 1:
         return True
@@ -25,20 +27,23 @@ def boolify(s: Union[int, None]) -> Union[bool, int]:
     return s
 
 
-def GetBridgeEntry(mdl: db.Model):
-    
-
-def parse(filepath: Text):
+def parse(filepath: Text, filename: Text):
     f = open(filepath, 'r+')
     js = json.load(f)
     f.close()
 
     m = Match()
-    m.parsed_file = os.path.basename(filepath)
+    db.add(m)
+    m.parsed_file = filename
 
     # Okay let's get started
     parse_matchdata(js, m)
     parse_deaths(js, m)
+    parse_survivors(js, m)
+    parse_uplink_buys(js, m)
+    parse_explosions(js, m)
+    parse_antag_objectives(js, m)
+    parse_badass_buys(js, m)
 
 
 def timestamp_to_datetime(timestring: Text) -> datetime:
@@ -55,29 +60,30 @@ def timestamp_to_datetime(timestring: Text) -> datetime:
     return dt
 
 
-def parse_matchdata(js: dict, m: Match):
+# I feel like there's a better way to handle this but I'm trying to
+# implement this before I get sucked into other projects
+def parse_matchdata(js: dict, m: Match) -> None:
     m.crewscore = js['crewscore']
     m.data_version = js['data_revision']
     m.mastermode = js['mastermode']
     m.tickermode = js['tickermode']
     m.modes_string = js['mixed_gamemodes']
-    if len(json['mixed_gamemodes']) > 0:
+    if len(js['mixed_gamemodes']) > 0:
         m.modes_string = '|'.join(js['mixed_gamemodes'])
     else:
         m.modes_string = js['tickermode']
     m.mapname = js['mapname']
-    m.escapees = js['escapees']
     m.crates_ordered = js['crates_ordered']
     m.blood_spilled = js['blood_spilled']
     m.artifacts_discovered = js['artifacts_discovered']
     m.tech_total = js['tech_total']
     m.borgs_at_roundend = js['borgs_at_roundend']
-    m.remaining_heads = js['remaining_heads']
+    m.remaining_heads = js['heads_at_roundend']
     m.nuked = boolify(js['nuked'])
 
     # Time stamp parsing
-    m.start_datetime = timestamp_to_datetime(m['round_start_time'])
-    m.end_datetime = timestamp_to_datetime(m['round_start_time'])
+    m.start_datetime = timestamp_to_datetime(js['round_start_time'])
+    m.end_datetime = timestamp_to_datetime(js['round_start_time'])
     m.round_length = (m.end_datetime - m.start_datetime).total_seconds()
 
     # cult
@@ -105,15 +111,26 @@ def parse_matchdata(js: dict, m: Match):
     # Malf
     m.malf_won = boolify(js['malf_won'])
     m.malf_shunted = boolify(js['malf_shunted'])
-    m.malf_modules = js['malf_modules']
+    for mod in js['malf_modules']:
+        modid = MalfModule.get_or_add(mod).id
+        match_mod = MatchMalfModule(match_id=m.id, module_id=modid)
+        db.add(match_mod)
 
     # Revsquad
-    revsquad_won = boolify(js['revsquad-won'])
-    revsquad_items
+    m.revsquad_won = boolify(js['revsquad_won'])
+    for mod in js['revsquad_items']:
+        itemid = RevsquadItem.get_or_add(mod).id
+        rev_item = MatchRevsquadItem(match_id=m.id, item_id=itemid)
+        db.add(rev_item)
 
-def parse_deaths(js: dict, match: Match):
+    # And finally...
+    db.commit()
+
+
+def parse_deaths(js: dict, match: Match) -> None:
     for death in js['deaths']:
-        d = Death()
+        d = Death(match_id=match.id)
+
         d.mindkey = death['key']
         d.mindname = death['realname']
         d.assigned_role = death['assigned_role']
@@ -130,3 +147,89 @@ def parse_deaths(js: dict, match: Match):
         d.damage_oxygen = death['damagevalues']['OXY']
         d.damage_clone = death['damagevalues']['CLONE']
         d.damage_brain = death['damagevalues']['BRAIN']
+
+        db.add(d)
+        db.commit()
+
+
+def parse_survivors(js: dict, match: Match) -> None:
+    for survivor in js['survivors']:
+        s = Survivor(match_id=match.id)
+
+        s.mindkey = survivor['key']
+        s.mindname = survivor['realname']
+        s.assigned_role = survivor['assigned_role']
+        s.special_role = survivor['special_role']
+        s.typepath = survivor['mob_typepath']
+        s.escaped = boolify(survivor['escaped'])
+        # Damage stuff
+        s.damage_brute = survivor['damagevalues']['BRUTE']
+        s.damage_fire = survivor['damagevalues']['FIRE']
+        s.damage_toxin = survivor['damagevalues']['TOXIN']
+        s.damage_oxygen = survivor['damagevalues']['OXY']
+        s.damage_clone = survivor['damagevalues']['CLONE']
+        s.damage_brain = survivor['damagevalues']['BRAIN']
+
+        db.add(s)
+        db.commit()
+
+
+def parse_antag_objectives(js: dict, match: Match) -> None:
+    for obj in js['antag_objectives']:
+        o = AntagObjective(match_id=match.id)
+        o.mindkey = obj['key']
+        o.mindname = obj['realname']
+        o.special_role = obj['special_role']
+        o.objective_type = obj['objective_type']
+        o.objective_desc = obj['objective_desc']
+        o.objective_succeeded = boolify(obj['objective_succeeded'])
+        o.target_name = obj['target_name']
+        o.target_role = obj['target_role']
+
+        db.add(o)
+        db.commit()
+
+
+def parse_explosions(js: dict, match: Match) -> None:
+    for explosion in js['explosions']:
+        e = Explosion(match_id=match.id)
+
+        e.epicenter_x = explosion['epicenter_x']
+        e.epicenter_y = explosion['epicenter_y']
+        e.epicenter_z = explosion['epicenter_z']
+        e.devestation_range = explosion['devestation_range']
+        e.heavy_impact_range = explosion['heavy_impact_range']
+        e.light_impact_range = explosion['light_impact_range']
+
+        db.add(e)
+        db.commit()
+
+
+def parse_uplink_buys(js: dict, match: Match) -> None:
+    for buy in js['uplink_purchases']:
+        up = UplinkBuy(match_id=match.id)
+
+        up.item_path = buy['itemtype']
+        up.bundle_path = buy['bundle']
+        up.mindkey = buy['purchaser_key']
+        up.mindname = buy['purchaser_name']
+        up.traitor_buyer = boolify(buy['purchaser_is_traitor'])
+
+        db.add(up)
+        db.commit()
+
+
+def parse_badass_buys(js: dict, match: Match) -> None:
+    for bbuy in js['badass_bundles']:
+        bad = BadassBundleBuy(match_id=match.id)
+
+        bad.mindkey = bbuy['purchaser_key']
+        bad.mindname = bbuy['purchaser_name']
+
+        db.add(bad)
+        db.commit()
+        for item in bbuy['contains']:
+            i = BadassBundleItem(badass_bundle_id=bad.id, item_path=item)
+
+            db.add(i)
+            db.commit()

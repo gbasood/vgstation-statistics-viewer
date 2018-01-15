@@ -53,7 +53,6 @@ class Match(db.Model):
     mastermode = db.Column(db.String(255), index=True, unique=False)
     modes_string = db.Column(db.String(65535), unique=False)
     crewscore = db.Column(db.Integer)
-    escapees = db.Column(db.Integer)
     nuked = db.Column(db.Boolean)
     crates_ordered = db.Column(db.Integer)
     blood_spilled = db.Column(db.Integer)
@@ -73,6 +72,8 @@ class Match(db.Model):
     antagobjs = db.relationship('AntagObjective', backref='match', lazy='dynamic')
     uplinkbuys = db.relationship('UplinkBuy', backref='match', lazy='dynamic')
     badassbuy = db.relationship('BadassBundleBuy', backref='match', lazy='dynamic')
+    survivors = db.relationship('Survivor', backref='match', lazy='dynamic')
+    malf_modules = db.relationship('MatchMalfModule', backref='match', lazy='dynamic')
 
     # Cult
     cult_runes_written = db.Column(db.Integer)
@@ -99,15 +100,13 @@ class Match(db.Model):
     # Malf
     malf_won = db.Column(db.Boolean)
     malf_shunted = db.Column(db.Boolean)
-    malf_modules = db.Column(db.String)
 
     # Revsquad
     revsquad_won = db.Column(db.Boolean)
-    revsquad_items =
+    revsquad_items = db.relationship('MatchRevsquadItem', backref='match', lazy='dynamic')
 
     populationstats = db.relationship('PopulationSnapshot', backref='match', lazy='dynamic')
 
-    date = db.Column(db.DateTime)
     start_datetime = db.Column(db.DateTime)
     end_datetime = db.Column(db.DateTime)
 
@@ -135,7 +134,7 @@ class Match(db.Model):
         """
         Return all Death entries associated with this match, whose keys are not null, and are not manifested ghosts.
         """
-        return self.deaths.filter(and_(Death.mindkey != 'null', Death.mindname != 'Manifested Ghost'))
+        return self.deaths.filter(and_(Death.mindkey is not 'null', Death.mindname != 'Manifested Ghost'))
 
     def nonplayer_deaths(self):
         """Return all Death entries associated with this match, whose keys are null."""
@@ -207,7 +206,6 @@ class Explosion(db.Model):
     devestation_range = db.Column(db.Integer)
     heavy_impact_range = db.Column(db.Integer)
     light_impact_range = db.Column(db.Integer)
-    max_range = db.Column(db.Integer)
 
     def serialize_to_json(self):
         """
@@ -336,4 +334,54 @@ class Survivor(db.Model):
     damage_brain = db.Column(db.Integer)
 
 
-# Bridge models
+# Auto-populated reference tables
+class MalfModule(db.Model):
+    """A reference table for malf AI modules."""
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+    @classmethod
+    def get_or_add(nameval):
+        # So since our reference tables' values are much more volatile than
+        # I'd like, we're going to have to automatically generate them.
+        model = MalfModule.query.filter_by(name=nameval).first()
+        if model is None:
+            mm = MalfModule()
+            mm.name = nameval
+            db.session.add(mm)
+            db.session.commit()
+            return mm
+        else:
+            return model
+
+    def __repr__(self):
+        return '<MalfModule {id} "{name}"'.format(**self)
+
+
+class RevsquadItem(db.Model):
+    """A reference table for revsquad items."""
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+    @classmethod
+    def get_or_add(nameval):
+        model = RevsquadItem.query.filter_by(name=nameval).first()
+        if model is None:
+            mm = RevsquadItem()
+            mm.name = nameval
+            db.session.add(mm)
+            db.session.commit()
+            return mm
+        else:
+            return model
+
+
+# BRIDGE TABLES WOO
+class MatchMalfModule(db.Model):
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), primary_key=True)
+    module_id = db.Column(db.Integer, db.ForeignKey('malf_module.id'), primary_key=True)
+
+
+class MatchRevsquadItem(db.Model):
+    match_id = db.Column(db.Integer, db.ForeignKey('match.id'), primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('revsquad_item.id'), primary_key=True)
