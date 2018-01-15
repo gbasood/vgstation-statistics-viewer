@@ -1,7 +1,7 @@
-"""empty message
+"""Init db
 
 Revision ID: c608894207f9
-Revises: 
+Revises:
 Create Date: 2018-01-15 00:43:49.233788
 
 """

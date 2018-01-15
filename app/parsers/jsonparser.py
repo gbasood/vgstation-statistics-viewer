@@ -76,7 +76,12 @@ def parse_matchdata(js: dict, m: Match) -> None:
     m.crates_ordered = js['crates_ordered']
     m.blood_spilled = js['blood_spilled']
     m.artifacts_discovered = js['artifacts_discovered']
-    m.tech_total = js['tech_total']
+    # terrible bad hotfix
+    try:
+        m.tech_total = js['tech_total']
+    except Exception:
+        pass
+    # end bad hotfix
     m.borgs_at_roundend = js['borgs_at_roundend']
     m.remaining_heads = js['heads_at_roundend']
     m.nuked = boolify(js['nuked'])
@@ -112,15 +117,15 @@ def parse_matchdata(js: dict, m: Match) -> None:
     m.malf_won = boolify(js['malf_won'])
     m.malf_shunted = boolify(js['malf_shunted'])
     for mod in js['malf_modules']:
-        modid = MalfModule.get_or_add(mod).id
-        match_mod = MatchMalfModule(match_id=m.id, module_id=modid)
+        modid = MalfModule.get_or_add(mod)
+        match_mod = MatchMalfModule(match_id=m.id, module_id=modid.id)
         db.add(match_mod)
 
     # Revsquad
     m.revsquad_won = boolify(js['revsquad_won'])
-    for mod in js['revsquad_items']:
-        itemid = RevsquadItem.get_or_add(mod).id
-        rev_item = MatchRevsquadItem(match_id=m.id, item_id=itemid)
+    for item in js['revsquad_items']:
+        itemid = RevsquadItem.get_or_add(item)
+        rev_item = MatchRevsquadItem(match_id=m.id, item_id=itemid.id)
         db.add(rev_item)
 
     # And finally...
@@ -197,7 +202,7 @@ def parse_explosions(js: dict, match: Match) -> None:
         e.epicenter_x = explosion['epicenter_x']
         e.epicenter_y = explosion['epicenter_y']
         e.epicenter_z = explosion['epicenter_z']
-        e.devestation_range = explosion['devestation_range']
+        e.devastation_range = explosion['devastation_range']
         e.heavy_impact_range = explosion['heavy_impact_range']
         e.light_impact_range = explosion['light_impact_range']
 

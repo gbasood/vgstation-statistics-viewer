@@ -203,7 +203,7 @@ class Explosion(db.Model):
     epicenter_x = db.Column(db.Integer)
     epicenter_y = db.Column(db.Integer)
     epicenter_z = db.Column(db.Integer)
-    devestation_range = db.Column(db.Integer)
+    devastation_range = db.Column(db.Integer)
     heavy_impact_range = db.Column(db.Integer)
     light_impact_range = db.Column(db.Integer)
 
@@ -340,7 +340,7 @@ class MalfModule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-    @classmethod
+    @staticmethod
     def get_or_add(nameval):
         # So since our reference tables' values are much more volatile than
         # I'd like, we're going to have to automatically generate them.
@@ -363,7 +363,7 @@ class RevsquadItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-    @classmethod
+    @staticmethod
     def get_or_add(nameval):
         model = RevsquadItem.query.filter_by(name=nameval).first()
         if model is None:
