@@ -529,3 +529,9 @@ a.block {
 
 	color: rgb(163, 61, 61);
 }
+
+.changelog-entry ul li.bugfix::before {
+	content: '\f188';
+
+	color: rgb(145, 99, 206);
+}

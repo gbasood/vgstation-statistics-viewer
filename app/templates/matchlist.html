@@ -19,7 +19,7 @@
 	<td class="match-title"><img src='{{modethumb(match.modes_string)}}'/></td>
 	<td>{%- if match.is_mixed() -%}Mixed{%- else -%}{{match.modes_string}}{%- endif %}</td>
 	<td>{{match.mapname}}</td>
-	<td>{{match.date.strftime('%m/%d/%y')}}
+	<td>{{match.start_datetime.strftime('%m/%d/%y')}}
       	{%-if match.start_datetime%}
       	{{match.start_datetime.strftime('%H:%M')}}
     	{%-endif %}</td>

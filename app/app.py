@@ -41,6 +41,8 @@ def create_app(config_path):
     errorHandler.setFormatter(logFormat)
     app.logger.handlers[0].setFormatter(logFormat)
 
+    app.db = db
+
     return app
 
 

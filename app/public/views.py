@@ -7,7 +7,7 @@ import os
 import threading
 
 import flask
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, current_app, render_template, request, redirect, url_for
 from sqlalchemy import func
 
 from app import global_stats, parse
@@ -76,6 +76,13 @@ def globalstats(timespan="monthly", month=None, year=None):
                            prevpage=prev_page)
 
 
+@blueprint.route('/match/latest')
+def latest_match():
+    """Redirect to latest match."""
+    lastmatch = Match.query.order_by(Match.id.desc()).first()
+    return redirect(url_for('blueprint.match', id=lastmatch.id))
+
+
 @blueprint.route('/match/<id>')
 def match(id=0):
     """Respond with view for a match."""
@@ -102,7 +109,7 @@ def changelog_view():
     return render_template('changelog.html')
 
 
-@blueprint.route('/error') # legacy
+@blueprint.route('/error')  # legacy
 def errorpage():
     """Error view."""
     return render_template('500.html'), 500
