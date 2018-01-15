@@ -28,8 +28,6 @@ def create_app(config_path):
     register_errorhandlers(app)
     register_commands(app)
 
-    create_db_if_necessary(app, db)
-
     logging.basicConfig(format="%(asctime)s %(msg)s", filename="statsserv_log.txt")
 
     errorHandler = RotatingFileHandler('statsserv_error.txt', maxBytes=100000, backupCount=1)
@@ -62,12 +60,6 @@ def register_commands(app):
     """Register Click commands."""
     app.cli.add_command(commands.test)
     app.cli.add_command(commands.clean)
-
-
-def create_db_if_necessary(app, db):
-    if not path.exists(path.join(config.SQLALCHEMY_DATABASE_URI, "app.db")):
-        db.create_all(app=app)
-
 
 def register_errorhandlers(app):
     """register error handlers"""
