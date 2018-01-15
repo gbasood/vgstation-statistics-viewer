@@ -1,52 +1,65 @@
 {% if chartLabels|length > 2 and chartData|length > 2 %}
 <h2 class = 'timeline'>
-<canvas id="timelineChart"></canvas>
+<div id="timelineChart"></div>
 </h2>
 <script>
 var data = {
     labels: {{chartLabels|safe}},
     datasets: [
         {
-            label: "{{chart_label|default('Population')}}",
-            fill: true,
-            lineTension: 0.3,
+            // fill: true,
+            // lineTension: 0.3,
             backgroundColor: "rgba(75,192,192,0.4)",
             borderColor: "rgba(75,192,192,1)",
-            data: {{chartData|safe}}
+            values: {{chartData|safe}}
         }
     ]
 };
 // Chart.defaults.global.defaultFontColor = '#fff';
 
-window.onload = function() {
-  var ctx = document.getElementById("timelineChart").getContext("2d");
+let timeline = new Chart({
+  title: "{{chart_label|default('Population')}}",
+  parent: "#timelineChart",
+  type: "line",
+  region_fill: 1,
+  // is_series: 1,
+  x_axis_mode: "tick",
+  height: 150,
+  data: data,
+  colors: [
+    "rgba(75,192,192,0.4)"
+  ]
+})
 
-  var myLineChart = new Chart(ctx, {
-      type: 'line',
-      data: data,
-      options: {
-        fontColor: '#DDD',
-        maintainAspectRatio: false,
-        scales: {
-          yAxes: [{
-            ticks: {
-              {% if chartMinY is not none %}
-              min: {{chartMinY-1}}
-              {% endif %}
-            }
-          }]
-        },
-        legend: {
-          display: false,
-        },
-        title: {
-          display: true,
-          fontColor: '#DDD',
-          text: {{chartTitle|default('\"Population timeline\"'|safe)}}
-        }
-      }
-  });
-}
+// window.onload = function() {
+//   var ctx = document.getElementById("timelineChart").getContext("2d");
+//
+//   var myLineChart = new Chart(ctx, {
+//       type: 'line',
+//       data: data,
+//       options: {
+//         fontColor: '#DDD',
+//         maintainAspectRatio: false,
+//         scales: {
+//           yAxes: [{
+//             ticks: {
+//               {% if chartMinY is not none %}
+//               min: {{chartMinY-1}}
+//               {% endif %}
+//             }
+//           }]
+//         },
+//         legend: {
+//           display: false,
+//         },
+//         title: {
+//           display: true,
+//           fontColor: '#DDD',
+//           text: {{chartTitle|default('\"Population timeline\"'|safe)}}
+//         }
+//       }
+//   });
+// }
 
 </script>
 {% endif %}

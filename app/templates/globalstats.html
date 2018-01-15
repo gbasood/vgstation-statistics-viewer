@@ -15,13 +15,13 @@
   {%- endif -%}
 </div>
 <div class='gen-contain'>
-  <div class='chart-container'>
+  <div class='chart-wrapper'>
     <label for='matchChart' class='bigger-font'>Victory Rate</label>
-    <canvas id="matchChart"></canvas>
+    <div id="matchChart"></div>
   </div>
-  <div class='chart-container'>
+  <div class='chart-wrapper'>
     <label for='matchPieChart' class='bigger-font'>Play Rate</label>
-    <canvas id="matchPieChart"></canvas>
+    <div id="matchPieChart"></div>
   </div>
 </div>
 {% endblock %}
@@ -31,87 +31,63 @@
 var bardata = {
   labels: {{matchData['types'] | safe}},
   datasets: [{
-    type: 'bar',
-      label: 'Antag Victory',
-      data: {{matchData['wins'] | safe}},
-      backgroundColor: '#779ECB'
-    }, {
-      type: 'bar',
-        label: 'Antag Defeat',
-        data: {{matchData['losses'] | safe}},
-        backgroundColor: '#C23B22'
+    title: 'Antag Victory',
+    values: {{matchData['wins'] | safe}},
+  },
+  {
+    title: 'Antag Defeat',
+    values: {{matchData['losses'] | safe}},
   }]
 };
 
 var piedata = {
   labels: {{matchData['alltypes'] | safe}},
   datasets: [{
-    type: 'pie',
-    data: {{matchData['all'] | safe}},
-    backgroundColor: [
-      '#779ECB', // blue
-      '#C23B22', // red
-      '#77DD77', // light green
-      '#836953', // brown
-      '#FFb347', // orange
-      '#B39EB5', // pastel purple
-      '#CFCFC4', // pastel 'gray'
-      '#FDFD96', // light yellow
-      '#AEC6CF', // light blue
-      '#DEA5A4', // light red
-      '#CB99C9', // violet
-      '#966FD6', // purple
-      '#FA9AC2', // magenta/pink
-      '#0077BE', // deep blue
-      '#FF6961', // bright red
-      '#03c03c', // green
-      '#9C2542', // dark violet
-      '#317873', // dark green
-      '#8A3324', // burnt umber
-      '#E51A4C', // spanish crimson
-      '#44D7A8', // eucalyptus
-      '#0A7E8C', // 'metallic seaweed'
-    ]
+    title: "Playrate",
+    values:{{matchData['all'] | safe}}
   }]
 }
 
-var graphOpts = {
-  type: 'bar',
+let barChart = new Chart({
+  parent: "#matchChart",
   data: bardata,
-  hover: {
-    animationDuration: 0
-  },
-  options: {
-    responsive: true,
-    fontColor: '#FFFFFF',
-    tooltips: {
-      mode: 'label',
-    },
-    scales: {
-      xAxes: [{
-        stacked: true
-      }],
-      yAxes: [{
-        stacked: true,
-        beginAtZero: true
-      }]
-    },
-  }
-}
-
-var pieOpts = {
-  type: 'pie',
-  data: piedata
-}
-
-Chart.defaults.global.defaultFontColor = '#fff';
-
-window.onload = function() {
-  var ctx = document.getElementById("matchChart").getContext("2d");
-  new Chart(ctx, graphOpts);
-
-  var ctx2 = document.getElementById("matchPieChart").getContext("2d");
-  new Chart(ctx2, pieOpts);
-}
+  height: 250,
+  type: "bar",
+  colors: [
+    '#779ECB',
+    '#C23B22',
+  ]
+})
+let pieChart = new Chart({
+  parent: "#matchPieChart",
+  // title: "Play Rate",
+  data: piedata,
+  type: "percentage",
+  height: 250,
+  colors: [
+    '#779ECB', // blue
+    '#C23B22', // red
+    '#77DD77', // light green
+    '#836953', // brown
+    '#FFb347', // orange
+    '#B39EB5', // pastel purple
+    '#CFCFC4', // pastel 'gray'
+    '#FDFD96', // light yellow
+    '#AEC6CF', // light blue
+    '#DEA5A4', // light red
+    '#CB99C9', // violet
+    '#966FD6', // purple
+    '#FA9AC2', // magenta/pink
+    '#0077BE', // deep blue
+    '#FF6961', // bright red
+    '#03c03c', // green
+    '#9C2542', // dark violet
+    '#317873', // dark green
+    '#8A3324', // burnt umber
+    '#E51A4C', // spanish crimson
+    '#44D7A8', // eucalyptus
+    '#0A7E8C', // 'metallic seaweed'
+  ]
+})
 </script>
 {% endblock %}

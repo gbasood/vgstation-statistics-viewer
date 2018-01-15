@@ -182,12 +182,25 @@ td {
 	font-weight: 600;
 }
 
-.chart-container {
+.chart-wrapper {
 	display: inline-block;
 
 	width: 40%;
 	margin: 0 auto;
 	padding: 1em;
+}
+
+.chart-wrapper .chart-container .tick .y-value-text,
+.chart-wrapper .chart-container .tick .x-value-text  {
+	fill: #CCC;
+}
+
+#timelineChart .chart-container>.title,
+#timelineChart .chart-container>.sub-title {
+	margin-top: 0;
+	margin-bottom: 0;
+	text-align: center;
+	color: #CCC;
 }
 
 .gen-contain {

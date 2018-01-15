@@ -142,6 +142,7 @@ def match_stats(timespan):
     q = q.filter(~models.Match.modes_string.contains('|'), ~models.Match.mastermode.contains('mixed'))
     print(str(q))  # TODO remove
     q = q.all()
+    print(q)
 
     matches = []
 
@@ -180,6 +181,7 @@ def checkModeVictory(match):
     elif "revolution squad" in modestring:
         return match.revsquad_won
     elif any(modestring in s for s in antag_objective_victory_modes):
+        print("wooo its a simple mode")
         succeeded = 0
         total = 0
         for objective in match.antagobjs:
