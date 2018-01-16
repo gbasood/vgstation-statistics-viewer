@@ -41,7 +41,7 @@ class ParseToDBTestCase(unittest.TestCase):  # pragma: no cover
 
             assert testresult is not None
             assert match1 is not None
-            # assert match1.station_name is not None
+            assert match1.station_name is not None
             assert len(match1.survivors.all()) is not 0
             print(match1.populationstats.all())
             assert len(match1.populationstats.all()) is not 0
