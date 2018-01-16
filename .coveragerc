@@ -1,0 +1,7 @@
+[run]
+omit =
+  tests/*
+  # this one is a legacy file
+  app/parsers/csvparser.py
+  # command line only stuff
+  app/commands.py

@@ -55,7 +55,7 @@ def parse_file(path: Text):
         logger.error('!! ERROR: Tried to parse non-existant path %r', str(path))
         return False
     filename, extension = os.path.splitext(path)
-    if extension.lower() == ".json":
+    if extension.lower() == ".json": # noqa
         return jsonparser.parse(path, filename)
     elif extension.lower() == ".txt":
         with open(path) as f:

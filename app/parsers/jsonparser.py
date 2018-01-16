@@ -27,7 +27,7 @@ def boolify(s: Union[int, None]) -> Union[bool, int]:
     return s
 
 
-def parse(filepath: Text, filename: Text):
+def parse(filepath: Text, filename: Text) -> bool:
     f = open(filepath, 'r+')
     js = json.load(f)
     f.close()
@@ -45,6 +45,8 @@ def parse(filepath: Text, filename: Text):
     parse_antag_objectives(js, m)
     parse_badass_buys(js, m)
     parse_population_snapshots(js, m)
+
+    return True
 
 
 def timestamp_to_datetime(timestring: Text) -> datetime:
@@ -68,7 +70,7 @@ def parse_matchdata(js: dict, m: Match) -> None:
     m.data_version = js['data_revision']
     m.mastermode = js['mastermode']
     m.tickermode = js['tickermode']
-    m.modes_string = js['mixed_gamemodes']
+    # m.modes_string = js['mixed_gamemodes']
     if len(js['mixed_gamemodes']) > 0:
         m.modes_string = '|'.join(js['mixed_gamemodes'])
     else:
@@ -242,6 +244,7 @@ def parse_badass_buys(js: dict, match: Match) -> None:
 
 
 def parse_population_snapshots(js: dict, match: Match) -> None:
+    print(js['population_polls'])
     for snapdata in js['population_polls']:
         snap = PopulationSnapshot(match_id=match.id)
         snap.time = timestamp_to_datetime(snapdata['time'])
