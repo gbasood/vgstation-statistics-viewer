@@ -134,11 +134,11 @@ class Match(db.Model):
         """
         Return all Death entries associated with this match, whose keys are not null, and are not manifested ghosts.
         """
-        return self.deaths.filter(and_(Death.mindkey is not 'null', Death.mindname != 'Manifested Ghost'))
+        return self.deaths.filter(and_(Death.mindkey is not 'null', Death.mindkey is not None, Death.mindname != 'Manifested Ghost'))
 
     def nonplayer_deaths(self):
         """Return all Death entries associated with this match, whose keys are null."""
-        return self.deaths.filter(Death.mindkey == 'null')
+        return self.deaths.filter(or_(Death.mindkey == 'null', Death.mindkey is None))
 
     def duration(self):
         """Return the number of minutes this round was played."""
