@@ -41,19 +41,19 @@ class ViewsTestCase(unittest.TestCase):  # pragma: no cover
 
     def test_matchlist(self):
         with self.sviewer.app_context():
-            ourapp.parse.parse_file('tests/valid/statistics_2015.14.12.testfile.txt')
+            ourapp.parse.parse_file('tests/valid/statistics-2018-01-15.113254.json')
             rv = self.app.get('/matchlist')
             assert b'match-title' in rv.data
 
     def test_matchpage(self):
         with self.sviewer.app_context():
-            ourapp.parse.parse_file('tests/valid/statistics_2015.14.12.testfile.txt')
+            ourapp.parse.parse_file('tests/valid/statistics-2018-01-15.113254.json')
             rv = self.app.get('/match/1')
             assert b'Deaths' in rv.data
 
     def test_popcount_matchpage(self):
         with self.sviewer.app_context():
-            ourapp.parse.parse_file('tests/valid/statistics_2017.18.02.100019.txt')
+            ourapp.parse.parse_file('tests/valid/statistics-2018-01-15.113254.json')
             rv = self.app.get('/match/1')
             assert b'timeline' in rv.data
 

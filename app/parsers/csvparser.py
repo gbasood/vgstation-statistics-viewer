@@ -1,12 +1,12 @@
 """Old stat file parser, kept as legacy code and unmaintained due to the files no longer being generated."""
-from datetime import datetime
 import re
+from datetime import datetime
+from typing import Text
 
 from flask import current_app
 from werkzeug import LocalProxy
 
 from app import models
-from typing import Text
 
 logger = LocalProxy(lambda: current_app.logger)
 db = LocalProxy(lambda: current_app.db)

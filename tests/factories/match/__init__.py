@@ -25,10 +25,9 @@ class MatchFactory(factory.alchemy.SQLAlchemyModelFactory):
     # modes_string = FuzzyChoice(['cult', 'revolution', 'vampire', 'autotraitor', 'nuclear emergency',
     # 'blob', 'wizard', 'ragin\' mages', 'ai malfunction', 'changeling'])
     # id = factory.Sequence(int)
-    date = FuzzyDateTime(datetime.datetime(2012, 1, 1, tzinfo=pytz.timezone('US/Eastern')))
-    start_datetime = date
-    end_datetime = date.fuzz() + datetime.timedelta(minutes=FuzzyInteger(15, 300).fuzz())
-    parsed_file = "statistics_{}".format(date.evaluate(2, None, False).strftime('%Y.%m.%d.%Y%m%d'))
+    start_datetime = FuzzyDateTime(datetime.datetime(2012, 1, 1, tzinfo=pytz.timezone('US/Eastern')))
+    end_datetime = start_datetime.fuzz() + datetime.timedelta(minutes=FuzzyInteger(15, 300).fuzz())
+    parsed_file = "statistics_{}".format(start_datetime.evaluate(2, None, False).strftime('%Y.%m.%d.%Y%m%d'))
     data_version = "1.1"
     modes_string = factory.Iterator(['cult', 'ai malfunction'])
 

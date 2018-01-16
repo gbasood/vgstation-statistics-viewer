@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 
 import os
-import shutil
-import sys, traceback
 import re
+import shutil
+import sys
+import traceback
 from typing import Text
 
 from flask import current_app
@@ -55,7 +56,7 @@ def parse_file(path: Text):
         logger.error('!! ERROR: Tried to parse non-existant path %r', str(path))
         return False
     filename, extension = os.path.splitext(path)
-    if extension.lower() == ".json":
+    if extension.lower() == ".json": # noqa
         return jsonparser.parse(path, filename)
     elif extension.lower() == ".txt":
         with open(path) as f:

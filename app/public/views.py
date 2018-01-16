@@ -7,7 +7,8 @@ import os
 import threading
 
 import flask
-from flask import Blueprint, current_app, render_template, request, redirect, url_for
+from flask import (Blueprint, current_app, redirect, render_template, request,
+                   url_for)
 from sqlalchemy import func
 
 from app import global_stats, parse
