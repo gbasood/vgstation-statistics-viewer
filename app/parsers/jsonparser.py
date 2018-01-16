@@ -1,7 +1,6 @@
 """For reading JSON data into the database."""
 # This whole file is kinda silly.
 
-logger = LocalProxy(lambda: current_app.logger)
 import json
 from datetime import datetime
 from typing import Text, Union
@@ -19,6 +18,7 @@ from app.models import (AntagObjective, BadassBundleBuy, BadassBundleItem,
                         Survivor, UplinkBuy)
 
 db = LocalProxy(lambda: current_app.db.session)
+logger = LocalProxy(lambda: current_app.logger)
 
 
 # because even though we're using JSON which has bools, BYOND does not
