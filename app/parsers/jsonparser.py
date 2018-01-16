@@ -85,11 +85,11 @@ def parse_matchdata(js: dict, m: Match) -> None:
     m.blood_spilled = js['blood_spilled']
     m.artifacts_discovered = js['artifacts_discovered']
     # terrible bad hotfix
-    try:
+    if 'tech_total' in js:
         m.tech_total = js['tech_total']
-    except Exception:
-        pass
     # end bad hotfix
+    if 'stationname' in js:
+        m.station_name = js['stationname']
     m.borgs_at_roundend = js['borgs_at_roundend']
     m.remaining_heads = js['heads_at_roundend']
     m.nuked = boolify(js['nuked'])

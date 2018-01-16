@@ -61,6 +61,7 @@ class Match(db.Model):
     mapname = db.Column(db.String)
     borgs_at_roundend = db.Column(db.Integer)
     remaining_heads = db.Column(db.Integer)
+    station_name = db.Column(db.String)
 
     starttime = db.Column(db.Integer)
     endtime = db.Column(db.Integer)
