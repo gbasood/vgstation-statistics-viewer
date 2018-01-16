@@ -7,16 +7,15 @@ from __future__ import unicode_literals
 
 import json
 
+from flask import current_app
 from sqlalchemy import and_, func
+from werkzeug import LocalProxy
 # from sqlalchemy import between
 from werkzeug.contrib.cache import SimpleCache
 
 from app import models
 from app.app import logging
 from app.helpers import add_months
-
-from flask import current_app
-from werkzeug import LocalProxy
 
 cache = SimpleCache()
 

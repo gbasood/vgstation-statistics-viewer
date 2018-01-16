@@ -1,18 +1,23 @@
 """For reading JSON data into the database."""
 # This whole file is kinda silly.
-# If I had kept names consistent between the model defintiions
-# and the JSON generated files, I could just load it all in naively.
+
+logger = LocalProxy(lambda: current_app.logger)
+import json
+from datetime import datetime
+from typing import Text, Union
+
 # But I didn't, and so we have most of this file.
 # TODO: future self, find a way to write this that actually seems good
 from flask import current_app
+# If I had kept names consistent between the model defintiions
+# and the JSON generated files, I could just load it all in naively.
 from werkzeug import LocalProxy
-from typing import Text, Union
-from app.models import Match, Death, AntagObjective, BadassBundleBuy, BadassBundleItem, \
-    Survivor, Explosion, UplinkBuy, RevsquadItem, MalfModule, MatchMalfModule, MatchRevsquadItem, PopulationSnapshot
-import json
-from datetime import datetime
 
-logger = LocalProxy(lambda: current_app.logger)
+from app.models import (AntagObjective, BadassBundleBuy, BadassBundleItem,
+                        Death, Explosion, MalfModule, Match, MatchMalfModule,
+                        MatchRevsquadItem, PopulationSnapshot, RevsquadItem,
+                        Survivor, UplinkBuy)
+
 db = LocalProxy(lambda: current_app.db.session)
 
 

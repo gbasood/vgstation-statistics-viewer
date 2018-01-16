@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 
 import os
-import shutil
-import sys, traceback
 import re
+import shutil
+import sys
+import traceback
 from typing import Text
 
 from flask import current_app
