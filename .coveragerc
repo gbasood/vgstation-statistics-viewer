@@ -5,3 +5,5 @@ omit =
   app/parsers/csvparser.py
   # command line only stuff
   app/commands.py
+  migrations/*
+  db/*
