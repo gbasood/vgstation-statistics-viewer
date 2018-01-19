@@ -96,7 +96,7 @@ def parse_matchdata(js: dict, m: Match) -> None:
 
     # Time stamp parsing
     m.start_datetime = timestamp_to_datetime(js['round_start_time'])
-    m.end_datetime = timestamp_to_datetime(js['round_start_time'])
+    m.end_datetime = timestamp_to_datetime(js['round_end_time'])
     m.round_length = (m.end_datetime - m.start_datetime).total_seconds()
 
     # cult
