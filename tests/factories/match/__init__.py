@@ -23,7 +23,7 @@ class MatchFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session = db.session
 
     # modes_string = FuzzyChoice(['cult', 'revolution', 'vampire', 'autotraitor', 'nuclear emergency',
-    # 'blob', 'wizard', 'ragin\' mages', 'ai malfunction', 'changeling'])
+    # 'blob', 'wizard', 'ragin\' mages', 'ai malfunction', 'changeling', 'mixed'])
     # id = factory.Sequence(int)
     start_datetime = FuzzyDateTime(datetime.datetime(2012, 1, 1, tzinfo=pytz.timezone('US/Eastern')))
     end_datetime = start_datetime.fuzz() + datetime.timedelta(minutes=FuzzyInteger(15, 300).fuzz())

@@ -20,7 +20,7 @@ from app.helpers import add_months
 cache = SimpleCache()
 
 antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling",
-                                 "vampire", 'wizard', 'ragin\' mages', 'revolution']
+                                 "vampire", 'wizard', 'ragin\' mages', 'revolution', 'mixed']
 do_not_show = ['extended', 'heist', 'meteor']
 objective_success_threshold = 0.49
 
