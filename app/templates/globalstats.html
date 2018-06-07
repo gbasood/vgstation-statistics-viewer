@@ -1,17 +1,17 @@
 {%- extends "_base.html" -%}
-{%- block title -%}Global Stats{% endblock -%}
+{%- block title -%}Global Stats - Gamemodes{% endblock -%}
 {%- block content -%}
 <div class = 'monthlynav'>
   {%- if timespan == 'monthly' -%}
-  <a href="{{ url_for('blueprint.globalstats', timespan='monthly', month=prevpage.month, year=prevpage.year) }}">«</a>
+  <a href="{{ url_for('.globalgamemodes', timespan='monthly', month=prevpage.month, year=prevpage.year) }}">«</a>
   <span>{{ query_start.strftime('%B %Y') }}</span>
-  <a href="{{ url_for('blueprint.globalstats', timespan='monthly', month=nextpage.month, year=nextpage.year) }}">»</a>
+  <a href="{{ url_for('.globalgamemodes', timespan='monthly', month=nextpage.month, year=nextpage.year) }}">»</a>
   <br/>
-  <a href="{{ url_for('blueprint.globalstats', timespan='all')}}">Show All Time</a>
+  <a href="{{ url_for('.globalgamemodes', timespan='all')}}">Show All Time</a>
   {%- else -%}
   <span>All Time</span>
   <br/>
-  <a href="{{ url_for('blueprint.globalstats', timespan='monthly')}}">Show Monthly</a>
+  <a href="{{ url_for('.globalgamemodes', timespan='monthly')}}">Show Monthly</a>
   {%- endif -%}
 </div>
 <div class='gen-contain'>

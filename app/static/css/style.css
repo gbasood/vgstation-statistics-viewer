@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Hind|Jockey+One');
+@import url('https://fonts.googleapis.com/css?family=Space+Mono');
 html,body {
 	width: 100%;
 	height: 100%;
@@ -558,4 +559,23 @@ a.block {
 	content: '\f188';
 
 	color: rgb(145, 99, 206);
+}
+
+.justify {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.txtbtn {
+	padding: 0.5rem;
+	display: inline-block;
+	background: #0077BE;
+	/* border: 1px solid #222; */
+	border-radius: 0.2rem;
+	color: white;
+}
+
+.txtbtn:hover {
+	background: #0070B0;
+	color: white;
 }
