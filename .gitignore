@@ -74,6 +74,7 @@ _mailinglist
 .tox
 .cache/
 .idea/
+.vscode
 db/*
 
 # Default directory for stat files to be parsed from

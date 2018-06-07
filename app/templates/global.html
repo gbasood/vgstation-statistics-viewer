@@ -1,0 +1,12 @@
+{%- extends "_base.html" -%}
+{%- block title -%}Global Stats{% endblock -%}
+{%- block content -%}
+<div class="justify">
+    <div>
+        <a class="txtbtn" href="{{ url_for('.globalgamemodes') }}">Gamemode Stats</a>
+    </div>
+    <div>
+        <a class="txtbtn" href="{{ url_for('.globalpopulation') }}">Average Playercounts by Hour</a>
+    </div>
+</div>
+{%- endblock -%}

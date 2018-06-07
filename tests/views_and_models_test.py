@@ -36,7 +36,7 @@ class ViewsTestCase(unittest.TestCase):  # pragma: no cover
     def test_global_stats(self):
         with self.sviewer.app_context():
             MatchFactory()
-            rv = self.app.get('/globalstats')
+            rv = self.app.get('/global/gamemode')
             assert b'matchChart' in rv.data
 
     def test_matchlist(self):

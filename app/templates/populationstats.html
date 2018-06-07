@@ -1,0 +1,28 @@
+{%- extends "_base.html" -%}
+{%- block title -%}Global Stats - Population{% endblock -%}
+{%- block content -%}
+<div class="gen-contain">
+    <div class="chart-wrapper">
+        <label for="popChart" class="">Average player count by hour over the last 30 days</label>
+        <div id="popChart"></div>
+    </div>
+</div>
+{%- endblock -%}
+{% block after_body %}
+<script>
+var barData = {
+    labels: {{hours | safe}},
+    datasets: [{
+        title: "Average playercount at this hour",
+        values: {{counts | safe}},
+    }]
+};
+
+let chart = new Chart({
+    parent: "#popChart",
+    data: barData,
+    height: 250,
+    type: "bar"
+})
+</script>
+{% endblock %}

@@ -7,13 +7,13 @@ import os
 import threading
 
 import flask
-from flask import (Blueprint, current_app, redirect, render_template, request,
-                   url_for)
+from flask import (Blueprint, current_app, redirect, render_template, redirect,
+                   request, url_for)
 from sqlalchemy import func
 
 from app import global_stats, parse
 from app.helpers import add_months
-from app.models import AntagObjective, Death, Explosion, Match, db
+from app.models import AntagObjective, Death, Explosion, Match, PopulationSnapshot as PopSnap, db
 from config import basedir
 
 parse_lock = threading.RLock()
@@ -59,9 +59,13 @@ def matchlist(page=1):
     return render_template('matchlist.html', matches=paginatedMatches.items, pagination=paginatedMatches)
 
 
-@blueprint.route('/globalstats')
-def globalstats(timespan="monthly", month=None, year=None):
-    """Respond with view for global statistics, with optional timespan grouping. Currently only all time or by month."""
+@blueprint.route('/global')
+def globalpage():
+    return render_template('global.html')
+
+@blueprint.route('/global/gamemode')
+def globalgamemodes(timespan="monthly", month=None, year=None):
+    """Respond with view for global statistics for gamemodes, with optional timespan grouping. Currently only all time or by month."""
     query_timespan = request.args.get("timespan") if request.args.get("timespan") else "monthly"
     request_month = int(request.args.get("month") if request.args.get("month") else datetime.datetime.now().month)
     request_year = int(request.args.get("year") if request.args.get("year") else datetime.datetime.now().year)
@@ -78,6 +82,26 @@ def globalstats(timespan="monthly", month=None, year=None):
                            nextpage=next_page,
                            prevpage=prev_page)
 
+@blueprint.route('/global/population')
+def globalpopulation():
+    """Respond with view for global statitics for population, chunked by hour, over the course of the last 30 days."""
+    startdate = datetime.datetime.now()
+    enddate = startdate - datetime.timedelta(days=30)
+    q = db.session.query(
+        func.avg(PopSnap.popcount),
+        func.strftime('%H', PopSnap.time)
+    ).filter(
+        # PopSnap.time <= startdate,
+        # PopSnap.time >= enddate
+    ).group_by(func.strftime('%H', PopSnap.time)).all()
+    counts = [el[0] for el in q] # first piece of each grouped result
+    hours = [el[1] for el in q] # second piece of each grouped result
+    return render_template('populationstats.html', counts=counts, hours=hours)
+
+
+@blueprint.route('/globalstats')
+def globalstats_redir():
+    return redirect(url_for(".globalpage"))
 
 @blueprint.route('/match/latest')
 def latest_match():
