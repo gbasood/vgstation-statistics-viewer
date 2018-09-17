@@ -16,8 +16,6 @@ from app.helpers import add_months
 from app.models import AntagObjective, Death, Explosion, Match, PopulationSnapshot as PopSnap, db
 from config import basedir
 
-parse_lock = threading.Lock()
-
 blueprint = Blueprint('blueprint', __name__, static_folder='static')
 
 
@@ -120,9 +118,9 @@ def match(id=0):
 @blueprint.route('/alert_new_file')
 def alert_new_file():
     """A GET request for this URL will cause the server to check for new statfiles in the configured dir."""
-    if parse_lock.locked():
+    if current_app.parse_lock.locked():
         return 'Already parsing.', 530
-    with parse_lock:
+    with current_app.parse_lock:
         thread = threading.Thread(target=parse.batch_parse, args=[current_app._get_current_object()])
         thread.start()
         return 'OK, parsing', 200

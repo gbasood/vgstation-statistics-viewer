@@ -2,6 +2,7 @@ import logging
 import os
 from logging.handlers import RotatingFileHandler
 from os import path
+import threading
 
 from flask import Flask, render_template
 
@@ -43,6 +44,7 @@ def create_app(config_path):
     app.logger.handlers[0].setFormatter(logFormat)
 
     app.db = db
+    app.parse_lock = threading.Lock()
 
     return app
 
