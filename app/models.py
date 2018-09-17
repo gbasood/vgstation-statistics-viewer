@@ -135,11 +135,11 @@ class Match(db.Model):
         """
         Return all Death entries associated with this match, whose keys are not null, and are not manifested ghosts.
         """
-        return self.deaths.filter(and_(Death.mindkey is not 'null', Death.mindkey is not None, Death.mindname != 'Manifested Ghost'))
+        return self.deaths.filter(and_(Death.mindkey != 'null', Death.mindkey != None, Death.mindname != 'Manifested Ghost'))
 
     def nonplayer_deaths(self):
         """Return all Death entries associated with this match, whose keys are null."""
-        return self.deaths.filter(or_(Death.mindkey == 'null', Death.mindkey is None))
+        return self.deaths.filter(or_(Death.mindkey == 'null', Death.mindkey == None))
 
     def duration(self):
         """Return the number of minutes this round was played."""
@@ -346,7 +346,7 @@ class MalfModule(db.Model):
         # So since our reference tables' values are much more volatile than
         # I'd like, we're going to have to automatically generate them.
         model = MalfModule.query.filter_by(name=nameval).first()
-        if model is None:
+        if model == None:
             mm = MalfModule()
             mm.name = nameval
             db.session.add(mm)
@@ -367,7 +367,7 @@ class RevsquadItem(db.Model):
     @staticmethod
     def get_or_add(nameval):
         model = RevsquadItem.query.filter_by(name=nameval).first()
-        if model is None:
+        if model == None:
             mm = RevsquadItem()
             mm.name = nameval
             db.session.add(mm)
