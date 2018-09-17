@@ -31,7 +31,10 @@ def create_app(config_path):
     logging.basicConfig(format="%(asctime)s %(msg)s", filename="statsserv_log.txt")
 
     errorHandler = RotatingFileHandler('statsserv_error.txt', maxBytes=100000, backupCount=1)
-    errorHandler.setLevel(logging.WARNING)
+    if app.debug:
+        errorHandler.setLevel(logging.WARNING)
+    else:
+        errorHandler.setLevel(logging.WARNING)
     app.logger.addHandler(errorHandler)
 
     logFormat = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s\n'

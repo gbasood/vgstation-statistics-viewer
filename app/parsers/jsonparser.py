@@ -36,20 +36,25 @@ def parse(filepath: Text, filename: Text) -> bool:
     f = open(filepath, 'r+')
     js = json.load(f)
     f.close()
+    try:
+        m = Match()
+        db.add(m)
+        m.parsed_file = filename
 
-    m = Match()
-    db.add(m)
-    m.parsed_file = filename
+        # Okay let's get started
+        parse_matchdata(js, m)
+        parse_deaths(js, m)
+        parse_survivors(js, m)
+        parse_uplink_buys(js, m)
+        parse_explosions(js, m)
+        parse_antag_objectives(js, m)
+        parse_badass_buys(js, m)
+        parse_population_snapshots(js, m)
 
-    # Okay let's get started
-    parse_matchdata(js, m)
-    parse_deaths(js, m)
-    parse_survivors(js, m)
-    parse_uplink_buys(js, m)
-    parse_explosions(js, m)
-    parse_antag_objectives(js, m)
-    parse_badass_buys(js, m)
-    parse_population_snapshots(js, m)
+        db.commit()
+    except:
+        db.rollback()
+        raise
 
     return True
 
@@ -137,7 +142,7 @@ def parse_matchdata(js: dict, m: Match) -> None:
         db.add(rev_item)
 
     # And finally...
-    db.commit()
+    db.flush()
 
 
 def parse_deaths(js: dict, match: Match) -> None:
@@ -162,7 +167,7 @@ def parse_deaths(js: dict, match: Match) -> None:
         d.damage_brain = death['damagevalues']['BRAIN']
 
         db.add(d)
-        db.commit()
+        db.flush()
 
 
 def parse_survivors(js: dict, match: Match) -> None:
@@ -184,7 +189,7 @@ def parse_survivors(js: dict, match: Match) -> None:
         s.damage_brain = survivor['damagevalues']['BRAIN']
 
         db.add(s)
-        db.commit()
+        db.flush()
 
 
 def parse_antag_objectives(js: dict, match: Match) -> None:
@@ -200,7 +205,7 @@ def parse_antag_objectives(js: dict, match: Match) -> None:
         o.target_role = obj['target_role']
 
         db.add(o)
-        db.commit()
+        db.flush()
 
 
 def parse_explosions(js: dict, match: Match) -> None:
@@ -215,7 +220,7 @@ def parse_explosions(js: dict, match: Match) -> None:
         e.light_impact_range = explosion['light_impact_range']
 
         db.add(e)
-        db.commit()
+        db.flush()
 
 
 def parse_uplink_buys(js: dict, match: Match) -> None:
@@ -229,7 +234,7 @@ def parse_uplink_buys(js: dict, match: Match) -> None:
         up.traitor_buyer = boolify(buy['purchaser_is_traitor'])
 
         db.add(up)
-        db.commit()
+        db.flush()
 
 
 def parse_badass_buys(js: dict, match: Match) -> None:
@@ -240,19 +245,19 @@ def parse_badass_buys(js: dict, match: Match) -> None:
         bad.mindname = bbuy['purchaser_name']
 
         db.add(bad)
-        db.commit()
+        db.flush()
         for item in bbuy['contains']:
             i = BadassBundleItem(badass_bundle_id=bad.id, item_path=item)
 
             db.add(i)
-            db.commit()
+            db.flush()
 
 
 def parse_population_snapshots(js: dict, match: Match) -> None:
-    print(js['population_polls'])
     for snapdata in js['population_polls']:
-        snap = PopulationSnapshot(match_id=match.id)
-        snap.time = timestamp_to_datetime(snapdata['time'])
-        snap.popcount = snapdata['popcount']
-        db.add(snap)
-    db.commit()
+        if snapdata['time'] != None:
+            snap = PopulationSnapshot(match_id=match.id)
+            snap.time = timestamp_to_datetime(snapdata['time'])
+            snap.popcount = snapdata['popcount']
+            db.add(snap)
+    db.flush()
