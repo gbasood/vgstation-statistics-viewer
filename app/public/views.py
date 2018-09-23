@@ -30,6 +30,17 @@ def index():
     deathratio = Death.query.count() / float(matchesTotal)
     nuked = Match.query.filter(Match.nuked).count()
     lastmatch = Match.query.order_by(Match.id.desc()).first()
+
+    startdate = datetime.datetime.now()
+    enddate = startdate - datetime.timedelta(days=30)
+    mapPlayrate = db.session.query(Match.mapname, func.count(Match.id))\
+    .group_by(Match.mapname)\
+    .filter(
+        Match.starttime <= startdate,
+        Match.starttime >= enddate
+    )\
+    .all()
+
     mapPlayrate = db.session.query(Match.mapname, func.count(Match.id)).group_by(Match.mapname).all()
     # Map percentage
     # for mapx in matchCounts:
@@ -89,8 +100,8 @@ def globalpopulation():
         func.avg(PopSnap.popcount),
         func.strftime('%H', PopSnap.time)
     ).filter(
-        # PopSnap.time <= startdate,
-        # PopSnap.time >= enddate
+        PopSnap.time <= startdate,
+        PopSnap.time >= enddate
     ).group_by(func.strftime('%H', PopSnap.time)).all()
     counts = [el[0] for el in q] # first piece of each grouped result
     hours = [el[1] for el in q] # second piece of each grouped result

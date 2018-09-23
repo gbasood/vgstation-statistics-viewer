@@ -11,7 +11,7 @@
         <p class = 'indented'>Deaths per match: {{'%0.2f' % deathratio|float}}</p>
     </div>
     <div class = 'floatleft'>
-      <p class>Map play percentage:</p>
+      <p class>Map play percentage (last 30 days):</p>
       {%- for mapx in mapPlayrate -%}
         <p class = 'indented'>{{mapx[0]}}: {{'%0.2f' % ((mapx[1] / matchcount|float) * 100)}}%</p>
       {%- endfor -%}
