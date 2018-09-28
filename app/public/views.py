@@ -122,7 +122,10 @@ def latest_match():
 @blueprint.route('/match/<id>')
 def match(id=0):
     """Respond with view for a match."""
-    return render_template('match.html', match=Match.query.get(id))
+    match = Match.query.get(id)
+    if match is not None:
+        return render_template('match.html', match=Match.query.get(id))
+    abort(404)
 
 
 # This is the route that the bot will use to notify the app to process files.
