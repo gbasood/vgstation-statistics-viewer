@@ -19,28 +19,20 @@
   </div>
     <p class='centertext warn'>Everything here is very much a work in progress. As such, match history may be wiped at any time.</p>
     <p class='centertext' style = 'margin-bottom: 0'>Last match:</p>
-    {%- if lastmatch -%}
-    <a href='/match/{{lastmatch.id}}'>
+    {%- if match -%}
+    <a href='/match/{{match.id}}'>
     <table class="single-match" id='match-container'>
-	    <thead>
-		    <td></td>
-		    <td>Game Mode</td>
-		    <td>Map</td>
-		    <td>Crew Score</td>
-		    <td>Player Deaths</td>
-	    </thead>
+      <thead>
+        <td></td>
+        <td>Station Name</td>
+        <td>Map</td>
+        <td>Date &amp; Time</td>
+        <td>Crew Score</td>
+        <td>Player Deaths</td>
+        <td>View</td>
+      </thead>
 	    <tbody>
-		<tr class="match">
-		<td><img src='{{modethumb(lastmatch.modes_string)}}'/></td>
-      {%- if lastmatch.is_mixed() -%}
-          <td>Mixed</p>
-      {%- else -%}
-          <td>{{lastmatch.modes_string}}</td>
-	  {%- endif -%}
-          <td>{{lastmatch.mapname}}</td>
-          <td>{{lastmatch.crewscore}}</td>
-          <td>{{lastmatch.player_deaths().count()}}</td>
-		</tr>
+        {%- include "components/_matchbar.html" with context -%}
 	    </tbody>
     </table>
     </a>

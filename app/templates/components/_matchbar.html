@@ -1,0 +1,12 @@
+<tr class = 'match block'>
+	<td class="match-title"><img src='{{modethumb(match.modes_string)}}'/></td>
+	<td>{{match.station_name}}</td>
+	<td>{{match.mapname}}</td>
+	<td>{{match.start_datetime.strftime('%m/%d/%y')}}
+          {{match.start_datetime.strftime('%H:%M')}}
+          {{(match.end_datetime - match.start_datetime).seconds % 60}} mins
+    </td>
+	<td class="bigger-font">{{match.crewscore}}</td>
+	<td class="bigger-font">{{match.player_deaths().count()}}</td>
+	<td><a href='/match/{{match.id}}' class="bigger-font">→</a></td>
+</tr>

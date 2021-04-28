@@ -7,7 +7,7 @@
   <table id = 'match-container'>
 	  <thead>
 		  <td></td>
-		  <td>Game Mode</td>
+		  <td>Station Name</td>
 		  <td>Map</td>
 		  <td>Date &amp; Time</td>
 		  <td>Crew Score</td>
@@ -15,18 +15,7 @@
 		  <td>View</td>
 	  </thead>
 {%- for match in matches %}
-   <tr class = 'match block'>
-	<td class="match-title"><img src='{{modethumb(match.modes_string)}}'/></td>
-	<td>{%- if match.is_mixed() -%}Mixed{%- else -%}{{match.modes_string}}{%- endif %}</td>
-	<td>{{match.mapname}}</td>
-	<td>{{match.start_datetime.strftime('%m/%d/%y')}}
-      	{%-if match.start_datetime%}
-      	{{match.start_datetime.strftime('%H:%M')}}
-    	{%-endif %}</td>
-	<td class="bigger-font">{{match.crewscore}}</td>
-	<td class="bigger-font">{{match.player_deaths().count()}}</td>
-	<td><a href='/match/{{match.id}}' class="bigger-font">→</a></td>
-    </tr>
+{%- include "components/_matchbar.html" with context -%}
 {%- endfor %}
   </table>
   {{ render_pagination(pagination, "blueprint.matchlist") }}

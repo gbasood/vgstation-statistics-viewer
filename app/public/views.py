@@ -47,7 +47,7 @@ def index():
     #     mapx[1] = mapx[1] / float(matchesTotal) * 100
 
     return render_template('index.html', matchcount=matchesTotal, nukedcount=nuked, explosionratio=explosionratio,
-                           deathratio=deathratio, lastmatch=lastmatch,
+                           deathratio=deathratio, match=lastmatch,
                            mapPlayrate=mapPlayrate)
 
 # @blueprint.route('/import')

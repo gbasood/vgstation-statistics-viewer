@@ -10,7 +10,7 @@ from typing import Text, Union
 from flask import current_app
 # If I had kept names consistent between the model defintiions
 # and the JSON generated files, I could just load it all in naively.
-from werkzeug import LocalProxy
+from werkzeug.local import LocalProxy
 
 from app.models import (AntagObjective, BadassBundleBuy, BadassBundleItem,
                         Death, Explosion, MalfModule, Match, MatchMalfModule,

@@ -11,7 +11,7 @@ from typing import Text
 from flask import current_app
 from werkzeug.local import LocalProxy
 
-from app.parsers import csvparser, jsonparser
+from app.parsers import jsonparser
 
 logger = LocalProxy(lambda: current_app.logger)
 

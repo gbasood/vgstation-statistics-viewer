@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 from gevent import monkey
 from gevent.pywsgi import WSGIServer
 
-from app.app import create_app
+from app import create_app
 
 monkey.patch_all()
 

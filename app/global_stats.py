@@ -9,15 +9,11 @@ import json
 
 from flask import current_app
 from sqlalchemy import and_, func
-from werkzeug import LocalProxy
-# from sqlalchemy import be`tween
-from werkzeug.contrib.cache import SimpleCache
+from werkzeug.local import Local
+# from sqlalchemy import between
 
-from app import models
-from app.app import logging
+from app import models, logging
 from app.helpers import add_months
-
-cache = SimpleCache()
 
 antag_objective_victory_modes = ["traitor+changeling", "double agents", "autotraitor", "changeling",
                                  "vampire", 'wizard', 'ragin\' mages', 'revolution', 'mixed']
@@ -88,7 +84,7 @@ def get_global_stats(timespan):
     if timespan[0] != "all":
         cachestring = 'globalstats{}{}'.format(timespan[1].year, timespan[1].month)
 
-    q = cache.get(cachestring)
+    q = current_app.cache.get(cachestring)
 
     if q is None:
         logging.debug('Cache miss on globalstats')
@@ -135,7 +131,7 @@ def match_stats(timespan):
         array: Array of MatchTypeVictory.
 
     """
-    db = LocalProxy(lambda: current_app.db.session)
+    db = Local(lambda: current_app.db.session)
     q = models.Match.query
     timespan_criteria = None
     count_query = db.query(models.Match.modes_string, func.count(models.Match.id))

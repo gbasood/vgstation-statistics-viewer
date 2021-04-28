@@ -88,3 +88,6 @@ statsserv_gevent_log.txt
 
 # Testing suite
 tests/db/*
+
+.scannerwork/*
+.vs/*
