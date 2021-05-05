@@ -1,51 +1,49 @@
 import logging
 import os
-from logging.handlers import RotatingFileHandler
-from os import path
 import threading
 
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import CSRFProtect
+from flask_compress import Compress
 
-import config
-from app import api, commands, public
-from app.extensions import db, migrate
+
+from config import config as Config
+from app import api, public, main
 from flask_caching import Cache
 
+db = SQLAlchemy()
+csrf = CSRFProtect()
+compress = Compress()
 
-def create_app(test_config=None):
-    app = Flask(__name__.split('.')[0])
-    app.config.from_pyfile('config.py', silent=True)
 
-    if not os.path.exists(config.STATS_DIR):
-        os.makedirs(config.STATS_DIR)
-    if not os.path.exists(config.PROCESSED_DIR):
-        os.makedirs(config.PROCESSED_DIR)
-    if not os.path.exists(config.UNPARSABLE_DIR):
-        os.makedirs(config.UNPARSABLE_DIR)
+def create_app(config):
+    app = Flask(__name__)
+    config_name = config
 
+    if not isinstance(config, str):
+        config_name = os.getenv('FLASK_CONFIG', 'default')
+
+    app.config.from_object(Config[config_name])
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     cache = Cache(config={'CACHE_TYPE': 'SimpleCache'})
+
+    # This is how we load the different configs we have for different environments:
+    # dev/testing/prod
+    Config[config_name].init_app(app)
+
+    db.init_app(app)
+    csrf.init_app(app)
+    compress.init_app(app)
     cache.init_app(app)
 
-    # from app.models import db
+    # Configure SSL if platform supports it
+    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
+        from flask_sslify import SSLify
+        SSLify(app)
 
-    register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
-    register_commands(app)
-
-    logging.basicConfig(format="%(asctime)s %(msg)s", filename="statsserv_log.txt")
-
-    errorHandler = RotatingFileHandler('statsserv_error.txt', maxBytes=100000, backupCount=1)
-    if app.debug:
-        errorHandler.setLevel(logging.WARNING)
-    else:
-        errorHandler.setLevel(logging.WARNING)
-    app.logger.addHandler(errorHandler)
-
-    logFormat = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s\n'
-                                  '[in %(pathname)s:%(lineno)d]')
-    errorHandler.setFormatter(logFormat)
-    app.logger.handlers[0].setFormatter(logFormat)
 
     app.db = db
     app.parse_lock = threading.Lock()
@@ -53,22 +51,11 @@ def create_app(test_config=None):
     return app
 
 
-def register_extensions(app):
-    db.init_app(app)
-    migrate.init_app(app, db)
-    return None
-
-
 def register_blueprints(app):
-    app.register_blueprint(public.views.blueprint)
+    app.register_blueprint(main.views.blueprint)
     app.register_blueprint(api.views.blueprint)
     return None
 
-
-def register_commands(app):
-    """Register Click commands."""
-    app.cli.add_command(commands.test)
-    app.cli.add_command(commands.clean)
 
 def register_errorhandlers(app):
     """register error handlers"""

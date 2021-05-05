@@ -1,25 +1,96 @@
 import os
 
-# Non-Flask, SQLAlchemy, lib stuff, just for our use!
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+if os.path.exists('config.env'):
+    print('Importing environment from .env file')
+    for line in open('config.env'):
+        var = line.strip().split('=')
+        if len(var) == 2:
+            os.environ[var[0]] = var[1].replace("\"", "")
+
+class Config:
+    APP_NAME = os.environ.get('APP_NAME', 'Statistics-Viewer')
+    if os.environ.get('SECRET_KEY'):
+        SECRET_KEY = os.environ.get('SECRET_KEY')
+    else:
+        SECRET_KEY = 'SECRET_KEY_ENV_VAR_NOT_SET'
+        print('SECRET KEY ENV VAR NOT SET! SHOULD NOT SEE IN PRODUCTION')
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+
+    @staticmethod
+    def init_app(app):
+        if not os.path.exists(config.STATS_DIR):
+            os.makedirs(config.STATS_DIR)
+        if not os.path.exists(config.PROCESSED_DIR):
+            os.makedirs(config.PROCESSED_DIR)
+        if not os.path.exists(config.UNPARSABLE_DIR):
+            os.makedirs(config.UNPARSABLE_DIR)
+        pass
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    ASSETS_DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL',
+        'sqlite:///' + 'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
+    STATS_BASE_DIR = os.path.join(basedir, 'test-statfiles')
+    STATS_PROCESSED_DIR = os.path.join(STATS_BASE_DIR, 'processed')
+    UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
+
+    @classmethod
+    def init_app(cls, app):
+        super().init_app(app)
+        print('THIS APP IS IN DEBUG MODE. \
+                YOU SHOULD NOT SEE THIS IN PRODUCTION.')
+
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL',
+        'sqlite:///' + 'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
+    WTF_CSRF_ENABLED = False
+    STATS_BASE_DIR = os.path.join(basedir, 'test-statfiles')
+    STATS_PROCESSED_DIR = os.path.join(STATS_BASE_DIR, 'processed')
+    UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
+
+    @classmethod
+    def init_app(cls, app):
+        super().init_app(app)
+        print('THIS APP IS IN TESTING MODE.  \
+                YOU SHOULD NOT SEE THIS IN PRODUCTION.')
+
+class ProductionConfig(Config):
+    DEBUG = False
+    USE_RELOADER = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
+        'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
+    SSL_DISABLE = (os.environ.get('SSL_DISABLE', 'True') == 'True')
+    STATS_BASE_DIR = os.path.join(basedir, 'test-statfiles')
+    STATS_PROCESSED_DIR = os.path.join(STATS_BASE_DIR, 'processed')
+    UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
+
+    @classmethod
+    def init_app(cls, app):
+        super().init_app(app)
+        assert os.environ.get('SECRET_KEY'), 'SECRET_KEY IS NOT SET!'
+
+
+config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
+}
+
+
 # General settings
-debug = True
 host = '0.0.0.0'
 port = 5000
 
-# Path to stat files. Default value MUST be changed.
-STATS_DIR = os.path.join(basedir, 'test-statfiles')
-# This is where files get moved to once they're batch processed. They will never be used again and are kept around only for debugging the server code.
-PROCESSED_DIR = os.path.join(STATS_DIR, 'processed')
-# Files that could not be parsed.
-UNPARSABLE_DIR = os.path.join(STATS_DIR, 'unparsable')
-
 # Database
-SQLALCHEMY_TRACK_MODIFICATIONS = False  # On production, set this to false.
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db', 'app.db')
-SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db', 'db_repository')
-SQLALCHEMY_TRACK_MODIFICATIONS = debug  # Track on debug
+# SQLALCHEMY_TRACK_MODIFICATIONS = False
+# SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db', 'app.db')
+# SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db', 'db_repository')
 
 # No longer used due to Manager implementation
 # Load from arguments
