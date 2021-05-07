@@ -9,6 +9,7 @@ if os.path.exists('config.env'):
         if len(var) == 2:
             os.environ[var[0]] = var[1].replace("\"", "")
 
+
 class Config:
     APP_NAME = os.environ.get('APP_NAME', 'Statistics-Viewer')
     if os.environ.get('SECRET_KEY'):
@@ -20,22 +21,23 @@ class Config:
 
     @staticmethod
     def init_app(app):
-        if not os.path.exists(config.STATS_DIR):
-            os.makedirs(config.STATS_DIR)
-        if not os.path.exists(config.PROCESSED_DIR):
-            os.makedirs(config.PROCESSED_DIR)
-        if not os.path.exists(config.UNPARSABLE_DIR):
-            os.makedirs(config.UNPARSABLE_DIR)
+        if not os.path.exists(app.config["STATS_BASE_DIR"]):
+            os.makedirs(app.config["STATS_BASE_DIR"])
+        if not os.path.exists(app.config["STATS_PROCESSED_DIR"]):
+            os.makedirs(app.config["STATS_PROCESSED_DIR"])
+        if not os.path.exists(app.config["STATS_UNPARSABLE_DIR"]):
+            os.makedirs(app.config["STATS_UNPARSABLE_DIR"])
         pass
+
 
 class DevelopmentConfig(Config):
     DEBUG = True
     ASSETS_DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL',
-        'sqlite:///' + 'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
+                                             'sqlite:///' + 'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
     STATS_BASE_DIR = os.path.join(basedir, 'test-statfiles')
     STATS_PROCESSED_DIR = os.path.join(STATS_BASE_DIR, 'processed')
-    UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
+    STATS_UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
 
     @classmethod
     def init_app(cls, app):
@@ -47,11 +49,11 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL',
-        'sqlite:///' + 'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
+                                             'sqlite:///' + 'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
     WTF_CSRF_ENABLED = False
     STATS_BASE_DIR = os.path.join(basedir, 'test-statfiles')
     STATS_PROCESSED_DIR = os.path.join(STATS_BASE_DIR, 'processed')
-    UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
+    STATS_UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
 
     @classmethod
     def init_app(cls, app):
@@ -59,15 +61,16 @@ class TestingConfig(Config):
         print('THIS APP IS IN TESTING MODE.  \
                 YOU SHOULD NOT SEE THIS IN PRODUCTION.')
 
+
 class ProductionConfig(Config):
     DEBUG = False
     USE_RELOADER = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL',
-        'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
+                                             'sqlite:///' + os.path.join(basedir, 'db', 'app.db'))
     SSL_DISABLE = (os.environ.get('SSL_DISABLE', 'True') == 'True')
     STATS_BASE_DIR = os.path.join(basedir, 'test-statfiles')
     STATS_PROCESSED_DIR = os.path.join(STATS_BASE_DIR, 'processed')
-    UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
+    STATS_UNPARSABLE_DIR = os.path.join(STATS_BASE_DIR, 'unparsable')
 
     @classmethod
     def init_app(cls, app):
@@ -81,7 +84,6 @@ config = {
     'production': ProductionConfig,
     'default': DevelopmentConfig
 }
-
 
 # General settings
 host = '0.0.0.0'

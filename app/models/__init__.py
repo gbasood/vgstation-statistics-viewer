@@ -4,7 +4,7 @@ Model definitions for SQLAlchemy models used in this app.
 import datetime
 import json
 
-from app import db
+from .. import db
 from sqlalchemy import and_, or_
 
 def to_json(mdl):

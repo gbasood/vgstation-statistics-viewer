@@ -9,7 +9,6 @@ from flask_compress import Compress
 
 
 from config import config as Config
-from app import api, public, main
 from flask_caching import Cache
 
 db = SQLAlchemy()
@@ -52,7 +51,9 @@ def create_app(config):
 
 
 def register_blueprints(app):
-    app.register_blueprint(main.views.blueprint)
+    from app import api, public, main
+
+    app.register_blueprint(main.blueprint)
     app.register_blueprint(api.views.blueprint)
     return None
 

@@ -6,7 +6,7 @@ import factory
 import datetime
 import pytz
 from app import models
-from app.models import db
+from app.models.models import db
 from tests.factories import popsnap
 from factory.fuzzy import FuzzyInteger, FuzzyDateTime, FuzzyChoice
 

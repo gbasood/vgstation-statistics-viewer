@@ -13,9 +13,9 @@ from flask import current_app
 from werkzeug.local import LocalProxy
 
 from app.models import (AntagObjective, BadassBundleBuy, BadassBundleItem,
-                        Death, Explosion, MalfModule, Match, MatchMalfModule,
-                        MatchRevsquadItem, PopulationSnapshot, RevsquadItem,
-                        Survivor, UplinkBuy)
+                               Death, Explosion, MalfModule, Match, MatchMalfModule,
+                               MatchRevsquadItem, PopulationSnapshot, RevsquadItem,
+                               Survivor, UplinkBuy)
 
 db = LocalProxy(lambda: current_app.db.session)
 logger = LocalProxy(lambda: current_app.logger)

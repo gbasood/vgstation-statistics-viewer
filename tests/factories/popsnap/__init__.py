@@ -5,7 +5,7 @@ Factory for PopulationSnapshot
 import factory
 import datetime
 from app import models
-from app.models import db
+from app.models.models import db
 from factory.fuzzy import FuzzyInteger, FuzzyNaiveDateTime
 
 

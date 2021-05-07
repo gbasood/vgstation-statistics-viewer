@@ -6,7 +6,7 @@ import app as ourapp
 # from app import public
 from app.app import create_app
 # from app import parse
-from app.models import db
+from app.models.models import db
 from config import basedir
 from tests.factories.match import MatchFactory
 
